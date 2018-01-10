@@ -1,0 +1,33 @@
+.passengersInfo .inp .inp-label {
+display: block;
+}
+.inp-animate-outer{
+    margin-top: 16px;
+}
+.inp-animate-label{
+    top: 0;
+    position: absolute;
+    width: 100%;
+    text-align: left;
+    pointer-events: none;
+    display: block;
+    user-select: none;
+}
+.inp-animate-label span{
+    padding: 11px 10px;
+    display: block;
+    border: 1px solid #e3e3e3;
+    background: #fff;
+    border-radius: 3px;
+}
+.ui-select-passengers.ng-invalid + .inp-animate-label {
+    opacity: 0;
+}
+.inp-animate-placeholder:focus ~ .inp-animate-label > span,
+.inp-animate-placeholder.ng-not-empty ~ .inp-animate-label > span,
+.ui-select-passengers.ng-valid ~ .inp-animate-label > span{
+    transition: transform 0.3s;
+    transform: translate3d(-10px, -30px, 0);
+    border: none;
+    background: none;
+}
