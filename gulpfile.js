@@ -32,21 +32,11 @@
     });
 
 
-    gulp.task('build:stylus', function() {
-        return gulp.src('src/stylus/custom.styl')
-            .pipe(stylus({
-                'use': [autoprefixer('last 2 versions')],
-                'include css': true,
-                'pretty': true
-            }))
-            .pipe(gulp.dest('build/'));
-    });
-
     gulp.task('watch', function() {
-        gulp.watch('src/**/*.*', gulp.series('build:stylus', 'build:html'));
+        gulp.watch('src/**/*.*', gulp.series('build:html'));
     });
 
-    gulp.task('build', gulp.series('build:stylus', 'build:html'));
+    gulp.task('build', gulp.series('build:html'));
 
     gulp.task('default', gulp.series('build', 'watch'));
 
