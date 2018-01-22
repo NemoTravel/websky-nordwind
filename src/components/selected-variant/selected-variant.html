@@ -92,15 +92,22 @@
               <div ng-if="segment.brand" class="tariff">
                 <div class="tariff__include">
                   <!-- {{ 'web.choosenFlight.tariffIncludeStart' | aliasStatic}} {{ segment.brandName }} {{ 'web.choosenFlight.tariffIncludeEnd' | aliasStatic}} -->
-                  <span>Ваш тариф</span>
-                  <span class="tariff__include--bold">{{ segment.brandName }}</span>
+                  <div class="tariff__include__text">
+                    <span>Ваш тариф</span>
+                    <span class="tariff__include--bold">{{ segment.brandName }}</span>
+                  </div>
+                  <div class="tariff__include__link">
+                    <a href fancybox="popupRemark">
+                      {{ 'web.choosenFlight.remarkLink' | aliasStatic}}
+                    </a>
+                  </div>
                 </div>
 
-                <div class="tariff__content" style="display:none">
+                <!-- <div class="tariff__content">
 
                   <span ng-repeat="prop in segment.brandAvailableProps" class="tariff__content__item" ng-bind-html="prop"></span>
 
-                </div>
+                </div> -->
 
                 <div class="tariff__content" ng-if="segment.brandAvailableProps && segment.brandAvailableProps.length > 0" >
 
@@ -188,11 +195,11 @@
                       </td>
                     </tr>
                   </table>
-                  <p class="right">
+                  <!-- <p class="right">
                     <a href fancybox="popupRemark">
-                                            {{ 'web.choosenFlight.remarkLink' | aliasStatic}}
-                                        </a>
-                  </p>
+                      {{ 'web.choosenFlight.remarkLink' | aliasStatic}}
+                    </a>
+                  </p> -->
                 </div>
                 <div class="bonus" ng-if="vm.pricingVariant.ffpSumm">
                   <table>

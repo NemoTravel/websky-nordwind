@@ -62,16 +62,32 @@
           <tr class="headrow">
             <td class="sortingCell firstCol">
               <!-- <variants-sort-switch selected="vm.searchResult.segmentSort[segNum]"></variants-sort-switch> -->
-              <a class="js-show__new-rates__list active" href="">Свернуть</a>
+              <div class="firstCol__link">
+                <a class="js-show__new-rates__list active" href="">Свернуть</a>
+              </div>
+              <div class="firstCol__desc">
+                <p>
+                  * - В эконом классе на рейсах продолжительностью менее 3ч - не предоставляется
+                </p>
+                <p>
+                  ** - 0-2 лет (РФ-РФ) - скидка 100%, 0-2 (ВВЛ-МВЛ) - скидка 90%
+                </p>
+                <p>
+                  *** - Для тарифов YPROW, YOPOW, CPROW, COPOW скидка 50%
+                </p>
+              </div>
             </td>
             <td ng-repeat="(brandNum, brand) in vm.searchResult.brandsList" class="{{ brand.cssClass }}" ng-class="{ control_disabled: (segNum == 1 && !vm.searchResult.brandsCompatibleState[brandNum]) }">
+
               <div class="columnTitle">
                 <div ng-if="brand.theBest" class="best">
                   {{ 'web.searchResult.brandTheBest' | aliasStatic}}
                 </div>
 
                 <span class="name">
-                  <a href ng-click="vm.showCompare(brand.code)" class="popup_js">{{ brand.name }}</a>
+                  <!-- <a href ng-click="vm.showCompare(brand.code)" class="popup_js">{{ brand.name }}</a> -->
+                  <!-- <a href="">{{ brand.name }}</a> -->
+                  {{ brand.name }}
                 </span>
                 <ul class="options">
                   <li ng-repeat="prop in brand.importantProps">
