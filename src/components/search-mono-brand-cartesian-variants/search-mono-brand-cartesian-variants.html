@@ -65,7 +65,7 @@
               <div class="firstCol__link">
                 <a class="js-show__new-rates__list active" href="">Свернуть</a>
               </div>
-              <div ng-bind-html="'web.popupCompare.comment' | aliasStatic" class="firstCol__desc"></div>
+              <div ng-bind-html="'web.popupCompare.comment' | aliasStatic" class="firstCol__desc" style="display: none"></div>
             </td>
             <td ng-repeat="(brandNum, brand) in vm.searchResult.brandsList" class="{{ brand.cssClass }}" ng-class="{ control_disabled: (segNum == 1 && !vm.searchResult.brandsCompatibleState[brandNum]) }">
 
@@ -79,15 +79,26 @@
                   <!-- <a href="">{{ brand.name }}</a> -->
                   {{ brand.name }}
                 </span>
+
+                <div style="display: none">
+                  {{brand.importantProps}}
+                </div>
+
                 <ul class="options">
                   <li ng-repeat="prop in brand.importantProps">
-                    <span ng-if="prop.name" class="infoBoxWrap">
-                      <i class="icon_{{ prop.code }}"></i>
+                    <span ng-if="prop.name && prop.amount == '2'" class="infoBoxWrap">
+                      <i class="icon_{{ prop.code }}_{{ prop.default }}_{{ prop.amount }}"></i>
                         <span class="infoBox">
                           <span class="infoBox__i">{{ prop.name }}</span>
                         </span>
                     </span>
-                    <i ng-if="!prop.name" class="icon_{{ prop.code }}"></i>
+                    <span ng-if="prop.name && prop.amount !== '2'" class="infoBoxWrap">
+                      <i class="icon_{{ prop.code }}_{{ prop.default }}"></i>
+                        <span class="infoBox">
+                          <span class="infoBox__i">{{ prop.name }}</span>
+                        </span>
+                    </span>
+                    <!-- <i ng-if="!prop.name && prop.default == 'yes'" class="icon_{{ prop.code }}"></i> -->
                   </li>
                 </ul>
               </div>
@@ -101,13 +112,11 @@
       						<span class="new-rates__icon new-rates__icon_no" ng-if="item.available == 'no'"></span>
 
                   <div class="new-rates__text">
-                    <span class="new-rates__name">
-                      {{ item.name }}
-                    </span>
 
-                    <!-- <span class="new-rates__desc"> -->
-                      <!-- {{ item.shortDesc }} -->
-                    <!-- </span> -->
+                    <span  ng-bind-html="item.name" class="new-rates__name"></span>
+
+                    <span ng-bind-html="item.shortDesc" class="new-rates__desc"></span>
+
                   </div>
 
                 </div>
