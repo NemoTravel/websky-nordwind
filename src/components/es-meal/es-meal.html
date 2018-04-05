@@ -73,15 +73,17 @@
                     <div class="passengersBlock">
                         <div class="passengersBlock_row">
                             <div class="passengersBlock_row-control">
-                                <div class="passengersBlock_row-control-outer" ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
+                                <div class="passengersBlock_row-control-outer active" ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
                                     <div class="passengersBlock_row-control-passengers" ng-click="vm.selectFlightPassenger(flightNum, 0)" ng-class="{active:flightNum == vm.selectedFlight}">
+                                    <!-- <div class="passengersBlock_row-control-passengers" ng-click="vm.selectFlightPassenger(flightNum, 0)"> -->
                                         <i class="passengersBlock_row-control-passengers-icon" aria-hidden="true"></i>
                                         <span class="passengersBlock_row-control-passengers-racenumber">{{flight.racenumber}}</span>
                                         <geo-marker prefix="dep__point" key="es-meal" city="flight.origincity"  cityname="flight.origincityName" port="flight.originport"  portname="flight.originportName"></geo-marker>
                                         <i class="passengersBlock_row-control-passengers-delimiter" aria-hidden="true"></i>
                                         <geo-marker prefix="arr__point" key="es-meal" city="flight.destinationcity"  cityname="flight.destinationcityName" port="flight.destinationport"  portname="flight.destinationportName"></geo-marker>
                                     </div>
-                                    <div class="passengersBlock_row-control-droporder" ng-show="flightNum == vm.selectedFlight">
+                                    <!-- <div class="passengersBlock_row-control-droporder" ng-show="flightNum == vm.selectedFlight"> -->
+                                    <div class="passengersBlock_row-control-droporder">
                                         <div class="passengersBlock_row-control-droporder-passenger" ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
                                              ng-if="vm.service.availableByPassengerSegments[passengerNum]">
                                             <div class="passengersBlock_row-control-droporder-passenger-outer" ng-click="vm.selectFlightPassenger(flightNum, passengerNum)" ng-class="{active: passengerNum == vm.selectedPassenger}">
@@ -135,7 +137,8 @@
                                                             </a>
                                                             <p ng-bind-html="mealItem.description"></p>
                                                         </div>
-                                                        <button class="selectItemButton">{{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}</button>
+                                                        <button class="selectItemButton selectItemButton_not">{{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}</button>
+                                                        <button class="selectItemButton selectItemButton_yes"> {{ 'web.extraServices.meal.isSelectItemButton' | aliasStatic}}</button>
                                                     </div>
                                                 </div>
                                             </div>
