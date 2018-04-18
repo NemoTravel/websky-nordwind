@@ -63,9 +63,15 @@
             <td class="sortingCell firstCol">
               <!-- <variants-sort-switch selected="vm.searchResult.segmentSort[segNum]"></variants-sort-switch> -->
               <div class="firstCol__link">
-                <a class="js-show__new-rates__list active" href="">Свернуть</a>
+                <a class="js-show__new-rates__list"
+                   ng-class="{'active': rates_show}"
+                   href=""
+                   ng-init="rates_show = false"
+                   ng-click="rates_show = !rates_show"> 
+                   {{rates_show ? 'Свернуть' : 'Развернуть'}}
+                 </a>
               </div>
-              <div ng-bind-html="'web.popupCompare.comment' | aliasStatic" class="firstCol__desc" style="display: none"></div>
+              <div ng-bind-html="'web.popupCompare.comment' | aliasStatic" class="firstCol__desc" ng-show="rates_show"></div>
             </td>
             <td ng-repeat="(brandNum, brand) in vm.searchResult.brandsList" class="{{ brand.cssClass }}" ng-class="{ control_disabled: (segNum == 1 && !vm.searchResult.brandsCompatibleState[brandNum]) }">
 
@@ -79,10 +85,6 @@
                   <!-- <a href="">{{ brand.name }}</a> -->
                   {{ brand.name }}
                 </span>
-
-                <div style="display: none">
-                  {{brand.importantProps}}
-                </div>
 
                 <ul class="options">
                   <li ng-repeat="prop in brand.importantProps">
@@ -103,7 +105,8 @@
                 </ul>
               </div>
 
-              <div class="new-rates__list">
+              <div class="new-rates__list" ng-class="{'show': rates_show}">
+
 
                 <div class="new-rates__item" ng-repeat="item in brand.props">
 
