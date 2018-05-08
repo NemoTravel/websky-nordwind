@@ -1,0 +1,215 @@
+<app-loader ng-if="vm.loading || vm.confirmLoading || vm.searchOrderLoading || vm.modifyServicesLoading || vm.orderServicesLoading"></app-loader>
+
+<section class="out" ng-if="!vm.loading">
+
+    <app-header></app-header>
+
+
+	<div ng-if="vm.orderInfo && !vm.fatalError" class="content content-add-services">
+		<div class="wrap wrap_pt32">
+			<div class="content__i">
+
+                <div class="checkoutServices">
+                    <div class="checkoutServices__i">
+
+                        <h2 class="title">
+                            {{ 'web.addServices.header' | aliasStatic}}
+                            <div class="orderInfo">
+                                <span ng-if="vm.orderInfo.header.regnum">
+                                    {{ 'web.addServices.regnumLabel' | aliasStatic}}{{ vm.orderInfo.header.regnum }}
+                                </span>
+                                <span>
+                                    {{ 'web.addServices.routeLabel' | aliasStatic}}{{ ' ' }}
+                                    <wrap ng-repeat="(num, segment) in vm.orderInfo.flights">
+                                        {{ num ? ' – ' : '' }}
+                                        <geo-marker prefix="dep__point" key="add-services" city="segment.flights[0].origincity"  cityname="segment.flights[0].origincityName" port="segment.flights[0].originport"  portname="segment.flights[0].originportName"></geo-marker>
+                                        <wrap ng-if="num == vm.orderInfo.flights.length-1">
+                                            {{ ' – ' }}
+                                            <geo-marker prefix="arr__point" key="add-services" city="segment.flights[segment.flights.length-1].destinationcity"  cityname="segment.flights[segment.flights.length-1].destinationcityName" port="segment.flights[segment.flights.length-1].destinationport"  portname="segment.flights[segment.flights.length-1].destinationportName"></geo-marker>
+                                        </wrap>
+                                    </wrap>{{ ', ' }}
+                                    <wrap ng-repeat="(num, segment) in vm.orderInfo.flights">
+                                        {{ num ? ' – ' : '' }}
+                                        {{ segment.date | formatDate: 'D MMM' }}
+                                    </wrap>
+                                </span>
+                            </div>
+                        </h2>
+
+                        <div ng-if="!vm.es" class="emptyServices">
+                            {{ 'web.addServices.emptyServices' | aliasStatic}}
+                            <br/><br/><br/>
+                        </div>
+
+                        <div ng-if="vm.modifyServicesError" class="infoMessage infoMessage_error">
+                            <div class="infoMessage__i">
+                                <p ng-bind-html=" vm.modifyServicesError | aliasDynamic "></p>
+                            </div>
+                        </div>
+
+                        <extra-services-list ng-if="vm.es" es="vm.es" list="vm.esList" locked="vm.modifyServicesLoading || vm.orderServicesLoading"></extra-services-list>
+
+
+                    </div>
+                </div>
+
+                <br/>
+                <br/>
+
+                <div ng-if="vm.orderInfo.hasSelectedExtraServices" class="invoice">
+                    <div class="row">
+                        <div class="col">
+                            <div class="invoiceServicesSelected">
+                                <div class="invoiceServicesSelected__i">
+
+                                    <h2 class="title">
+                                        {{ 'web.addServices.selected' | aliasStatic}}
+                                    </h2>
+
+                                    <grouped-services-list order="vm.orderInfo" mode="editable"></grouped-services-list>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="invoiceTotal">
+                                <div class="invoiceTotal__i">
+
+                                    <!-- <order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices> -->
+                                    <order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>
+                                    <order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+                <br/>
+                <br/>
+
+                <div ng-if="vm.orderInfo.hasSelectedExtraServices && vm.priceVariant" class="payMethods">
+					<div class="payMethods__i">
+
+
+                        <wrap ng-show="!vm.isFreePricevariant">
+                            <h2 class="title">
+                                {{ 'web.paymentTypeSelect.header' | aliasStatic}}
+                            </h2>
+                            <payment-type-select price-variant="vm.priceVariant"
+                                change-handler="vm.paymentFormChangeHandler"
+                                selected-payment-type="vm.selectedPaymentType"
+                                selected-payment-form="vm.selectedPaymentForm">
+                            </payment-type-select>
+                        </wrap>
+
+                        <div class="iconfirm">
+							<div class="iconfirm__i">
+								<div class="customCheckbox">
+									<label><input type="checkbox" id="iconfirm" ng-model="vm.agree"/><span></span></label>
+								</div>
+								<p>
+									<label for="iconfirm">
+										<wrap ng-bind-html=" 'web.addServices.agree' | aliasStatic"></wrap>
+									</label>
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="searchResultsControl">
+					<div class="searchResultsControl__i">
+
+                        <a href ng-click="vm.openOrder(vm.pnrOrTicketNumber, vm.lastName)" class="btn btn_back">
+                            {{ 'web.addServices.backToOrder' | aliasStatic}}
+                        </a>
+
+                        <a href ng-click="vm.clearSession()" ng-if=" !('site.bookingEnabled' | param) " class="btn btn-clear-session">
+                            {{ 'web.buttons.clearSession' | aliasStatic}}
+                        </a>
+
+						<a href ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading" ng-click="vm.submitPayment()" ng-class="{ disabled: (!vm.agree || !vm.selectedPaymentForm || !vm.selectedPaymentType || vm.modifyServicesLoading || vm.orderServicesLoading) }" class="btn btn_next">
+							<span class="mobileHide">
+                                {{  vm.isFreePricevariant ? 'web.buttons.confirmAddServices' : 'web.buttons.gotoPayment' | aliasStatic}}
+                            </span>
+                            <span class="mobileShow">
+                                {{ 'web.buttons.next' | aliasStatic}}
+                            </span>
+						</a>
+
+					</div>
+				</div>
+
+
+                <div ng-if="vm.showNeedSelectPaymentFormMesage" class="infoMessage infoMessage_error">
+					<div class="infoMessage__i">
+						<p>
+                            {{ 'web.messages.needSelectPaymentForm' | aliasStatic}}
+                        </p>
+					</div>
+				</div>
+
+                <div ng-if="vm.confirmError" class="infoMessage infoMessage_error">
+					<div class="infoMessage__i">
+						<p ng-if=" vm.confirmError === true ">
+                            {{ 'web.messages.startPaymentForExtraServicesError' | aliasStatic}}
+                        </p>
+						<p ng-if=" vm.confirmError !== true ">
+                            {{ vm.confirmError | aliasDynamic }}
+                        </p>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+    <div class="content" ng-if="vm.errorMessage">
+        <div class="wrap wrap_pt32">
+            <div class="content__i">
+                <div>
+                    <div class="popup__i__caption">
+                        <div class="message_error">
+                            {{ vm.errorMessage | aliasDynamic }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content" ng-if="vm.fatalError">
+        <div class="wrap wrap_pt32">
+            <div class="content__i">
+                <div>
+                    <div class="popup__i__caption">
+                        <div class="message_error">
+                            {{ vm.fatalError | aliasDynamic }}
+                        </div>
+                    </div>
+                </div>
+                <div class="searchResultsControl">
+					<div class="searchResultsControl__i">
+						<a href ng-click="vm.reloadPage()" class="btn btn_next">
+                            {{ 'web.buttons.reloadPage' | aliasStatic}}
+						</a>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+
+	<div class="push"></div>
+
+</section>
+
+<app-footer ng-if="!vm.loading"></app-footer>
+
+<wrap ng-if="!vm.loading">
+    <popup-alias></popup-alias>
+    <popup-removed-services-warning ng-if="vm.orderInfo" order="vm.orderInfo"></popup-removed-services-warning>
+</wrap>
