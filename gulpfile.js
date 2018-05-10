@@ -2,12 +2,15 @@
 
     var gulp = require('gulp'),
         del = require('del'),
+        browserify = require('browserify'),
+        strictify = require('strictify'),
+        buffer = require('vinyl-buffer'),
         ngHtml2Js = require('gulp-ng-html2js'),
         minifyHtml = require('gulp-minify-html'),
+        source = require('vinyl-source-stream'),
         uglify = require('gulp-uglify'),
-        concat = require('gulp-concat'),
-        stylus = require('gulp-stylus'),
-        autoprefixer = require('autoprefixer-stylus');
+        sourcemaps = require('gulp-sourcemaps'),
+        concat = require('gulp-concat');
 
     gulp.task('clean', function() {
         return del('build');
@@ -31,12 +34,22 @@
             .pipe(gulp.dest('build/'));
     });
 
-
-    gulp.task('watch', function() {
-        gulp.watch('src/**/*.*', gulp.series('build:html'));
+    gulp.task('build:js', function () {
+        return browserify('src/index.js', { transform: strictify })
+            .bundle()
+            .pipe(source('controllers-nordwind.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(uglify())
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest('build/'));
     });
 
-    gulp.task('build', gulp.series('build:html'));
+    gulp.task('watch', function() {
+        gulp.watch('src/**/*.*', gulp.series('build:js', 'build:html'));
+    });
+
+    gulp.task('build', gulp.series('build:js', 'build:html'));
 
     gulp.task('default', gulp.series('build', 'watch'));
 

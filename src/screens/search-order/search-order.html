@@ -1,0 +1,132 @@
+<app-loader ng-if="vm.loading"></app-loader>
+
+<section class="out" ng-if="!vm.loading">
+
+  <app-header></app-header>
+
+
+  <div class="content">
+    <div class="wrap wrap_pt32">
+      <div class="content__i">
+
+        <div ng-show="!vm.orderLoaded" class="orderSearchForm orderSearchForm_change" style="display: block;">
+
+          <div class="search-order-form-header" ng-bind-html=" 'web.order.form.header' | aliasStatic"></div>
+
+          <div class="orderSearchForm__i">
+
+            <div class="formBody">
+              <form class="formBody__i" name="vm.searchOrderForm" ng-submit="vm.submitSearch();"
+                    form-submit-error-highlight novalidate>
+
+
+                <div class="formBodyItem">
+                  <div class="steps active">
+
+                    <div class="steps__i">
+
+                      <div class="item item_order_search_params">
+                        <div class="item__i">
+
+
+                          <div class="col">
+                            <div class="inp">
+                              <div class="inp__i">
+                                <error-message
+                                        control="vm.searchOrderForm.pnrOrTicketNumber"
+                                        format-alias="'web.messages.formatTicketOrPNR'"
+                                        touched="vm.submitTouched">
+                                </error-message>
+                                <input type="text"
+                                       tabindex="3"
+                                       placeholder="{{ 'web.order.form.pnr' | aliasStatic}}"
+                                       class="textInp"
+                                       name="pnrOrTicketNumber"
+                                       ng-model="vm.searchParams.pnrOrTicketNumber"
+                                       ng-change="vm.clear()"
+                                       ng-pattern="vm.pnrOrTicketRegexp"
+                                       clean-search-order-param
+                                       maxlength="26"
+                                       error-highlight="{{ vm.submitTouched }}"
+                                       required/>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="inp">
+                              <div class="inp__i">
+                                <error-message
+                                        control="vm.searchOrderForm.lastName"
+                                        format-alias="'web.messages.formatLastName'"
+                                        touched="vm.submitTouched">
+                                </error-message>
+                                <input type="text"
+                                       tabindex="4"
+                                       placeholder="{{ 'web.order.form.lastName' | aliasStatic}}"
+                                       class="textInp"
+                                       name="lastName"
+                                       ng-model="vm.searchParams.lastName"
+                                       ng-change="vm.clear()"
+                                       ng-pattern="vm.passengerLastNameRegexp"
+                                       clean-search-order-param
+                                       maxlength="50"
+                                       error-highlight="{{ vm.submitTouched }}"
+                                       required/>
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+
+
+                      <button class="btn btn_search btn_formSearch btn_formSearch_js"
+                          ng-class="{ disabled: (!vm.searchOrderAgree && ('site.useSearchOrderAgreeCheckbox' | param)) }">
+                        {{ 'web.order.form.searchButton' | aliasStatic}}
+                      </button>
+
+                    </div>
+
+                  </div>
+                </div>
+
+                <div ng-if=" 'site.useSearchOrderAgreeCheckbox' | param " class="iconfirm">
+                    <div class="iconfirm__i">
+                        <div class="customCheckbox">
+                            <label><input type="checkbox" id="searchOrderAgreeChb" ng-model="vm.searchOrderAgree"/><span></span></label>
+                        </div>
+                        <p>
+                            <label for="searchOrderAgreeChb">
+                                <wrap ng-bind-html=" 'web.searchOrderAgree' | aliasStatic"></wrap>
+                            </label>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="search-order-form-footer" ng-bind-html=" 'web.order.form.footer' | aliasStatic"></div>
+
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+
+        <p ng-if="vm.orderLoaded" class="invoiceBack">
+          <a href="#{{$root.ROUTES.SEARCH_ORDER}}" class="back">
+            {{ 'web.order.form.backToSearchOrder' | aliasStatic}}
+          </a>
+        </p>
+
+        <order ng-if="vm.pnrOrTicketNumber && vm.lastName && vm.searchOrderForm.$valid" num="vm.pnrOrTicketNumber" lastname="vm.lastName"></order>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="push"></div>
+
+</section>
+
+<app-footer ng-if="!vm.loading"></app-footer>
