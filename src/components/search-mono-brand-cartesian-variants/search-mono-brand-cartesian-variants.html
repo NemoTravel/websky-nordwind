@@ -67,7 +67,7 @@
                    ng-class="{'active': rates_show}"
                    href=""
                    ng-init="rates_show = false"
-                   ng-click="rates_show = !rates_show"> 
+                   ng-click="rates_show = !rates_show">
                    {{rates_show ? 'Свернуть' : 'Развернуть'}}
                  </a>
               </div>
@@ -318,7 +318,8 @@
 
       <div class="chooseFlight__table flightTable">
 
-        <div class="chooseFlight__table__item" ng-if="vm.searchResult.segmentRows[segNum][vm.selectedFlightRow[segNum]].prices" ng-repeat="(priceNum, priceItem) in vm.searchResult.segmentRows[segNum][vm.selectedFlightRow[segNum]].prices track by $index">
+        <div class="chooseFlight__table__item" ng-if="vm.searchResult.segmentRows[segNum][vm.selectedFlightRow[segNum]].prices"
+        ng-repeat="(priceNum, priceItem) in vm.searchResult.segmentRows[segNum][vm.selectedFlightRow[segNum]].prices track by $index">
           <div class="chooseFlight__table__item__columnTitle {{ vm.searchResult.brandsList[priceNum].cssClass }}">
 
             <div ng-if="vm.searchResult.brandsList[priceNum].theBest" class="best">
@@ -332,17 +333,21 @@
 						</span>
             <ul class="options">
               <li ng-repeat="prop in vm.searchResult.brandsList[priceNum].importantProps">
-                <span ng-if="prop.name" class="infoBoxWrap mobile">
-                                    <i class="icon_{{ prop.code }}"></i>
-                                    <span class="infoBox">
-                                        <span class="infoBox__i">
-                                            {{ prop.name }}
-                                        </span>
+                <span ng-if="prop.name && prop.amount == '2'" class="infoBoxWrap mobile">
+                  <i class="icon_{{ prop.code }}_{{ prop.default }}_{{ prop.amount }}"></i>
+                    <span class="infoBox">
+                      <span class="infoBox__i">{{ prop.name }}</span>
+                    </span>
                 </span>
+                <span ng-if="prop.name && prop.amount !== '2'" class="infoBoxWrap">
+                  <i class="icon_{{ prop.code }}_{{ prop.default }}"></i>
+                    <span class="infoBox">
+                      <span class="infoBox__i">{{ prop.name }}</span>
+                    </span>
                 </span>
-                <i ng-if="!prop.name" class="icon_{{ prop.code }}"></i>
               </li>
             </ul>
+
           </div>
           <div class="chooseFlight__table__item__content" ng-class="{ active: priceItem.selected }">
             <a ng-if="priceItem" href ng-click="vm.selectVariant(segNum, vm.selectedFlightRow[segNum], priceNum)" ng-class="{ control_disabled: (segNum == 1 && !vm.searchResult.brandsCompatibleState[priceNum]) || priceItem.comparedDateTimeDisable }" class="chooseFlight__table__item__content__link">
