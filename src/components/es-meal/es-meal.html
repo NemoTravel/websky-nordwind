@@ -157,9 +157,24 @@
                                                         </div>
 
                                                         <button class="item__btn"
-                                                                ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)">
-                                                          {{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}
+                                                                ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+                                                                ng-if="mealItem.alreadySelectedCount < 1">
+                                                          {{ 'web.extraServices.meal.choose' | aliasStatic}}
                                                         </button>
+
+                                                        <button class="item__btn"
+                                                                ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+                                                                ng-if="mealItem.alreadySelectedCount > 0 && mealItem.alreadySelectedCount !== mealItem.limit">
+                                                          {{ 'web.extraServices.meal.addAnother' | aliasStatic}}
+                                                        </button>
+
+                                                        <button class="item__btn"
+                                                                ng-class="{selected: mealItem.alreadySelectedCount == mealItem.limit}"
+                                                                ng-if="mealItem.alreadySelectedCount == mealItem.limit">
+                                                          {{ 'web.extraServices.meal.selected' | aliasStatic}}
+                                                        </button>
+
+
 
                                                     </div>
                                                 </div>
