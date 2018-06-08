@@ -110,7 +110,12 @@
                                 </div>
                             </div>
                             <div class="passengersBlock_row-menu">
-                                <div ng-if=" vm.service.subgroups.length > 1 " class="passengersBlock_row-menu-foodSorting">
+
+                              <div ng-if="!vm.mealMenu" class="passengersBlock_row-menu__no-food">
+                                {{ 'web.extraServices.meal.noFood' | aliasStatic}}
+                              </div>
+
+                                <div ng-if=" vm.service.subgroups.length > 1 && vm.mealMenu" class="passengersBlock_row-menu-foodSorting">
                                     <ul>
                                         <li ng-class="{ active: vm.mealMenuSubgroup === false }">
                                             <a href ng-click="vm.mealMenuSubgroup = false">{{ 'web.meal.subgroup.' | aliasWithPrefix:'all' }}</a>
@@ -147,14 +152,6 @@
                                                             </a>
                                                             <p ng-bind-html="mealItem.description"></p>
                                                         </div>
-                                                        <div class="extra-service-picker" style="display: none">
-                                                            <service-picker count="mealItem.alreadySelectedCount"
-                                                                limit="mealItem.limit"
-                                                                locked="vm.locked"
-                                                                on-increase="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
-                                                                on-decrease="vm.mealCountChangeHandler(subgroupNum, mealItem, -1)">
-                                                            </service-picker>
-                                                        </div>
 
                                                         <button class="item__btn"
                                                                 ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
@@ -173,8 +170,6 @@
                                                                 ng-if="mealItem.alreadySelectedCount == mealItem.limit">
                                                           {{ 'web.extraServices.meal.selected' | aliasStatic}}
                                                         </button>
-
-
 
                                                     </div>
                                                 </div>
