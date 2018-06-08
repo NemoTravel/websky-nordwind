@@ -128,10 +128,12 @@
                                             <div ng-repeat="mealItem in subgroup"
                                                  ng-if=" vm.mealMenuSubgroup === subgroupNum || vm.mealMenuSubgroup === false "
                                                  ng-class="{ active: mealItem.active, control_disabled: vm.locked }"
-                                                 ng-click="vm.setPassengerFlightMeal(subgroupNum, mealItem)"
                                                  class="item">
                                                 <div class="food_wrap">
                                                     <div class="img">
+                                                      <span class="item__status-count" ng-if="mealItem.alreadySelectedCount">
+                                                        {{ mealItem.alreadySelectedCount }}
+                                                      </span>
                                                         <img ng-src="{{vm.mealImagesPath}}/{{ mealItem.serviceType }}-{{ mealItem.rfisc }}.jpg" alt=""/>
                                                     </div>
                                                     <div class="food_info">
@@ -153,8 +155,12 @@
                                                                 on-decrease="vm.mealCountChangeHandler(subgroupNum, mealItem, -1)">
                                                             </service-picker>
                                                         </div>
-                                                        <button ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)" class="selectItemButton selectItemButton_not">{{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}</button>
-                                                        <button class="selectItemButton selectItemButton_yes"> {{ 'web.extraServices.meal.isSelectItemButton' | aliasStatic}}</button>
+
+                                                        <button class="item__btn"
+                                                                ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)">
+                                                          {{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}
+                                                        </button>
+
                                                     </div>
                                                 </div>
                                             </div>
