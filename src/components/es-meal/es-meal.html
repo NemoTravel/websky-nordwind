@@ -88,13 +88,23 @@
                                                 <i class="passengersBlock_row-control-droporder-passenger-icon" aria-hidden="true"></i>
                                                 <span class="passengersBlock_row-control-droporder-passenger-name">{{ passenger.lastName }} {{ passenger.firstName }}</span>
                                             </div>
-                                            <div class="passengersBlock_row-control-droporder-passenger-order" ng-init="selectedPassengerFlightMeal = vm.getSelectedPassengerFlightMeal(passengerNum, flightNum)">
-                                                <div class="passengersBlock_row-control-droporder-passenger-order-outer" ng-show="selectedPassengerFlightMeal">
-                                                    <span>{{selectedPassengerFlightMeal.title}}</span>
-                                                    <span ng-bind-html="{ value: selectedPassengerFlightMeal.totalPrice, currency: selectedPassengerFlightMeal.currency } | price"></span>
-                                                    <i class="passengersBlock_row-control-droporder-passenger-order-remove" ng-click="vm.removePassengerFlightMeal(passengerNum, flightNum)" aria-hidden="true"></i>
-                                                </div>
+
+                                            <!-- passengersBlock_row-control-droporder-passenger-order -->
+                                            <div ng-if="vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]"
+                                                 class="passengersBlock_row-control-droporder-passenger-order"
+                                                 ng-repeat="(indexMealSelect, itemMealSelect) in vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum] track by $index">
+
+                                              <div class="passengersBlock_row-control-droporder-passenger-order-outer">
+                                                <span>{{itemMealSelect.title}}</span>
+                                                <span ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price"></span>
+                                                <i class="passengersBlock_row-control-droporder-passenger-order-remove"
+                                                   ng-click="vm.selectFlightPassenger(flightNum, passengerNum); vm.removePassengerFlightMeal(passengerNum, flightNum)"
+                                                   aria-hidden="true"></i>
+                                              </div>
+
                                             </div>
+                                            <!-- end passengersBlock_row-control-droporder-passenger-order -->
+
                                         </div>
                                     </div>
                                 </div>
@@ -135,7 +145,15 @@
                                                             </a>
                                                             <p ng-bind-html="mealItem.description"></p>
                                                         </div>
-                                                        <button class="selectItemButton selectItemButton_not">{{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}</button>
+                                                        <div class="extra-service-picker" style="display: none">
+                                                            <service-picker count="mealItem.alreadySelectedCount"
+                                                                limit="mealItem.limit"
+                                                                locked="vm.locked"
+                                                                on-increase="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+                                                                on-decrease="vm.mealCountChangeHandler(subgroupNum, mealItem, -1)">
+                                                            </service-picker>
+                                                        </div>
+                                                        <button ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)" class="selectItemButton selectItemButton_not">{{ 'web.extraServices.meal.selectItemButton' | aliasStatic}}</button>
                                                         <button class="selectItemButton selectItemButton_yes"> {{ 'web.extraServices.meal.isSelectItemButton' | aliasStatic}}</button>
                                                     </div>
                                                 </div>
