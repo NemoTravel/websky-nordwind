@@ -1,0 +1,97 @@
+<div class="popup popup_selectFood" id="popupMeal" style="display: none;">
+    <div class="title">
+        <div class="title__i">
+            <p>{{ 'web.popupMeal.header' | aliasStatic}}</p>
+            <a href ng-click="vm.close()" class="closePopup closePopup_js"></a>
+        </div>
+    </div>
+    <div class="foodSlider">
+
+        <div class="foodSlider__i slick-initialized slick-slider">
+
+            <div aria-live="polite" class="slick-list draggable">
+                <div class="slick-track" role="listbox">
+
+                    <div class="item slick-slide slick-current slick-active">
+
+                        <div class="itemTitle">
+                            <div class="itemTitle__i">
+                                <p>
+                                    <geo-marker prefix="dep__point" key="es-meal" city="vm.flight.origincity"  cityname="vm.flight.origincityName" port="vm.flight.originport"  portname="vm.flight.originportName"></geo-marker>
+                                     –
+                                    <geo-marker prefix="arr__point" key="es-meal" city="vm.flight.destinationcity"  cityname="vm.flight.destinationcityName" port="vm.flight.destinationport"  portname="vm.flight.destinationportName"></geo-marker>
+                                </p>
+                                <p>
+                                    {{ vm.passenger.lastName }} {{ vm.passenger.firstName }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div ng-if="vm.nextPassenger || vm.prevPassenger" class="pax-switcher">
+                            <a href ng-if="vm.prevPassenger" ng-click="vm.switchPrev()" class="pax-switcher-prev">
+                                {{ 'web.popupMeal.switchPrev' | aliasStatic}}
+                            </a>
+                            <a href ng-if="vm.nextPassenger" ng-click="vm.switchNext()" class="pax-switcher-next">
+                                {{ 'web.popupMeal.switchNext' | aliasStatic}}
+                            </a>
+                        </div>
+
+                        <div ng-show=" vm.subgroups.length > 1 " class="foodSortSelect_wrap">
+                            <ui-select ng-change="vm.mealMenuSubgroupMobileChange()"
+                                       ng-model="vm.mealMenuSubgroupMobile"
+                                       theme="selectize"
+                                       search-enabled="false"
+                                       required>
+                                <ui-select-match placeholder="{{$select.selected.value ? ('web.meal.subgroup.' | aliasWithPrefix:$select.selected.value) : ( 'web.meal.subgroup.all' | aliasStatic)}}">
+                                    {{$select.selected.value ? ('web.meal.subgroup.' | aliasWithPrefix:$select.selected.value) : ( 'web.meal.subgroup.all' | aliasStatic)}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="subgroupCode.index as subgroupCode in vm.subgroupItems track by $index">
+                                    <div>{{ 'web.meal.subgroup.' | aliasWithPrefix:subgroupCode.value }}</div>
+                                </ui-select-choices>
+                            </ui-select>
+    					</div>
+
+                        <div class="list">
+                            <div class="list__i isotopeGrid">
+
+                                <wrap ng-repeat="(subgroupNum, subgroup) in vm.mealMenu">
+                                    <div ng-repeat="mealItem in subgroup"
+                                        ng-if=" vm.mealMenuSubgroup === subgroupNum || vm.mealMenuSubgroup === false "
+                                        ng-class="{ active: ( mealItem.alreadySelectedCount > 0 ) }"
+                                        class="item">
+                                        <a href>
+                                            <div class="img">
+                                                <img ng-src="{{vm.mealImagesPath}}/{{ mealItem.serviceType }}-{{ mealItem.rfisc }}.jpg" alt=""/>
+                                            </div>
+                                            <div class="name">
+                                                <p>{{ mealItem.title }}</p>
+                                                <p class="price" ng-bind-html="{ value: mealItem.price, currency: mealItem.currency } | price"></p>
+                                            </div>
+                                            <div class="extra-service-picker">
+                                                <service-picker count="mealItem.alreadySelectedCount"
+                                                    limit="mealItem.limit"
+                                                    locked="vm.locked"
+                                                    on-increase="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+                                                    on-decrease="vm.mealCountChangeHandler(subgroupNum, mealItem, -1)">
+                                                </service-picker>
+                                            </div>
+                                            <div class="description">
+                                                <p ng-bind-html="mealItem.description"></p>
+                                            </div>
+                                        </a>
+
+                                    </div>
+
+                                </wrap>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
