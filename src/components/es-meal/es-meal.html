@@ -1,4 +1,3 @@
-
 <div class="item__i mobileHide">
     <div class="top">
         <div class="top__i">
@@ -287,34 +286,61 @@
                                     <td ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
                                         ng-if="vm.service.availableByPassengerSegments[passengerNum]"
                                         ng-class="{ active: vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum }"
-                                        ng-init="selectedPassengerFlightMeal = vm.getSelectedPassengerFlightMeal(passengerNum, flightNum)">
-                                        <a href fancybox="popupMeal" ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
-                                           class="passengersTable__link"
-                                           ng-class="{ passengersTable__link_empty: !selectedPassengerFlightMeal, passengersTable__link_select: (!selectedPassengerFlightMeal && vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum) }">
-                                            <wrap ng-if="!selectedPassengerFlightMeal && (vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum)">
-                                                {{ 'web.extraServices.meal.selectItem' | aliasStatic}}
-                                            </wrap>
-                                            <wrap ng-if="!selectedPassengerFlightMeal && !(vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum)">
-                                                {{ 'web.extraServices.meal.noneSelected' | aliasStatic}}
-                                            </wrap>
-                                            <wrap ng-if="selectedPassengerFlightMeal">
-                                                {{ selectedPassengerFlightMeal.title }}
-                                            </wrap>
-                                        </a>
-                                        <span ng-if="selectedPassengerFlightMeal"
-                                              class="passengersTable__priceSeat"
-                                              ng-bind-html="{ value: selectedPassengerFlightMeal.totalPrice, currency: selectedPassengerFlightMeal.currency } | price">
-                                            </span>
-                                        <a ng-if="selectedPassengerFlightMeal" href ng-click="vm.removePassengerFlightMeal(passengerNum, flightNum)" class="btn-remove">
-                                                <span class="infoBoxWrap">
-                                                    <i class="icon_remove"></i>
-                                                    <span class="infoBox">
-                                                        <span class="infoBox__i">
-                                                            {{ 'web.extraServices.meal.cancelByPassengerSegment' | aliasStatic }}
-                                                        </span>
-                                                    </span>
+                                        ng-init="selectedPassengerFlightMeals = vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]">
+
+                                        <!--  -->
+                                        <div ng-if="!selectedPassengerFlightMeals">
+
+                                          <a href fancybox="popupMeal" ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+                                             class="passengersTable__link"
+                                             ng-class="{ passengersTable__link_select: (!selectedPassengerFlightMeals && vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum) }">
+
+                                              <wrap ng-if="vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum">
+                                                  {{ 'web.extraServices.meal.selectItem' | aliasStatic}}
+                                              </wrap>
+
+                                              <wrap ng-if="!(vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum)">
+                                                  {{ 'web.extraServices.meal.noneSelected' | aliasStatic}}
+                                              </wrap>
+
+                                          </a>
+
+                                        </div>
+
+                                        <div ng-if="selectedPassengerFlightMeals"
+                                             ng-repeat="(indexMealSelect, itemMealSelect) in selectedPassengerFlightMeals track by $index">
+
+                                          <a href fancybox="popupMeal" ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+                                             class="passengersTable__link"
+                                             ng-class="{ passengersTable__link_empty: !selectedPassengerFlightMeals }">
+
+                                              <wrap ng-if="selectedPassengerFlightMeals">
+                                                  {{ itemMealSelect.title }}
+                                              </wrap>
+
+                                          </a>
+
+                                          <span ng-if="selectedPassengerFlightMeals"
+                                                class="passengersTable__priceSeat"
+                                                ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price">
+                                          </span>
+
+                                          <a ng-if="selectedPassengerFlightMeals" href
+                                             ng-click="vm.removePassengerFlightMeal(passengerNum, flightNum)" class="btn-remove">
+
+                                            <span class="infoBoxWrap">
+                                              <i class="icon_remove"></i>
+                                              <span class="infoBox">
+                                                <span class="infoBox__i">
+                                                  {{ 'web.extraServices.meal.cancelByPassengerSegment' | aliasStatic }}
                                                 </span>
-                                        </a>
+                                              </span>
+                                            </span>
+                                          </a>
+
+                                        </div>
+                                        <!--  -->
+
                                     </td>
                                 </tr>
                                 </tbody>
@@ -333,11 +359,11 @@
     </div>
 
     <popup-meal menu="vm.mealMenu"
-                passenger="vm.orderInfo.passengers[vm.selectedPassenger]"
-                flight="vm.orderInfo.plainFlights[vm.selectedFlight]"
-                handler="vm.setPassengerFlightMeal"
-                path="vm.mealImagesPath"
-                subgroups="vm.service.subgroups">
+        passenger="vm.orderInfo.passengers[vm.selectedPassenger]"
+        flight="vm.orderInfo.plainFlights[vm.selectedFlight]"
+        handler="vm.mealCountChangeHandler"
+        path="vm.mealImagesPath"
+        subgroups="vm.service.subgroups">
     </popup-meal>
 
 </div>
