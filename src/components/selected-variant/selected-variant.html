@@ -109,7 +109,34 @@
 
                 </div> -->
 
-                <div class="tariff__content" ng-if="segment.brandAvailableProps && segment.brandAvailableProps.length > 0" >
+
+                <div class="tariff__content">
+
+                  <div class="tariff__content__item" ng-repeat="item in segment.brandAvailableProps">
+                    <span class="new-rates__icon new-rates__icon_free"></span>
+                    <div class="tariff__content__item__text">
+                      <span class="tariff__content__item__name" ng-bind-html="item"></span>
+                    </div>
+                  </div>
+
+                  <div class="tariff__content__item" ng-repeat="item in segment.brandPaidProps">
+                    <span class="new-rates__icon new-rates__icon_paid"></span>
+                    <div class="tariff__content__item__text">
+                      <span class="tariff__content__item__name" ng-bind-html="item"></span>
+                    </div>
+                  </div>
+
+                  <div class="tariff__content__item" ng-repeat="item in segment.brandUnavailableProps">
+                    <span class="new-rates__icon new-rates__icon_no"></span>
+                    <div class="tariff__content__item__text">
+                      <span class="tariff__content__item__name" ng-bind-html="item"></span>
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <!-- <div class="tariff__content" ng-if="segment.brandAvailableProps && segment.brandAvailableProps.length > 0" >
 
                   <div class="tariff__content__item" ng-repeat="(propNum, prop) in vm.getBrandsList(segment.brand)">
                     <span class="new-rates__icon new-rates__icon_free" ng-if="prop.available == 'yes'"></span>
@@ -121,7 +148,7 @@
                     </div>
                   </div>
 
-                </div>
+                </div> -->
 
               </div>
 
