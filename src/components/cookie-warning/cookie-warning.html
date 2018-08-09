@@ -1,0 +1,15 @@
+
+<div ng-if="vm.active" class="cookieWarning">
+    <div class="cookieWarning__i">
+        <a href ng-click="vm.close()" class="cookieWarningClose"></a>
+        <h2 class="cookieWarningHeader">
+            {{ 'web.cookieWarning.header' | aliasStatic}}
+        </h2>
+        <div class="cookieWarningBody" ng-bind-html=" 'web.cookieWarning.text' | aliasStatic "></div>
+        <div class="cookieWarningFooter">
+            <a href="#{{$root.ROUTES.PRIVACY_POLICY}}" target="_blank" class="link">
+                {{ 'web.cookieWarning.privacyPolicyLink' | aliasStatic}}
+            </a>
+        </div>
+    </div>
+</div>
