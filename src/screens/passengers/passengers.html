@@ -479,6 +479,30 @@
 													</div>
 												</td>
                                             </tr>
+											<tr ng-if=" ('customer.showIsSmsSend' | param) || ('customer.showIsEmailSend' | param) ">
+												<td>
+													<div class="inp" ng-if=" 'customer.showIsSmsSend' | param ">
+														<div class="customCheckbox">
+															<label>
+																<input type="checkbox" ng-model="vm.customer.sendSms">
+																<span></span>
+																{{ 'web.customerInfo.sendSms' | aliasStatic}}
+															</label>
+														</div>
+													</div>
+												</td>
+												<td>
+													<div class="inp" ng-if=" 'customer.showIsEmailSend' | param ">
+														<div class="customCheckbox">
+															<label>
+																<input type="checkbox" ng-model="vm.customer.sendEMail">
+																<span></span>
+																{{ 'web.customerInfo.sendEMail' | aliasStatic}}
+															</label>
+														</div>
+													</div>
+												</td>
+											</tr>
 											<tr ng-if="!vm.authoriseCustomer && vm.allowCreateAccount && vm.customer.createAccount">
                                                 <td>
 													<div class="inp">
