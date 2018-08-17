@@ -484,7 +484,7 @@
 													<div class="inp" ng-if=" 'customer.showIsSmsSend' | param ">
 														<div class="customCheckbox">
 															<label>
-																<input type="checkbox" ng-model="vm.customer.sendSms">
+																<input type="checkbox" ng-model="vm.customer.sendSms" ng-checked="'customer.defaultIsMessageSend' | param">
 																<span></span>
 																{{ 'web.customerInfo.sendSms' | aliasStatic}}
 															</label>
@@ -495,7 +495,7 @@
 													<div class="inp" ng-if=" 'customer.showIsEmailSend' | param ">
 														<div class="customCheckbox">
 															<label>
-																<input type="checkbox" ng-model="vm.customer.sendEMail">
+																<input type="checkbox" ng-model="vm.customer.sendEMail" ng-checked="'customer.defaultIsMessageSend' | param">
 																<span></span>
 																{{ 'web.customerInfo.sendEMail' | aliasStatic}}
 															</label>
