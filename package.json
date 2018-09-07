@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "browserify": "^16.2.2",
+    "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-util": "^3.0.8",
     "strictify": "^0.2.0",

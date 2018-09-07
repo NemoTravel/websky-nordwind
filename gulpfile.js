@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     var gulp = require('gulp'),
         del = require('del'),
@@ -12,11 +12,11 @@
         sourcemaps = require('gulp-sourcemaps'),
         concat = require('gulp-concat');
 
-    gulp.task('clean', function() {
+    gulp.task('clean', function () {
         return del('build');
     });
 
-    gulp.task('build:html', function() {
+    gulp.task('build:html', function () {
         return gulp.src('src/**/*.html')
             .pipe(minifyHtml({
                 empty: true,
@@ -25,7 +25,7 @@
             }))
             .pipe(ngHtml2Js({
                 moduleName: 'app',
-                rename: function(url) {
+                rename: function (url) {
                     return url.replace('src/', '');
                 }
             }))
@@ -35,7 +35,7 @@
     });
 
     gulp.task('build:js', function () {
-        return browserify('src/index.js', { transform: strictify })
+        return browserify('src/index.js', {transform: strictify})
             .bundle()
             .pipe(source('controllers-nordwind.js'))
             .pipe(buffer())
@@ -45,7 +45,19 @@
             .pipe(gulp.dest('build/'));
     });
 
-    gulp.task('watch', function() {
+    gulp.task('build:css', function () {
+        return gulp.src('src/css/**/*.sass')
+            .pipe(sourcemaps.init())
+            .pipe(sass().on('error', sass.logError))
+            .pipe(autoprefixer({
+                browsers: ['last 5 versions'],
+                cascade: false
+            }))
+            .pipe(sourcemaps.write())
+            .concat('styles-nordwind.css')
+            .pipe(gulp.dest('build/index.css/'));
+    });
+    gulp.task('watch', function () {
         gulp.watch('src/**/*.*', gulp.series('build:js', 'build:html'));
     });
 
