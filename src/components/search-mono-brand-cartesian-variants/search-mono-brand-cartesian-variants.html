@@ -133,7 +133,7 @@
                 <tr>
                   <td class="racenumber">
                     <span ng-repeat="flight in row.flights">
-                                            {{ flight.company.code_en }}-{{ flight.racenumber }}
+                                            {{ flight.company.code_en }}-{{ flight.racenumber }}{{ row.flights.length > 0 && !$last? ',&nbsp;&nbsp;' : '' }}
                                         </span>
                   </td>
                   <td></td>
@@ -292,7 +292,7 @@
 								</div>
 								<div class="chooseFlight__list__item__content__bottom__flightInfo">
 									<span ng-repeat="flight in row.flights" class="number">
-                                        {{ flight.company.code || flight.company.code_en }}-{{ flight.racenumber }}
+                                        {{ flight.company.code || flight.company.code_en }}-{{ flight.racenumber }}{{ row.flights.length > 0 && !$last? ',&nbsp;&nbsp;' : '' }}
                                     </span>,
 									<span class="timeEnRoute">
                                         {{ 'web.choosenFlight.flighttime' | aliasStatic}} {{ row.flightsInfo.flighttime | timeAsWords }}
