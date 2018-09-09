@@ -1,0 +1,94 @@
+/// Remove the unit of a length
+/// @param {Number} $number - Number to remove unit from
+/// @return {Number} - Unitless number
+@function strip-unit($number)
+  @if type-of($number) == 'number' and not unitless($number)
+    @return $number / ($number * 0 + 1)
+  @return $number
+
+
+@function em($wanted, $base: 16)
+  @return (strip-unit($wanted) / strip-unit($base)) * 1em
+
+@function rem($wanted, $base: 16)
+  @return (strip-unit($wanted) / strip-unit($base)) * 1rem
+
+@function percent($wanted, $context)
+  @return (strip-unit($wanted) / strip-unit($context) * 100) * 1%
+
+// example +fastTransition(background-color width height, .8s ease)
+// notice that transitioned props isn't comma-separated
+=fastTransition($props, $duration: .15s, $timing: ease-in-out)
+  transition-property: join((), $props, comma)
+  transition-duration: $duration
+  transition-timing-function: $timing
+
+=clearfix()
+  &:after
+    content: ""
+    display: table
+    clear: both
+
+=placeholder
+  &::-webkit-input-placeholder
+    @content
+  &:-moz-placeholder
+    @content
+  &::-moz-placeholder
+    @content
+  &:-ms-input-placeholder
+    @content
+
+
+=adaptivity($media)
+  $screen-size-laptop-large: 1440px
+  $screen-size-laptop: 1100px
+  $screen-size-tablet: 768px
+  $screen-size-phone: 515px
+  @if $media == desktop
+    @media only screen and (min-width: $screen-size-laptop-large)
+      @content
+
+  @if $media == laptop-large
+    @media only screen and (max-width: $screen-size-laptop-large)
+      @content
+
+  @else if $media == laptop
+    @media only screen and (max-width: $screen-size-laptop)
+      @content
+
+  @else if $media == only-laptop
+    @media only screen and (min-width: $screen-size-tablet) and (max-width: $screen-size-laptop)
+      @content
+
+  @else if $media == tablet
+    @media only screen and (max-width: $screen-size-tablet)
+      @content
+
+  @else if $media == phone
+    @media only screen and (max-width: $screen-size-phone)
+      @content
+
+/// Block Element
+/// @access public
+/// @param {String} $element - Element's name
+=element($element)
+  &__#{$element}
+    @content
+
+/// Block Modifier
+/// @access public
+/// @param {String} $modifier - Modifier's name
+=modifier($modifier)
+  &--#{$modifier}
+    @content
+
+
+=e($element)
+  +element($element)
+    @content
+
+/// @alias modifier
+=m($modifier)
+  +modifier($modifier)
+    @content
