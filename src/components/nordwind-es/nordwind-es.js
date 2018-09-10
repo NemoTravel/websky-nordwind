@@ -3,22 +3,30 @@ angular.module('app').component('nordwindEs', {
     bindings: {
         orderInfo: '='
     },
-    controller: ['backend', nordwindEsController],
+    controller: ['backend', 'utils', nordwindEsController],
     controllerAs: 'vm'
 });
 
 
-function nordwindEsController(backend) {
+function nordwindEsController(backend, utils) {
     var vm = this;
-    vm.link = 'test';
 
-    backend.ready.then(function(){
+    vm.selected = null;
+    vm.handleEsSelect = handleEsSelect;
 
-        backend.getExtraServices().then(function(extraServices){
+    backend.ready.then(function () {
+
+        backend.getExtraServices().then(function (extraServices) {
             vm.extraServicesList = extraServices.slice();
-            console.log(vm.extraServicesList);
+            // console.log(vm.extraServicesList);
+            // ??? isnt working!
+            console.log(utils.getAvailableExtraServicesList(extraServices, vm.orderInfo, vm.extraServicesList));
         });
-
     });
+
+    function handleEsSelect(esCode) {
+        vm.selected = esCode;
+        console.log(vm.selected);
+    }
 
 }
