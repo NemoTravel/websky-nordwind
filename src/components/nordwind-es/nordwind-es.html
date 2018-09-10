@@ -1,0 +1,23 @@
+<wrap ng-if="vm.extraServicesList.length > 0">
+    <div class="extra-services">
+        <h3 class="extra-services__heading">{{ 'web.extraServices.heading' | aliasStatic }}</h3>
+        <ul class="extra-services__list">
+            <li class="extra-services__item" ng-repeat="extraService in vm.extraServicesList">
+                <div class="extra-services__item-image-wrp">
+                    <img class="extra-services__item-image"
+                            ng-src="/resources/websky-test/custom/img/es-{{ extraService.code }}.png"
+                            alt="{{ extraService.code }}">
+                    <i class="extra-services__item-icon extra-services__item-icon--{{ extraService.code }}"></i>
+                </div>
+                <h3 class="extra-services__item-service-name">
+                    {{ extraService.title }}
+                    <span class="extra-services__item-min-price text text--highlight"></span>
+                </h3>
+                <p class="extra-services__item-descr">
+                    {{ 'web.extraServices.' + extraService.code +'.desc' | aliasStatic }}
+                </p>
+                <a class="extra-services__item-button">Выбрать</a>
+            </li>
+        </ul>
+    </div>
+</wrap>

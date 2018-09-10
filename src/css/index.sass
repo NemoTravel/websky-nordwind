@@ -2,4 +2,67 @@
 @import "variables"
 @import "blocks"
 
+.extra-services
+  display: flex
+  flex-direction: column
+  background: $brandLightGrayColor
+  border-radius: 5px
+  padding: 40px 15px 15px
+  &__heading
+    text-align: center
+    @extend %heading--big
+  &__list
+    padding: 0
+    list-style-type: none
+    display: flex
+    justify-content: space-between
+  &__item
+    display: flex
+    flex-direction: column
+  &__item-service-name
+    @extend %heading--subheading
+    margin-top: 20px
+    margin-bottom: 40px
+  &__item-descr
+    @extend %text--small
+    margin-top: 35px
+    margin-bottom: 20px
+  &__item-image-wrp
+    position: relative
+    overflow: hidden
+    &:before,
+    &:after
+      background-color: $brandRedColor
+      width: 30%
+      height: 100%
+      content: ''
+      position: absolute
+      left: -10%
+      top: 0
+      transform: skew(-30deg)
+      z-index: 1
+    &:after
+      background: rgba($brandRedColor, .5)
+      left: 0
+
+  &__item-icon
+    z-index: 2
+    position: absolute
+    width: 45px
+    height: 45px
+    left: 20px
+    top: 40%
+    transform: translate(0, -50%)
+    background-repeat: no-repeat
+    background-position: center
+    background-size: contain
+    &--meal
+      background-image: $mealIcon
+    &--insuranceOnline
+    &--seat
+      background-image: $seatIcon
+
+  &__item-button
+    @extend %btn
+    width: percent(177, 360)
 
