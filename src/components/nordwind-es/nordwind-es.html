@@ -21,12 +21,49 @@
                 </div>
             </li>
         </ul>
-        <es-insurance ng-if="vm.selected === 'insurance'" service="vm.es.insurance"></es-insurance>
-        <es-meal ng-if="vm.selected === 'meal'" service="vm.es.meal"></es-meal>
-        <es-seat ng-if="vm.selected === 'seat'" service="vm.es.seat"></es-seat>
-        <es-baggage ng-if="vm.selected == 'baggage'" service="vm.es.baggage"></es-baggage>
-        <es-aeroexpress ng-if="esCode == 'aeroexpress'" service="vm.es.aeroexpress" locked="vm.locked"></es-aeroexpress>
-        <es-common ng-if="vm.isCommonService(esCode)" service="vm.es[esCode]" code="esCode"
-                   locked="vm.locked"></es-common>
+
+
+        <div class="es-popup es-popup--insurance" ng-if="vm.selected === 'insurance'">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-insurance service="vm.es.insurance"></es-insurance>
+            </div>
+        </div>
+        <div class="es-popup es-popup--meal" ng-if="vm.selected === 'meal'">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-meal service="vm.es.meal"></es-meal>
+            </div>
+        </div>
+        <div class="es-popup es-popup--seat" ng-if="vm.selected === 'seat'">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-seat service="vm.es.seat"></es-seat>
+            </div>
+        </div>
+
+        <div class="es-popup es-popup--baggage" ng-if="vm.selected == 'baggage'">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-baggage service="vm.es.baggage"></es-baggage>
+            </div>
+        </div>
+
+        <div class="es-popup es-popup--aeroexpress" ng-if="vm.selected == 'aeroexpress'">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-aeroexpress service="vm.es.aeroexpress"
+                                locked="vm.locked"></es-aeroexpress>
+            </div>
+        </div>
+
+        <!--TODO: implement vm.isCommonService(esCode)-->
+        <div class="es-popup es-popup--common" ng-if="vm.isCommonService(esCode)">
+            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+            <div class="es-popup__inner">
+                <es-common service="vm.es[esCode]" code="esCode"
+                           locked="vm.locked"></es-common>
+            </div>
+        </div>
     </div>
 </wrap>

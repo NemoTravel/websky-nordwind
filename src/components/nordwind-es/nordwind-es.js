@@ -14,6 +14,7 @@ function nordwindEsController($scope, backend, utils) {
 
     vm.selected = null;
     vm.handleEsSelect = handleEsSelect;
+    vm.closePopup = closePopup;
 
     backend.ready.then(function () {
 
@@ -28,6 +29,10 @@ function nordwindEsController($scope, backend, utils) {
 
     function handleEsSelect(esCode) {
         vm.selected = esCode;
+    }
+
+    function closePopup() {
+        vm.selected = null;
     }
 
 }
