@@ -3,13 +3,14 @@ angular.module('app').component('nordwindEs', {
     bindings: {
         orderInfo: '='
     },
-    controller: ['backend', 'utils', nordwindEsController],
+    controller: ['$scope', 'backend', 'utils', nordwindEsController],
     controllerAs: 'vm'
 });
 
 
-function nordwindEsController(backend, utils) {
+function nordwindEsController($scope, backend, utils) {
     var vm = this;
+
 
     vm.selected = null;
     vm.handleEsSelect = handleEsSelect;
@@ -18,15 +19,15 @@ function nordwindEsController(backend, utils) {
 
         backend.getExtraServices().then(function (extraServices) {
             vm.extraServicesList = extraServices.slice();
-            // console.log(vm.extraServicesList);
-            // ??? isnt working!
-            console.log(utils.getAvailableExtraServicesList(extraServices, vm.orderInfo, vm.extraServicesList));
+
+            // hooray, now it works
+            vm.es = utils.reformatAvailableExtraServices(extraServices.slice(), vm.orderInfo, undefined);
         });
     });
 
+
     function handleEsSelect(esCode) {
         vm.selected = esCode;
-        console.log(vm.selected);
     }
 
 }

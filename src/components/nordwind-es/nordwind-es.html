@@ -5,8 +5,8 @@
             <li class="extra-services__item" ng-repeat="extraService in vm.extraServicesList">
                 <div class="extra-services__item-image-wrp">
                     <img class="extra-services__item-image"
-                            ng-src="/resources/websky-test/custom/img/es-{{ extraService.code }}.png"
-                            alt="{{ extraService.code }}">
+                         ng-src="/resources/websky-test/custom/img/es-{{ extraService.code }}.png"
+                         alt="{{ extraService.code }}">
                     <i class="extra-services__item-icon extra-services__item-icon--{{ extraService.code }}"></i>
                 </div>
                 <div class="extra-services__item-descr-block">
@@ -21,8 +21,12 @@
                 </div>
             </li>
         </ul>
-        <es-insurance ng-if="vm.selected === 'insurance'"></es-insurance>
-        <es-meal ng-if="vm.selected === 'meal'"></es-meal>
-        <es-seat ng-if="vm.selected === 'seat'"></es-seat>
+        <es-insurance ng-if="vm.selected === 'insurance'" service="vm.es.insurance"></es-insurance>
+        <es-meal ng-if="vm.selected === 'meal'" service="vm.es.meal"></es-meal>
+        <es-seat ng-if="vm.selected === 'seat'" service="vm.es.seat"></es-seat>
+        <es-baggage ng-if="vm.selected == 'baggage'" service="vm.es.baggage"></es-baggage>
+        <es-aeroexpress ng-if="esCode == 'aeroexpress'" service="vm.es.aeroexpress" locked="vm.locked"></es-aeroexpress>
+        <es-common ng-if="vm.isCommonService(esCode)" service="vm.es[esCode]" code="esCode"
+                   locked="vm.locked"></es-common>
     </div>
 </wrap>

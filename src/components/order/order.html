@@ -348,45 +348,49 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <div class="invoiceServicesSelected">
-          <div class="invoiceServicesSelected__i">
-            <h2 class="title">
-              {{ 'web.orderInfo.extraServices' | aliasStatic}}
-            </h2>
+    <!--<div class="row">-->
+      <!--<div class="col">-->
+        <!--<div class="invoiceServicesSelected">-->
+          <!--<div class="invoiceServicesSelected__i">-->
+            <!--<h2 class="title">-->
+              <!--{{ 'web.orderInfo.extraServices' | aliasStatic}}-->
+            <!--</h2>-->
 
-            <grouped-services-list order="vm.orderInfo" mode="all"></grouped-services-list>
+            <!--<grouped-services-list order="vm.orderInfo" mode="all"></grouped-services-list>-->
 
-          </div>
-        </div>
-        <div ng-if="vm.orderInfo.addingExtraServicesAllowed" class="otherServices">
-          <div class="otherServices__i">
-            <h2 class="title">
-              {{ 'web.orderInfo.addExtraServices' | aliasStatic}}
-            </h2>
-            <wrap ng-bind-html=" 'web.orderInfo.addExtraServices.htmlItems' | aliasStatic"></wrap>
-            <div class="btnRow">
-              <a href ng-click="vm.openAddServices(vm.orderInfo.header.regnum, vm.orderInfo.header.lastName)" class="btn btn_select">
-                {{ 'web.buttons.addServices' | aliasStatic}}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div ng-if="vm.orderInfo.addingExtraServicesAllowed" class="otherServices">-->
+          <!--<div class="otherServices__i">-->
+            <!--<h2 class="title">-->
+              <!--{{ 'web.orderInfo.addExtraServices' | aliasStatic}}-->
+            <!--</h2>-->
+            <!--<wrap ng-bind-html=" 'web.orderInfo.addExtraServices.htmlItems' | aliasStatic"></wrap>-->
+            <!--<div class="btnRow">-->
+              <!--<a href ng-click="vm.openAddServices(vm.orderInfo.header.regnum, vm.orderInfo.header.lastName)" class="btn btn_select">-->
+                <!--{{ 'web.buttons.addServices' | aliasStatic}}-->
+              <!--</a>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <a href name="invoiceHeader"></a>
+      <!--<a href name="invoiceHeader"></a>-->
 
-      <div class="col">
-        <div class="invoiceTotal">
-          <div class="invoiceTotal__i">
-            <order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>
-            <order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>
-            <order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>
-          </div>
-        </div>
-      </div>
-    </div>
+      <!--<div class="col">-->
+        <!--<div class="invoiceTotal">-->
+          <!--<div class="invoiceTotal__i">-->
+            <!--<order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>-->
+            <!--<order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>-->
+            <!--<order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>
+    <order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>
+    <order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>
 
     <div ng-if="vm.orderInfo.currencyToPay != vm.orderInfo.currency && vm.showPaymentFrame"
          class="currencyConvertWarning">

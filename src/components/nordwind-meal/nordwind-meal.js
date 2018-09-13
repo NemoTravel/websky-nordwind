@@ -10,18 +10,16 @@ angular.module('app').component('nordwindMeal', {
 
 function nordwindMealController(backend) {
     var vm = this;
-    console.log(vm.service);
 
 
-    backend.ready.then(function(){
+    backend.ready.then(function () {
 
-        backend.getExtraServices().then(function(extraServices){
+        backend.getExtraServices().then(function (extraServices) {
             vm.extraServicesList = extraServices.slice();
-            console.log(vm.extraServicesList);
+
         });
 
     });
-
 
 
 }

@@ -17,8 +17,11 @@
     list-style-type: none
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
   &__item
-    width: 360px
+    width: 33%
+    min-width: 240px
+    max-width: 360px
     display: flex
     flex-direction: column
   &__item-service-name
@@ -75,3 +78,64 @@
     &:hover
       @extend %btn--hover
 
+order-prices[mode="pricesIssued"]
+
+  .title
+    color: $textGrayColor
+    font-size: $textLineHeight
+    font-weight: $normalFontWeight
+    line-height: $defaultLineHegith
+
+  .icon_info
+    color: $brandRedColor
+
+  .totalTable
+    table
+      width: 100%
+
+    tr td:last-of-type
+      text-align: right
+
+  tr[ng-if="vm.orderInfo[vm.mode].totalTicket"]
+    td:first-of-type
+      color: $textGrayColor
+      font-size: $textFontSize
+      font-weight: $normalFontWeight
+      line-height: 30px
+
+order-prices[mode="pricesNotIssued"]
+  .title
+    padding: 0 15px
+    background-color: #dddddd
+    line-height: 72px
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+    font-weight: $normalFontWeight
+    color: $black
+  .totalTable
+    background-color: #f5f5f5
+    padding: 0 15px
+    margin-top: 0
+    table
+      width: 100%
+    tr
+      display: flex
+      justify-content: space-between
+      td:first-of-type
+        color: $textGrayColor
+        font-size: $textLineHeight
+        font-weight: $normalFontWeight
+        line-height: 30px
+
+    .total
+      tr
+        td:first-of-type
+          color: $black
+          font-size: 22px
+          font-weight: $normalFontWeight
+          line-height: 30px
+        td:last-of-type
+          color: $black
+          font-size: 30px
+          font-weight: $bolderFontWeight
+          line-height: $defaultLineHegith
