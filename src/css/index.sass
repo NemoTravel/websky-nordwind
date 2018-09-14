@@ -95,7 +95,7 @@
     left: 50%
     top: 50%
     background-color: $brandLightGrayColor
-    padding: 20px
+    border-radius: 5px
   &__close
     display: block
     width: 60px
@@ -107,6 +107,11 @@
     border: 1px solid #bebebe
     background: $crossIcon no-repeat center
     background-size: 80%
+    cursor: pointer
+
+.foodSelect
+  .list.customScroll_height
+    height: 500px
 
 order-prices[mode="pricesIssued"]
   .title
@@ -169,4 +174,81 @@ order-prices[mode="pricesNotIssued"]
           font-weight: $bolderFontWeight
           line-height: $defaultLineHegith
 
+.top__i
+  margin-bottom: 50px
 
+  table
+    width: 100%
+    position: relative
+  .text
+    display: flex
+
+  .iconBox
+    width: 100px
+    height: 100px
+    background: $brandRedColor $mealIcon center no-repeat
+    border-top-left-radius: 3px
+    border-bottom-left-radius: 3px
+
+    i
+      display: none
+
+  .name
+    margin-left: 40px
+    position: relative
+
+    &:after
+      content: ''
+      position: absolute
+      width: 200%
+      height: 1px
+      left: 0
+      bottom: 0
+      background-color: #dddddd
+
+    h2
+      color: $black
+      font-size: 48px
+      font-weight: $normalFontWeight
+      line-height: $defaultLineHegith
+
+  .invoiceInfo .btn
+    top: 100px
+
+.foodSelect
+  padding: 0 10px 15px 20px
+  &__routes-list
+    display: flex
+  &__routes-item
+    padding: 20px 40px
+    text-align: center
+    box-shadow: inset 0 0 6px #dddddd
+    background: radial-gradient(#6c6c6c, #464646)
+    color: $white
+    &--active
+      background: $white
+      color: $black
+
+    .arr__point_city
+      margin-left: 0
+
+  &__airport-code
+    @extend %text--highlight
+    padding-left: 5px
+
+  &__arrow-right
+    margin: 0 10px
+    width: 15px
+    height: 10px
+    background: $arrowRightIcon center no-repeat
+    background-size: contain
+    position: relative
+    top: -2px
+
+/* ==== redefine old styles ==== */
+
+.passengersBlock_row-control-passengers .port__SVO:before,
+.passengersBlock_row-control-passengers .port__LED:before
+  display: none !important
+
+/* ==== END redefine old styles ==== */

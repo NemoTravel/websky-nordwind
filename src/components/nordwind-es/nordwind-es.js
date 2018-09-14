@@ -23,6 +23,13 @@ function nordwindEsController($scope, backend, utils) {
 
             // hooray, now it works
             vm.es = utils.reformatAvailableExtraServices(extraServices.slice(), vm.orderInfo, undefined);
+
+            // make every extra service active by default
+            _.forEach(vm.es, function (es) {
+                es.active = true;
+                console.log(es);
+            });
+
         });
     });
 
