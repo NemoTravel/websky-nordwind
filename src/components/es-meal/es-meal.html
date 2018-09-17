@@ -96,7 +96,11 @@
 
                                 <i class="passengersBlock_row-control-passengers-icon" aria-hidden="true"></i>
 
-                                <span class="passengersBlock_row-control-passengers-racenumber">{{flight.racenumber}}</span>
+                                <div>
+                                    <span class="passengersBlock_row-control-passengers-racenumber">
+                                        {{ flight.carrier }} - {{flight.racenumber}}
+                                    </span>
+                                </div>
 
                                 <geo-marker prefix="dep__point" key="es-meal" city="flight.origincity"
                                             cityname="flight.origincityName" port="undefined"

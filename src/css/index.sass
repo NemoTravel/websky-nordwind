@@ -87,8 +87,8 @@
   top: 0
   z-index: 400
   &__inner
-    width: 70%
-    height: 60%
+    width: 90%
+    height: auto
     margin: 0 auto
     position: absolute
     transform: translate(-50%, -50%)
@@ -111,7 +111,7 @@
 
 .foodSelect
   .list.customScroll_height
-    height: 500px
+    height: 460px
 
 order-prices[mode="pricesIssued"]
   .title
@@ -217,7 +217,7 @@ order-prices[mode="pricesNotIssued"]
 
 .foodSelect
   padding: 0 10px 15px 20px
-  &__routes-list
+  &__routes
     display: flex
   &__routes-item
     padding: 20px 40px
@@ -237,6 +237,7 @@ order-prices[mode="pricesNotIssued"]
     padding-left: 5px
 
   &__arrow-right
+    display: inline-block
     margin: 0 10px
     width: 15px
     height: 10px
@@ -247,8 +248,98 @@ order-prices[mode="pricesNotIssued"]
 
 /* ==== redefine old styles ==== */
 
-.passengersBlock_row-control-passengers .port__SVO:before,
-.passengersBlock_row-control-passengers .port__LED:before
-  display: none !important
+.passengersBlock_row-control
+  &-passengers
+    display: block
+    .port__SVO:before,
+    .port__LED:before
+      display: none !important
+    &-icon
+      display: none
+    &-racenumber
+      @extend %text--highlight
+      display: inline-block
+      margin: 0 0 10px
+      border-bottom: none
+  &-droporder
+    &-passenger
+      &-order
+        &-outer
+          > i
+            width: 25px
+            height: 25px
+            background: $white $crossIcon center
+            border-radius: 50%
+            background-size: 80%
+      &-outer
+        background: $white
+        &:after
+          border-left-color: $white
+        &.active
+          background: #e9e9e6
+          &:after
+            border-left-color: #e9e9e6
+
+.passengersBlock_row
+  &-menu
+    &-foodSorting
+      padding: 0
+      ul
+        li
+          &.active
+            a
+              border-top-color: $brandRedColor
+              background: #e9e9e6
+          a
+            border-top: 4px solid transparent
+            padding: 15px 0
+            border-top-left-radius: 4px
+            border-top-right-radius: 4px
+            &:before
+              display: none
+
+.foodSelect .list.customScroll_height
+  background-color: #e9e9e6
+
+.foodSelect
+  .item
+    &__btn
+      background: transparent
+      &:hover
+        color: $brandRedColor
+.passengersTable
+  &__cancel
+    position: relative
+  &__link
+    &_cancel
+      @extend %btn
+      @extend %btn--white
+      position: absolute
+      top: 40px
+      left: -20px
+
+.invoiceInfo .btn
+  color: #6c6c6c
+  font-size: $accentTextFontSize
+  font-weight: $bolderFontWeight
+  line-height: 30px
+  &:not(.active)
+    .hide
+      display: none
+  &.active
+    .show
+      display: none
+    .hide
+      display: flex
+      align-items: center
+      &:after
+        margin-left: 10px
+        content: ''
+        display: inline-block
+        width: 20px
+        height: 20px
+        border-radius: 50%
+        background: $white $crossIcon center
+        background-size: 80%
 
 /* ==== END redefine old styles ==== */
