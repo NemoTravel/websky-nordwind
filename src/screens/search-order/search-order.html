@@ -119,7 +119,7 @@
           </a>
         </p>
 
-        <order ng-if="vm.pnrOrTicketNumber && vm.lastName && vm.searchOrderForm.$valid" num="vm.pnrOrTicketNumber" lastname="vm.lastName"></order>
+        <order order-info="vm.orderInfo" ng-if="vm.pnrOrTicketNumber && vm.lastName" num="vm.pnrOrTicketNumber" lastname="vm.lastName"></order>
 
       </div>
     </div>
