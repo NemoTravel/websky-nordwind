@@ -1,3 +1,5 @@
+"use strict";
+
 angular.module('app').controller(
     'SearchOrderScreenController',
     ['$routeParams', 'backend', '$timeout', SearchOrderScreenController]
@@ -14,7 +16,6 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
     vm.confirmHandler = confirmHandler;
     vm.clear = clear;
     vm.addPassenger = addPassenger;
-    vm.swithcSubmitButtonHoverState = swithcSubmitButtonHoverState;
 
     backend.ready.then(function () {
 
@@ -27,8 +28,6 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
         if ($routeParams.pnrOrTicketNumber && $routeParams.lastName && backend.getParam('site.searchOrdersBy') === 'LAST_NAME_PNR_TICKET') {
             vm.searchParams.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
             vm.searchParams.lastName = $routeParams.lastName;
-            vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
-            vm.lastName = $routeParams.lastName;
             vm.loading = false;
             $timeout(submitSearch);
         } else {
@@ -36,8 +35,8 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
         }
     });
 
-
     function clear() {
+        backend.clearSession();
         backend.clearOrderInfo();
         vm.orderInfo = false;
         vm.showSearchForm = true;
@@ -47,7 +46,7 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
     function submitSearch() {
         vm.submitTouched = true;
         if ((!backend.getParam('site.useSearchOrderAgreeCheckbox') || vm.searchOrderAgree) && vm.searchOrderForm.$valid) {
-            vm.loading = true;
+            vm.searchLoading = true;
             vm.errorMessage = false;
             backend.searchOrderByParams(vm.searchParams, !!vm.partiallyAddedPassengers.length).then(function (resp) {
                 if (vm.searchParams.flight && vm.searchParams.date) {
@@ -71,11 +70,9 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
                     if (vm.needToSpecifyDocument) {
                         vm.showSearchForm = true;
                     }
-                    vm.loading = false;
                 }
+                vm.searchLoading = false;
             }, errorHandler);
-        } else {
-            vm.loading = false;
         }
     }
 
@@ -91,6 +88,7 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
 
     function errorHandler(resp) {
         vm.loading = false;
+        vm.searchLoading = false;
         if (resp.error !== 'web.messages.emptyOrder') {
             vm.errorMessage = resp.error;
         }
@@ -103,9 +101,4 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
     function addPassenger() {
         vm.showSearchForm = true;
     }
-
-    function swithcSubmitButtonHoverState() {
-        vm.submitButtonHover = !vm.submitButtonHover;
-    }
-
 }
