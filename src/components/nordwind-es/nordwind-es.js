@@ -26,26 +26,7 @@ function nordwindEsController($scope, backend, utils) {
             console.log(vm.extraServicesList);
 
             vm.es = utils.reformatAvailableExtraServices(response.extraServices.slice(), vm.orderInfo, undefined);
-            console.log(vm.es);
-
-            // make every extra service active by default
-            _.forEach(vm.es, function (es) {
-                if (es.code !== 'insurance') {
-                    es.active = true;
-                } else {
-                    var insurance = es;
-
-                    var orderInfoInsurance =
-                        _.find(vm.orderInfo.editable_extra_services, {code: 'insurance'})
-                        ||
-                        _.find(vm.orderInfo.editable_extra_services, {code: 'insuranceOnline'});
-
-                    if(orderInfoInsurance){
-                        es.active = false;
-                    }
-                }
-            });
-
+            activateAllServicesByDefault();
         });
     });
 
@@ -70,42 +51,6 @@ function nordwindEsController($scope, backend, utils) {
     }
 
 
-    function switchService(service) {
-        service.active = !service.active;
-        if (service.active) {
-            if (service.items.length === 1) {
-                backend.modifyExtraService(getInsuranceSubmitParams(service.items[0]));
-            }
-        } else {
-            backend.removeExtraService({
-                code: service.onlineMode ? 'insuranceOnline' : 'insurance'
-            });
-        }
-    }
-
-    function switchServiceItem(itemNum, paxKey) {
-        if (!vm.locked) {
-            if (paxKey === 'common') {
-                backend[
-                    vm.service.items[itemNum].selected ?
-                        'modifyExtraService' :
-                        'removeExtraService'
-                    ](getInsuranceSubmitParams(vm.service.items[itemNum]));
-            } else {
-                backend[
-                    vm.service.itemsByPassengers[paxKey][itemNum].selected ?
-                        'modifyExtraService' :
-                        'removeExtraService'
-                    ](
-                    getInsuranceSubmitParams(
-                        vm.service.itemsByPassengers[paxKey][itemNum],
-                        vm.orderInfo.passengers[paxKey].id
-                    )
-                );
-            }
-        }
-    }
-
     function getInsuranceSubmitParams(item, passenger_id) {
         var params = {
             code: 'insurance',
@@ -122,12 +67,27 @@ function nordwindEsController($scope, backend, utils) {
         return params;
     }
 
+    function activateAllServicesByDefault() {
+        _.forEach(vm.es, function (es) {
+            if (es.code !== 'insurance') {
+                es.active = true;
+            } else {
+                var orderInfoInsurance =
+                    _.find(vm.orderInfo.editable_extra_services, {code: 'insurance'})
+                    ||
+                    _.find(vm.orderInfo.editable_extra_services, {code: 'insuranceOnline'});
+
+                if (orderInfoInsurance) {
+                    es.active = false;
+                }
+            }
+        });
+
+    }
+
 
     function handleEsSelect(esCode, service) {
         vm.selected = esCode;
-        if (esCode === 'insurance' || 'insuranceOnline') {
-            vm.switchInsurance(service)
-        }
 
     }
 
