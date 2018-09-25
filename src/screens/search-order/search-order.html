@@ -1,4 +1,5 @@
-<app-loader ng-if="vm.loading"></app-loader>
+
+<app-loader ng-if="vm.loading || vm.searchLoading"></app-loader>
 
 <section class="out" ng-if="!vm.loading">
 
@@ -9,16 +10,24 @@
     <div class="wrap wrap_pt32">
       <div class="content__i">
 
-        <div ng-show="!vm.orderLoaded" class="orderSearchForm orderSearchForm_change" style="display: block;">
+        <div ng-if="vm.showSearchForm" class="orderSearchForm orderSearchForm_change orderSearchForm--order" style="display: block;">
 
           <div class="search-order-form-header" ng-bind-html=" 'web.order.form.header' | aliasStatic"></div>
 
           <div class="orderSearchForm__i">
 
+            <div ng-if="vm.needToSpecifyDocument" class="infoMessage">
+              <div class="infoMessage__i">
+                <p>
+                  {{ 'web.messages.needToSpecifyDocument' | aliasStatic}}
+                </p>
+              </div>
+            </div>
+
+
             <div class="formBody">
               <form class="formBody__i" name="vm.searchOrderForm" ng-submit="vm.submitSearch();"
                     form-submit-error-highlight novalidate>
-
 
                 <div class="formBodyItem">
                   <div class="steps active">
@@ -29,13 +38,13 @@
                         <div class="item__i">
 
 
-                          <div class="col">
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_PNR_TICKET' " class="col">
                             <div class="inp">
                               <div class="inp__i">
                                 <error-message
-                                        control="vm.searchOrderForm.pnrOrTicketNumber"
-                                        format-alias="'web.messages.formatTicketOrPNR'"
-                                        touched="vm.submitTouched">
+                                    control="vm.searchOrderForm.pnrOrTicketNumber"
+                                    format-alias="'web.messages.formatTicketOrPNR'"
+                                    touched="vm.submitTouched">
                                 </error-message>
                                 <input type="text"
                                        tabindex="3"
@@ -43,7 +52,6 @@
                                        class="textInp"
                                        name="pnrOrTicketNumber"
                                        ng-model="vm.searchParams.pnrOrTicketNumber"
-                                       ng-change="vm.clear()"
                                        ng-pattern="vm.pnrOrTicketRegexp"
                                        clean-search-order-param
                                        maxlength="26"
@@ -52,13 +60,35 @@
                               </div>
                             </div>
                           </div>
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_TICKET' " class="col">
+                            <div class="inp">
+                              <div class="inp__i">
+                                <error-message
+                                    control="vm.searchOrderForm.ticket"
+                                    format-alias="'web.messages.formatTicket'"
+                                    touched="vm.submitTouched">
+                                </error-message>
+                                <input type="number"
+                                       tabindex="3"
+                                       placeholder="{{ 'web.order.form.ticket' | aliasStatic}}"
+                                       class="textInp"
+                                       name="ticket"
+                                       ng-model="vm.searchParams.ticket"
+                                       ng-pattern="vm.ticketRegexp"
+                                       maxlength="26"
+                                       clean-search-order-param
+                                       error-highlight="{{ vm.submitTouched }}"
+                                       required/>
+                              </div>
+                            </div>
+                          </div>
                           <div class="col">
                             <div class="inp">
                               <div class="inp__i">
                                 <error-message
-                                        control="vm.searchOrderForm.lastName"
-                                        format-alias="'web.messages.formatLastName'"
-                                        touched="vm.submitTouched">
+                                    control="vm.searchOrderForm.lastName"
+                                    format-alias="'web.messages.formatLastName'"
+                                    touched="vm.submitTouched">
                                 </error-message>
                                 <input type="text"
                                        tabindex="4"
@@ -66,7 +96,6 @@
                                        class="textInp"
                                        name="lastName"
                                        ng-model="vm.searchParams.lastName"
-                                       ng-change="vm.clear()"
                                        ng-pattern="vm.passengerLastNameRegexp"
                                        clean-search-order-param
                                        maxlength="50"
@@ -75,14 +104,90 @@
                               </div>
                             </div>
                           </div>
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' " class="col">
+                            <div class="inp">
+                              <div class="inp__i">
+                                <error-message
+                                    control="vm.searchOrderForm.flight"
+                                    touched="vm.submitTouched">
+                                </error-message>
+                                <input type="text"
+                                       tabindex="5"
+                                       placeholder="{{ 'web.order.form.flight' | aliasStatic}}"
+                                       class="textInp"
+                                       name="flight"
+                                       ng-model="vm.searchParams.flight"
+                                       maxlength="26"
+                                       clean-search-order-param
+                                       error-highlight="{{ vm.submitTouched }}"
+                                       required/>
+                              </div>
+                            </div>
+                          </div>
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' || vm.needToSpecifyDocument " class="col">
+                            <div class="inp">
+                              <div class="inp__i">
+                                <error-message
+                                    control="vm.searchOrderForm.document"
+                                    touched="vm.submitTouched">
+                                </error-message>
+                                <input type="text"
+                                       tabindex="6"
+                                       placeholder="{{ 'web.order.form.document' | aliasStatic}}"
+                                       class="textInp"
+                                       name="document"
+                                       ng-model="vm.searchParams.document"
+                                       maxlength="26"
+                                       clean-search-order-param
+                                       error-highlight="{{ vm.submitTouched }}"
+                                       required/>
+                              </div>
+                            </div>
+                          </div>
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' " class="col">
+
+                            <div id="calendarContainer">
+
+
+                              <div class="pikaday__header_mobile" ng-class="{ active: vm.pikadayDateOpen }">
+                                <i class="icon_plane"></i>
+                                <span>{{ 'web.order.form.dateTitle' | aliasStatic}}</span>
+                                <a href class="pikaday__header_mobile_close" ng-click="vm.pikadayClose('')"></a>
+                              </div>
+                              <div class="inp">
+                                <div class="inp__i">
+                                  <error-message
+                                      control="vm.searchOrderForm.date"
+                                      touched="vm.submitTouched">
+                                  </error-message>
+                                  <input type="text" tabindex="7" placeholder="{{ 'web.order.form.date' | aliasStatic}}"
+                                         class="textInp calendarInp calendarInp_js"
+                                         ng-class="{ textInp_error:(vm.submitTouched && vm.searchOrderForm.date.$invalid) }"
+                                         pikaday="vm.pikadayDate" container="calendarContainer"
+                                         on-open="vm.pikadayOpen(); vm.pikadayDateOpen = true;"
+                                         on-select="vm.pikadayThereSelectHandler()"
+                                         on-close="vm.pikadayDateOpen = false"
+                                         name="date" ng-model="vm.searchParams.date" readonly required/>
+                                  <a href class="calendarBtn calendarBtn_js">
+                                    <i class="icon_calendar"></i>
+                                  </a>
+                                </div>
+                              </div>
+
+                            </div>
+
+
+                          </div>
 
 
                         </div>
                       </div>
 
 
-                      <button class="btn btn_search btn_formSearch btn_formSearch_js"
-                          ng-class="{ disabled: (!vm.searchOrderAgree && ('site.useSearchOrderAgreeCheckbox' | param)) }">
+                      <button class="btn btn_search btn_search--order btn_formSearch btn_formSearch_js"
+                              ng-mouseenter="vm.swithcSubmitButtonHoverState();"
+                              ng-mouseleave="vm.swithcSubmitButtonHoverState();"
+                              ng-class="{ disabled: (!vm.searchOrderAgree && ('site.useSearchOrderAgreeCheckbox' | param)) }">
                         {{ 'web.order.form.searchButton' | aliasStatic}}
                       </button>
 
@@ -91,17 +196,20 @@
                   </div>
                 </div>
 
-                <div ng-if=" 'site.useSearchOrderAgreeCheckbox' | param " class="iconfirm">
-                    <div class="iconfirm__i">
-                        <div class="customCheckbox">
-                            <label><input type="checkbox" id="searchOrderAgreeChb" ng-model="vm.searchOrderAgree"/><span></span></label>
-                        </div>
-                        <p>
-                            <label for="searchOrderAgreeChb">
-                                <wrap ng-bind-html=" 'web.searchOrderAgree' | aliasStatic"></wrap>
-                            </label>
-                        </p>
+                <div ng-if=" 'site.useSearchOrderAgreeCheckbox' | param " class="iconfirm iconfirm--order">
+                  <div class="iconfirm__i">
+                    <div class="customCheckbox">
+                      <label><input type="checkbox" id="searchOrderAgreeChb" ng-model="vm.searchOrderAgree"/><span></span></label>
+                      <div ng-if="!vm.searchOrderAgree && vm.submitButtonHover" class="errorMessage">
+                        {{ 'web.searchOrderAgreeTooltip' | aliasStatic}}
+                      </div>
                     </div>
+                    <p>
+                      <label for="searchOrderAgreeChb">
+                        <wrap ng-bind-html=" 'web.searchOrderAgree' | aliasStatic"></wrap>
+                      </label>
+                    </p>
+                  </div>
                 </div>
 
                 <div class="search-order-form-footer" ng-bind-html=" 'web.order.form.footer' | aliasStatic"></div>
@@ -113,13 +221,39 @@
           </div>
         </div>
 
-        <p ng-if="vm.orderLoaded" class="invoiceBack">
-          <a href="#{{$root.ROUTES.SEARCH_ORDER}}" class="back">
-            {{ 'web.order.form.backToSearchOrder' | aliasStatic}}
-          </a>
-        </p>
+        <separate-order-passengers-list ng-if="vm.partiallyAddedPassengers.length && !vm.orderInfo" passengers="vm.partiallyAddedPassengers"></separate-order-passengers-list>
 
-        <order ng-if="vm.pnrOrTicketNumber && vm.lastName && vm.searchOrderForm.$valid" num="vm.pnrOrTicketNumber" lastname="vm.lastName"></order>
+        <div ng-if="vm.partiallyAddedPassengers.length && !vm.orderInfo" class="searchResultsControl">
+          <div class="searchResultsControl__i">
+            <a href ng-if="!vm.showSearchForm" ng-click="vm.addPassenger();" class="btn btn_back btn_noArrow">
+              {{ 'web.separateOrder.button.addPassenger' | aliasStatic}}
+            </a>
+            <a href ng-if="!vm.showSearchForm" ng-click="vm.clear();" class="btn btn_back btn_clear btn_noArrow">
+              {{ 'web.separateOrder.button.clear' | aliasStatic}}
+            </a>
+            <a href ng-click="vm.confirmHandler()" class="btn btn_next btn_noArrow">
+              {{ 'web.separateOrder.button.gotoOrder' | aliasStatic}}
+            </a>
+          </div>
+        </div>
+
+
+
+        <div ng-if="vm.errorMessage" class="message_error">
+          {{ vm.errorMessage | aliasDynamic }}
+        </div>
+
+        <wrap ng-if="vm.orderInfo">
+
+          <p class="invoiceBack">
+            <a href ng-click="vm.clear()" class="back">
+              {{ 'web.order.form.backToSearchOrder' | aliasStatic}}
+            </a>
+          </p>
+
+          <order order-info="vm.orderInfo"></order>
+
+        </wrap>
 
       </div>
     </div>

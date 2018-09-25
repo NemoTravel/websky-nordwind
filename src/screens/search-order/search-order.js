@@ -1,62 +1,104 @@
+"use strict";
+
 angular.module('app').controller(
     'SearchOrderScreenController',
-    ['$routeParams', 'backend', 'redirect', SearchOrderScreenController]
+    ['$routeParams', 'backend', '$timeout', SearchOrderScreenController]
 );
 
-function SearchOrderScreenController($routeParams, backend, redirect) {
+function SearchOrderScreenController($routeParams, backend, $timeout) {
 
     var vm = this;
     vm.loading = true;
+    vm.showSearchForm = true;
     vm.searchParams = {};
+    vm.partiallyAddedPassengers = [];
     vm.submitSearch = submitSearch;
+    vm.confirmHandler = confirmHandler;
     vm.clear = clear;
+    vm.addPassenger = addPassenger;
 
     backend.ready.then(function () {
-
-        if (backend.getParam('site.rossiyaAirlineMode')) {
-            redirect.goToSearchSeparateOrder();
-            return;
-        }
 
         angular.element('title').text(backend.getAliasWithPrefix('web.pageTitle.', 'searchOrder'));
 
         vm.passengerLastNameRegexp = backend.applicationConstants.passengerLastNameRegexp;
         vm.pnrOrTicketRegexp = backend.applicationConstants.pnrOrTicketRegexp;
+        vm.ticketRegexp = backend.applicationConstants.ticketRegexp;
 
-        backend.clearOrderInfo();
-        backend.addOrderInfoListener(function () {
-            vm.orderLoaded = true;
-        });
-
-        if ($routeParams.pnrOrTicketNumber && $routeParams.lastName) {
-
+        if ($routeParams.pnrOrTicketNumber && $routeParams.lastName && backend.getParam('site.searchOrdersBy') === 'LAST_NAME_PNR_TICKET') {
             vm.searchParams.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
             vm.searchParams.lastName = $routeParams.lastName;
-
-            vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
-            vm.lastName = $routeParams.lastName;
-
-            vm.submitTouched = true;
-
+            vm.loading = false;
+            $timeout(submitSearch);
+        } else {
+            updateOrderInfoHandler();
         }
-
-        vm.loading = false;
-
     });
+
+    function clear() {
+        backend.clearSession();
+        backend.clearOrderInfo();
+        vm.orderInfo = false;
+        vm.showSearchForm = true;
+        vm.partiallyAddedPassengers = [];
+    }
 
     function submitSearch() {
         vm.submitTouched = true;
-        if (
-            (!backend.getParam('site.useSearchOrderAgreeCheckbox') || vm.searchOrderAgree) &&
-            vm.searchOrderForm.$valid
-        ) {
-            redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
+        if ((!backend.getParam('site.useSearchOrderAgreeCheckbox') || vm.searchOrderAgree) && vm.searchOrderForm.$valid) {
+            vm.searchLoading = true;
+            vm.errorMessage = false;
+            backend.searchOrderByParams(vm.searchParams, !!vm.partiallyAddedPassengers.length).then(function (resp) {
+                if (vm.searchParams.flight && vm.searchParams.date) {
+                    vm.searchParams = {
+                        flight: vm.searchParams.flight,
+                        date: vm.searchParams.date
+                    };
+                } else if (!resp.needToSpecifyDocument) {
+                    vm.searchParams = {};
+                }
+                vm.needToSpecifyDocument = resp.needToSpecifyDocument;
+                vm.showSearchForm = false;
+                vm.submitTouched = false;
+                if (resp.orderCompletelyInitialized) {
+                    vm.partiallyAddedPassengers = [];
+                    updateOrderInfoHandler();
+                } else {
+                    if (resp.partiallyAddedPassengers) {
+                        vm.partiallyAddedPassengers = resp.partiallyAddedPassengers;
+                    }
+                    if (vm.needToSpecifyDocument) {
+                        vm.showSearchForm = true;
+                    }
+                }
+                vm.searchLoading = false;
+            }, errorHandler);
         }
     }
 
-    function clear() {
-        vm.pnrOrTicketNumber = false;
-        vm.lastName = false;
+    function updateOrderInfoHandler() {
+        backend.updateOrderInfo().then(function (orderInfo) {
+            if (orderInfo.passengers) {
+                vm.orderInfo = orderInfo;
+                vm.showSearchForm = false;
+            }
+            vm.loading = false;
+        }, errorHandler);
     }
 
+    function errorHandler(resp) {
+        vm.loading = false;
+        vm.searchLoading = false;
+        if (resp.error !== 'web.messages.emptyOrder') {
+            vm.errorMessage = resp.error;
+        }
+    }
+
+    function confirmHandler() {
+        backend.finishSeparatePassengersSearch().then(updateOrderInfoHandler, errorHandler);
+    }
+
+    function addPassenger() {
+        vm.showSearchForm = true;
+    }
 }
