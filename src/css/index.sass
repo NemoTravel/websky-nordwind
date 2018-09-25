@@ -24,6 +24,8 @@
     max-width: 360px
     display: flex
     flex-direction: column
+    background: #ffffff
+    border-radius: 5px
   &__item-service-name
     @extend %heading--subheading
     margin-top: 20px
@@ -68,15 +70,47 @@
     background-size: contain
     &--meal
       background-image: $mealIcon
-    &--insuranceOnline
+    &--insurance
+      background-image: $mealIcon
     &--seat
       background-image: $seatIcon
-
   &__item-button
     @extend %btn
     width: percent(177, 360)
     &:hover
       @extend %btn--hover
+
+.es-insurance
+  display: flex
+  order: 100
+  flex: 1 0 100%
+  max-width: initial
+  background: #ffffff
+  border-radius: 5px
+  margin-top: 20px
+  flex-direction: row
+  .extra-services__item-image-wrp
+    width: 180px
+  .extra-services__item-descr-block
+    display: flex
+    flex-direction: row
+  .extra-services__item-image-wrp:before,
+  .extra-services__item-image-wrp:after
+    width: 200px
+  .extra-services__item-image-wrp:before
+    left: -100px
+  .extra-services__item-image-wrp:after
+    left: -80px
+  .extra-services__item-service-name
+    margin-bottom: 5px
+    margin-top: 10px
+  .extra-services__item-descr
+    margin-bottom: 0
+    margin-right: 50px
+  .extra-services__item-button
+    width: 150px
+    align-self: center
+
 
 .es-popup
   position: fixed
@@ -307,6 +341,7 @@ order-prices[mode="pricesNotIssued"]
       background: transparent
       &:hover
         color: $brandRedColor
+
 .passengersTable
   &__cancel
     position: relative

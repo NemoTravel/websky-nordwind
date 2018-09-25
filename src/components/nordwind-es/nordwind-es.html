@@ -1,69 +1,91 @@
 <wrap ng-if="vm.extraServicesList.length > 0">
-    <div class="extra-services">
-        <h3 class="extra-services__heading">{{ 'web.extraServices.heading' | aliasStatic }}</h3>
-        <ul class="extra-services__list">
-            <li class="extra-services__item" ng-repeat="extraService in vm.extraServicesList">
-                <div class="extra-services__item-image-wrp">
-                    <img class="extra-services__item-image"
-                         ng-src="/resources/websky-test/custom/img/es-{{ extraService.code }}.png"
-                         alt="{{ extraService.code }}">
-                    <i class="extra-services__item-icon extra-services__item-icon--{{ extraService.code }}"></i>
-                </div>
-                <div class="extra-services__item-descr-block">
-                    <h3 class="extra-services__item-service-name">
-                        {{ extraService.title }}
-                        <span class="extra-services__item-min-price text text--highlight"></span>
-                    </h3>
-                    <p class="extra-services__item-descr">
-                        {{ 'web.extraServices.' + extraService.code +'.desc' | aliasStatic }}
-                    </p>
-                    <a class="extra-services__item-button" ng-click="vm.handleEsSelect(extraService.code)">Выбрать</a>
-                </div>
-            </li>
-        </ul>
+  <div class="extra-services">
+    <h3 class="extra-services__heading">{{ 'web.extraServices.heading' | aliasStatic }}</h3>
+    <div class="extra-services__list">
+
+      <div class="extra-services__item"
+           ng-class="{'es-insurance': extraService.code === 'insurance'}"
+           ng-repeat="extraService in vm.es">
+
+        <div class="extra-services__item-image-wrp">
+          <img class="extra-services__item-image"
+               ng-src="/resources/websky-test/custom/img/es-{{ extraService.code }}.png"
+               alt="{{ extraService.code }}">
+          <i class="extra-services__item-icon extra-services__item-icon--{{ extraService.code }}"></i>
+        </div>
 
 
-        <div class="es-popup es-popup--insurance" ng-if="vm.selected === 'insurance'">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-insurance service="vm.es.insurance"></es-insurance>
-            </div>
-        </div>
-        <div class="es-popup es-popup--meal" ng-if="vm.selected === 'meal'">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-meal service="vm.es.meal"></es-meal>
-            </div>
-        </div>
-        <div class="es-popup es-popup--seat" ng-if="vm.selected === 'seat'">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-seat service="vm.es.seat"></es-seat>
-            </div>
+        <div class="extra-services__item-descr-block">
+          <!--TODO: refactor for DRY principle -->
+          <div class="extra-services__item-descr-wrp" ng-if="extraService.code === 'insurance'">
+            <h3 class="extra-services__item-service-name">
+              {{ extraService.title }}
+              <span ng-if="extraService.code === 'insurance'">{{ 'extraService.insurance.title' | aliasStatic }}</span>
+              <span class="extra-services__item-min-price text text--highlight"></span>
+            </h3>
+            <p class="extra-services__item-descr">
+              {{ 'web.extraServices.' + extraService.code +'.desc' | aliasStatic }}
+            </p>
+          </div>
+          <div class="extra-services__item-descr-wrp" ng-if="extraService.code !== 'insurance'">
+            <h3 class="extra-services__item-service-name">
+              {{ extraService.title }}
+              <span ng-if="extraService.code === 'insurance'">{{ 'extraService.insurance.title' | aliasStatic }}</span>
+              <span class="extra-services__item-min-price text text--highlight"></span>
+            </h3>
+            <p class="extra-services__item-descr">
+              {{ 'web.extraServices.' + extraService.code +'.desc' | aliasStatic }}
+            </p>
+          </div>
+          <a ng-if="extraService.code !== 'insurance'"
+             class="extra-services__item-button"
+             ng-click="vm.handleEsSelect(extraService.code)">Выбрать</a>
+
+          <a ng-if="extraService.code === 'insurance'"
+              class="extra-services__item-button"
+             ng-click="vm.addInsurance()">Выбрать</a>
         </div>
 
-        <div class="es-popup es-popup--baggage" ng-if="vm.selected == 'baggage'">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-baggage service="vm.es.baggage"></es-baggage>
-            </div>
-        </div>
+      </div>
 
-        <div class="es-popup es-popup--aeroexpress" ng-if="vm.selected == 'aeroexpress'">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-aeroexpress service="vm.es.aeroexpress"
-                                locked="vm.locked"></es-aeroexpress>
-            </div>
-        </div>
-
-        <!--TODO: implement vm.isCommonService(esCode)-->
-        <div class="es-popup es-popup--common" ng-if="vm.isCommonService(esCode)">
-            <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-            <div class="es-popup__inner">
-                <es-common service="vm.es[esCode]" code="esCode"
-                           locked="vm.locked"></es-common>
-            </div>
-        </div>
     </div>
+
+
+    <div class="es-popup es-popup--meal" ng-if="vm.selected === 'meal'">
+      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+      <div class="es-popup__inner">
+        <es-meal service="vm.es.meal"></es-meal>
+      </div>
+    </div>
+    <div class="es-popup es-popup--seat" ng-if="vm.selected === 'seat'">
+      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+      <div class="es-popup__inner">
+        <es-seat service="vm.es.seat"></es-seat>
+      </div>
+    </div>
+
+    <div class="es-popup es-popup--baggage" ng-if="vm.selected == 'baggage'">
+      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+      <div class="es-popup__inner">
+        <es-baggage service="vm.es.baggage"></es-baggage>
+      </div>
+    </div>
+
+    <div class="es-popup es-popup--aeroexpress" ng-if="vm.selected == 'aeroexpress'">
+      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+      <div class="es-popup__inner">
+        <es-aeroexpress service="vm.es.aeroexpress"
+                        locked="vm.locked"></es-aeroexpress>
+      </div>
+    </div>
+
+    <!--TODO: implement vm.isCommonService(esCode)-->
+    <div class="es-popup es-popup--common" ng-if="vm.isCommonService(esCode)">
+      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+      <div class="es-popup__inner">
+        <es-common service="vm.es[esCode]" code="esCode"
+                   locked="vm.locked"></es-common>
+      </div>
+    </div>
+  </div>
 </wrap>
