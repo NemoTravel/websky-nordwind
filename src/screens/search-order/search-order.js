@@ -2,10 +2,10 @@
 
 angular.module('app').controller(
     'SearchOrderScreenController',
-    ['$routeParams', 'backend', '$timeout', SearchOrderScreenController]
+    ['$routeParams', 'backend', 'redirect', '$timeout', SearchOrderScreenController]
 );
 
-function SearchOrderScreenController($routeParams, backend, $timeout) {
+function SearchOrderScreenController($routeParams, backend, redirect, $timeout) {
 
     var vm = this;
     vm.loading = true;
@@ -60,9 +60,12 @@ function SearchOrderScreenController($routeParams, backend, $timeout) {
                 vm.needToSpecifyDocument = resp.needToSpecifyDocument;
                 vm.showSearchForm = false;
                 vm.submitTouched = false;
+
+
                 if (resp.orderCompletelyInitialized) {
                     vm.partiallyAddedPassengers = [];
                     updateOrderInfoHandler();
+                    redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
                 } else {
                     if (resp.partiallyAddedPassengers) {
                         vm.partiallyAddedPassengers = resp.partiallyAddedPassengers;
