@@ -9,11 +9,13 @@
 		<div class="wrap wrap_pt32">
 			<div class="content__i">
 
-                <div class="checkoutServices">
+                <div class="checkoutServices add-services">
                     <div class="checkoutServices__i">
 
-                        <h2 class="title">
+                        <h2 class="title add-services__title">
+                          <span class="title__text add-services__title-tex">
                             {{ 'web.addServices.header' | aliasStatic}}
+                          </span>
                             <div class="orderInfo">
                                 <span ng-if="vm.orderInfo.header.regnum">
                                     {{ 'web.addServices.regnumLabel' | aliasStatic}}{{ vm.orderInfo.header.regnum }}
@@ -63,7 +65,9 @@
                                 <div class="invoiceServicesSelected__i">
 
                                     <h2 class="title">
+                                      <span class="title__text">
                                         {{ 'web.addServices.selected' | aliasStatic}}
+                                      </span>
                                     </h2>
 
                                     <grouped-services-list order="vm.orderInfo" mode="editable"></grouped-services-list>
