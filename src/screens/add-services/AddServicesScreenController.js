@@ -7,11 +7,12 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
     vm.searchOrderLoading = true;
     vm.orderServicesLoading = true;
 
-    vm.openOrder = openOrder;
+    vm.openOrder = redirect.goToSearchOrder;
     vm.submitPayment = submitPayment;
     vm.paymentFormChangeHandler = paymentFormChangeHandler;
     vm.reloadPage = reloadPage;
     vm.clearSession = clearSession;
+    vm.swithcSubmitButtonHoverState = swithcSubmitButtonHoverState;
 
     $scope.$on('plasticCardForPaymentChangeEvent', function (event, data) {
         vm.card = data;
@@ -20,29 +21,11 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
     backend.ready.then(function () {
         angular.element('title').text(backend.getAliasWithPrefix('web.pageTitle.', 'addServices'));
 
-        vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
-        vm.lastName = $routeParams.lastName;
-
         vm.loading = false;
 
         backend.clearOrderInfoListeners();
         backend.clearUpdateOrderServicesListeners();
 
-        vm.orderInfo = backend.getOrderInfo();
-
-        if (vm.orderInfo) {
-            orderReadyHandler();
-        } else {
-            backend.searchOrder(vm.pnrOrTicketNumber, vm.lastName, true).then(orderReadyHandler, function (resp) {
-                vm.searchOrderLoading = false;
-                vm.orderServicesLoading = false;
-                vm.errorMessage = resp.error;
-            });
-        }
-
-    });
-
-    function orderReadyHandler() {
         backend.addOrderInfoListener(function (orderInfo) {
             vm.orderInfo = orderInfo;
         });
@@ -71,17 +54,15 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
             vm.searchOrderLoading = false;
             vm.orderServicesLoading = false;
             vm.errorMessage = resp.error;
-
-            if (vm.errorMessage === 'web.extraServices.submitError') {
-                vm.showBackButton = true;
-            }
         });
-
 
         backend.updateOrderServices(true).then(function () {
             vm.loading = true;
 
             backend.switchDefaultSelectedServices(vm.esList, vm.es, vm.orderInfo).then(function () {
+                vm.loading = false;
+            }, function (resp) {
+                vm.errorMessage = resp.error;
                 vm.loading = false;
             });
         });
@@ -99,21 +80,12 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
             vm.modifyServicesLoading = false;
             vm.orderServicesLoading = true;
         });
-    }
+    });
 
     function submitPayment(removeInsuranceAeroexpress) {
         if (vm.agree && !vm.modifyServicesLoading && !vm.orderServicesLoading) {
             if (vm.selectedPaymentForm && vm.selectedPaymentType) {
-                if (backend.getParam('site.rossiyaAirlineMode')) {
-                    fancyboxTools.openHandler('popupOrderEmailRequired', false, {
-                        phoneRequiredToo: true,
-                        submitCallback: function submitCallback(email, phone) {
-                            submitPaymentConfirm(removeInsuranceAeroexpress, email, phone);
-                        }
-                    });
-                } else {
-                    submitPaymentConfirm(removeInsuranceAeroexpress);
-                }
+                submitPaymentConfirm(removeInsuranceAeroexpress);
             } else {
                 vm.showNeedSelectPaymentFormMesage = true;
             }
@@ -129,7 +101,7 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
 
         backend.startPaymentForExtraServices(vm.selectedPaymentForm, vm.selectedPaymentType, removeInsuranceAeroexpress, email, phone, vm.card).then(function (resp) {
             if (resp.pnr && resp.lastName) {
-                redirect.goToConfirmOrder(resp.pnr, resp.lastName);
+                redirect.goToConfirmOrder();
             } else if (resp.eraseAeroexpressBecauseOfCurrency || resp.eraseInsuranceBecauseOfCurrency) {
                 fancyboxTools.openHandler('popupChangeCurrencyError', false, {
                     eraseAeroexpressBecauseOfCurrency: resp.eraseAeroexpressBecauseOfCurrency,
@@ -174,17 +146,13 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
         return false;
     }
 
-    function openOrder(pnrOrTicketNumber, lastName) {
-        if (backend.getParam('site.separatePassengersSearchOrder')) {
-            redirect.goToViewSeparateOrder(pnrOrTicketNumber, lastName);
-        } else {
-            redirect.goToSearchOrder(pnrOrTicketNumber, lastName);
-        }
-    }
-
     function clearSession() {
         backend.clearSession().then(function () {
             redirect.goToSearchOrder();
         });
+    }
+
+    function swithcSubmitButtonHoverState() {
+        vm.submitButtonHover = !vm.submitButtonHover;
     }
 }]);
