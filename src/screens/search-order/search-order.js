@@ -64,8 +64,14 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
 
                 if (resp.orderCompletelyInitialized) {
                     vm.partiallyAddedPassengers = [];
-                    updateOrderInfoHandler();
-                    redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
+                    // call updateOrderInfo with callback
+                    // because need to redirect to add-services
+                    // only if adding extra services allowed
+                    updateOrderInfoHandler(function () {
+                        if (vm.orderInfo.addingExtraServicesAllowed) {
+                            redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
+                        }
+                    });
                 } else {
                     if (resp.partiallyAddedPassengers) {
                         vm.partiallyAddedPassengers = resp.partiallyAddedPassengers;
@@ -79,11 +85,14 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
         }
     }
 
-    function updateOrderInfoHandler() {
+    function updateOrderInfoHandler(cb) {
         backend.updateOrderInfo().then(function (orderInfo) {
             if (orderInfo.passengers) {
                 vm.orderInfo = orderInfo;
                 vm.showSearchForm = false;
+                if (typeof cb === 'function') {
+                    cb();
+                }
             }
             vm.loading = false;
         }, errorHandler);
