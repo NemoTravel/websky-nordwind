@@ -136,6 +136,7 @@
     min-width: 780px
     max-width: 1160px
     height: auto
+    //overflow: auto
     margin: 0 auto
     position: absolute
     transform: translate(-50%, -50%)
@@ -266,7 +267,8 @@ order-prices[mode="pricesNotIssued"]
   .invoiceInfo .btn
     top: 100px
 
-.foodSelect
+.foodSelect,
+.seatSelect
   padding: 0 10px 15px 20px
   &__routes
     display: flex
@@ -297,6 +299,40 @@ order-prices[mode="pricesNotIssued"]
     background-size: contain
     position: relative
     top: -2px
+
+.seatSelect
+  .info
+    padding: 10px 0
+
+/* seatMap */
+.seatInfo
+  .seat-rfisc
+    &-CMF
+      width: $chairWidth
+      height: $chairHeight
+      background: $CMF-color
+    &-PRS
+      width: $chairWidth
+      height: $chairHeight
+      background: $PRS-color
+    &-0B5
+      width: $chairWidth
+      height: $chairHeight
+      background: $OB5-color
+      &:after
+        display: none
+
+.seat-info-labels
+  background-color: transparent
+  border-top: 1px solid #d0d0d0
+  padding: 0
+  > h4
+    background-color: transparent
+    color: black
+    font-size: 20px
+    font-weight: $normalFontWeight
+    text-align: left
+    margin: 0
 
 .passenger
   margin-bottom: 20px

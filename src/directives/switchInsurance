@@ -1,0 +1,20 @@
+var app = angular.module('app');
+
+
+app.directive('switchInsurance', function () {
+    return {
+        controller: 'switchInsuranceCtrl',
+        scope: {
+            service: '='
+        },
+        bindToController: true,
+        controllerAs: 'vm',
+    }
+});
+
+app.controller('switchInsuranceCtrl', ['$scope', switchInsuranceCtrl]);
+
+function switchInsuranceCtrl($scope) {
+    var vm = this;
+}
+

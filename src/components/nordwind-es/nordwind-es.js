@@ -31,11 +31,12 @@ function nordwindEsController($scope, backend, utils) {
         });
 
         backend.getExtraServices().then(function (response) {
+
             vm.extraServicesList = response.extraServices.slice();
-
             vm.es = utils.reformatAvailableExtraServices(response.extraServices.slice(), vm.orderInfo, undefined);
-            activateAllServicesByDefault();
 
+            activateAllServicesByDefault();
+            vm.loading = false;
         });
 
     });
