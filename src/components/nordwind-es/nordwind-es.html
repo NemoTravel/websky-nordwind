@@ -39,11 +39,13 @@
           </div>
           <a ng-if="extraService.code !== 'insurance'"
              class="extra-services__item-button"
-             ng-click="vm.handleEsSelect(extraService.code)">Выбрать</a>
+             ng-click="vm.handleEsSelect(extraService.code)"> Выбрать </a>
 
           <a ng-if="extraService.code === 'insurance'"
-              class="extra-services__item-button"
-             ng-click="vm.addInsurance()">Выбрать</a>
+             class="extra-services__item-button"
+             ng-click="vm.handleEsSelect(extraService.code)">
+            <span>Выбрать</span>
+          </a>
         </div>
 
       </div>
@@ -51,40 +53,74 @@
     </div>
 
 
-    <div class="es-popup es-popup--meal" ng-if="vm.selected === 'meal'">
-      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-      <div class="es-popup__inner">
-        <es-meal service="vm.es.meal"></es-meal>
+    <div class="es-popup es-popup--insurance" ng-if="vm.selected === 'insurance'">
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-insurance service="vm.es.insurance"></es-insurance>
+        </div>
       </div>
     </div>
+
+
+    <div class="es-popup es-popup--meal" ng-if="vm.selected === 'meal'">
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-meal service="vm.es.meal"></es-meal>
+        </div>
+      </div>
+    </div>
+
+
     <div class="es-popup es-popup--seat" ng-if="vm.selected === 'seat'">
-      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-      <div class="es-popup__inner">
-        <es-seat service="vm.es.seat"></es-seat>
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-seat service="vm.es.seat"></es-seat>
+        </div>
       </div>
     </div>
 
     <div class="es-popup es-popup--baggage" ng-if="vm.selected == 'baggage'">
-      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-      <div class="es-popup__inner">
-        <es-baggage service="vm.es.baggage"></es-baggage>
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-baggage service="vm.es.baggage"></es-baggage>
+        </div>
       </div>
     </div>
 
     <div class="es-popup es-popup--aeroexpress" ng-if="vm.selected == 'aeroexpress'">
-      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-      <div class="es-popup__inner">
-        <es-aeroexpress service="vm.es.aeroexpress"
-                        locked="vm.locked"></es-aeroexpress>
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-aeroexpress service="vm.es.aeroexpress"
+                          locked="vm.locked"></es-aeroexpress>
+        </div>
       </div>
     </div>
 
     <!--TODO: implement vm.isCommonService(esCode)-->
     <div class="es-popup es-popup--common" ng-if="vm.isCommonService(esCode)">
-      <div class="es-popup__close" ng-click="vm.closePopup()"></div>
-      <div class="es-popup__inner">
-        <es-common service="vm.es[esCode]" code="esCode"
-                   locked="vm.locked"></es-common>
+      <div class="es-popup__inner-wrp">
+        <div class="es-popup__close-wrp">
+          <div class="es-popup__close" ng-click="vm.closePopup()"></div>
+        </div>
+        <div class="es-popup__inner">
+          <es-common service="vm.es[esCode]" code="esCode"
+                     locked="vm.locked"></es-common>
+        </div>
       </div>
     </div>
   </div>

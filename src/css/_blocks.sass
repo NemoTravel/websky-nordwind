@@ -21,6 +21,9 @@
     line-height: $textLineHeight
   &--highlight
     color: $brandRedColor
+  &--bold
+    font-weight: $bolderFontWeight
+    font-size: $accentTextFontSize
 
 %btn
   border-radius: 3px
@@ -28,8 +31,10 @@
   color: $brandRedColor
   font-size: $accentTextFontSize
   font-weight: $bolderFontWeight
-  line-height: 30px
   text-align: center
+  display: inline-block
+  padding: 10px
+  cursor: pointer
   &--hover
     background-color: $brandRedColor
     color: $white

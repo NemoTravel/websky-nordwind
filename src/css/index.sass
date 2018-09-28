@@ -2,6 +2,15 @@
 @import "variables"
 @import "blocks"
 
+// TODO: remove
+=enabledCalendarStyles
+  .pika-button.pika-day
+    @content
+
++enabledCalendarStyles
+  background: #00ff00
+// end remove
+
 .extra-services
   display: flex
   flex-direction: column
@@ -94,13 +103,16 @@
   .extra-services__item-descr-block
     display: flex
     flex-direction: row
+    padding: 5px
   .extra-services__item-image-wrp:before,
   .extra-services__item-image-wrp:after
     width: 200px
   .extra-services__item-image-wrp:before
-    left: -100px
+    left: auto
+    right: 60px
   .extra-services__item-image-wrp:after
-    left: -80px
+    left: auto
+    right: 40px
   .extra-services__item-service-name
     margin-bottom: 5px
     margin-top: 10px
@@ -110,7 +122,6 @@
   .extra-services__item-button
     width: 150px
     align-self: center
-
 
 .es-popup
   position: fixed
@@ -122,6 +133,8 @@
   z-index: 400
   &__inner
     width: 90%
+    min-width: 780px
+    max-width: 1160px
     height: auto
     margin: 0 auto
     position: absolute
@@ -130,21 +143,24 @@
     top: 50%
     background-color: $brandLightGrayColor
     border-radius: 5px
+  &__close-wrp
+    position: relative
   &__close
     display: block
     width: 60px
     height: 60px
-    right: 10%
     position: absolute
-    top: 15%
+    right: 0
     border-radius: 50%
     border: 1px solid #bebebe
     background: $crossIcon no-repeat center
     background-size: 80%
     cursor: pointer
 
-.foodSelect
-  .list.customScroll_height
+.foodSelect,
+.seatSelect,
+.insuranceSelect
+  .customScroll_height
     height: 460px
 
 order-prices[mode="pricesIssued"]
@@ -209,6 +225,7 @@ order-prices[mode="pricesNotIssued"]
           line-height: $defaultLineHegith
 
 .top__i
+  overflow: hidden
   margin-bottom: 50px
 
   table
@@ -254,11 +271,12 @@ order-prices[mode="pricesNotIssued"]
   &__routes
     display: flex
   &__routes-item
-    padding: 20px 40px
+    padding: 10px 30px
     text-align: center
     box-shadow: inset 0 0 6px #dddddd
     background: radial-gradient(#6c6c6c, #464646)
     color: $white
+    cursor: pointer
     &--active
       background: $white
       color: $black
@@ -279,6 +297,47 @@ order-prices[mode="pricesNotIssued"]
     background-size: contain
     position: relative
     top: -2px
+
+.passenger
+  margin-bottom: 20px
+  border-radius: 5px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  margin-right: 15px
+  &__link
+    &__i
+      &__name
+        display: flex
+        align-items: center
+    &__icon
+      margin-right: 20px
+
+.insurance-fares
+  &__item
+    display: flex
+    align-items: center
+  &__price
+    @extend %text--bold
+    margin-right: 20px
+  &__button
+    @extend %btn
+    display: inline-block
+    &:hover
+      @extend %btn--hover
+
+.icon-close
+  +icon($crossIcon, $width: 25px, $height: 25px)
+  display: inline-block
+  border-radius: 50%
+  background-color: #ffffff
+  cursor: pointer
+
+.icon-passenger
+  +icon($passengerIcon)
+  display: inline-block
+  &--active
+    background: $passengerActiveIcon center
 
 /* ==== redefine old styles ==== */
 

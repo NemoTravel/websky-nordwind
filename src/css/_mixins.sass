@@ -6,7 +6,6 @@
     @return $number / ($number * 0 + 1)
   @return $number
 
-
 @function em($wanted, $base: 16)
   @return (strip-unit($wanted) / strip-unit($base)) * 1em
 
@@ -38,7 +37,6 @@
     @content
   &:-ms-input-placeholder
     @content
-
 
 =adaptivity($media)
   $screen-size-laptop-large: 1440px
@@ -83,7 +81,6 @@
   &--#{$modifier}
     @content
 
-
 =e($element)
   +element($element)
     @content
@@ -92,3 +89,10 @@
 =m($modifier)
   +modifier($modifier)
     @content
+
+=icon($url, $width: 16px, $height: 16px)
+  display: inline-block
+  width: $width
+  height: $height
+  background: $url center
+  background-size: contain
