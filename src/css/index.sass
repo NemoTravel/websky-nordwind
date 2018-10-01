@@ -377,40 +377,43 @@ order-prices[mode="pricesNotIssued"]
 
 /* ==== redefine old styles ==== */
 
-.passengersBlock_row-control
-  &-passengers
-    display: block
-    .port__SVO:before,
-    .port__LED:before
-      display: none !important
-    &-icon
-      display: none
-    &-racenumber
-      @extend %text--highlight
-      display: inline-block
-      margin: 0 0 10px
-      border-bottom: none
-  &-droporder
-    &-passenger
-      &-order
+.passengersBlock_row
+  &-control
+    &-passengers
+      display: block
+      .port__SVO:before,
+      .port__LED:before
+        display: none !important
+      &-icon
+        display: none
+      &-racenumber
+        @extend %text--highlight
+        display: inline-block
+        margin: 0 0 10px
+        border-bottom: none
+    &-droporder
+      &-passenger
+        &-order
+          &-outer
+            > i
+              width: 25px
+              height: 25px
+              background: $white $crossIcon center
+              border-radius: 50%
+              background-size: 80%
         &-outer
-          > i
-            width: 25px
-            height: 25px
-            background: $white $crossIcon center
-            border-radius: 50%
-            background-size: 80%
-      &-outer
-        background: $white
-        &:after
-          border-left-color: $white
-        &.active
-          background: #e9e9e6
+          background: $white
           &:after
-            border-left-color: #e9e9e6
+            border-left-color: $white
+          &.active
+            background: #e9e9e6
+            &:after
+              border-left-color: #e9e9e6
 
 .passengersBlock_row
   &-menu
+    .item
+      cursor: default
     &-foodSorting
       padding: 0
       ul
@@ -427,6 +430,26 @@ order-prices[mode="pricesNotIssued"]
             &:before
               display: none
 
+.passengersBlock
+  &__flight-info
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    &-heading
+      @extend %text--small
+      color: #9e9e9e
+      line-height: 35px
+    &-descr
+      display: flex
+      align-items: center
+    &-airplane-scheme
+      font-size: $textFontSize
+      font-weight: $normalFontWeight
+      color: #01abe8
+      margin-right: 10px
+    &-airplane-info
+      @extend %text--accent
+
 .foodSelect .list.customScroll_height
   background-color: #e9e9e6
 
@@ -435,18 +458,27 @@ order-prices[mode="pricesNotIssued"]
     &__btn
       background: transparent
       &:hover
-        color: $brandRedColor
+        background: $brandRedColor
+        color: $white
 
 .passengersTable
-  &__cancel
-    position: relative
   &__link
     &_cancel
+      position: initial
       @extend %btn
       @extend %btn--white
-      position: absolute
-      top: 40px
-      left: -20px
+  &__bottom-row
+    display: flex
+    align-items: center
+    justify-content: space-between
+    position: relative
+    bottom: -60px
+  &__totalPrice-wrp
+    right: 0
+    color: $white
+    font-size: $accentTextFontSize
+    font-weight: $bolderFontWeight
+    line-height: 30px
 
 .invoiceInfo .btn
   color: #6c6c6c
@@ -472,4 +504,17 @@ order-prices[mode="pricesNotIssued"]
         background: $white $crossIcon center
         background-size: 80%
 
+.mCSB_scrollTools .mCSB_draggerRail
+  width: 11px
+  background-color: #dcdcdc
+
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
+.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar
+  background-color: #949494
+  width: 11px
+
+.drop
+  &__i
+    position: relative
 /* ==== END redefine old styles ==== */
+

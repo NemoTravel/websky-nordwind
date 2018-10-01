@@ -166,8 +166,6 @@
                   </div>
 
 
-
-
                 </div>
 
 
@@ -207,6 +205,24 @@
               </div>
 
               <div class="passengersBlock_row-menu passengersBlock_row-menu-seat">
+                <div class="passengersBlock__flight-info">
+                  <span class="passengersBlock__flight-info-heading">
+                    Ваш перелет на воздушном судне
+                  </span>
+                  <span class="passengersBlock__flight-info-descr">
+                    <span class="passengersBlock__flight-info-airplane-scheme">
+                      Схема самолета
+                    </span>
+                    <span class="passengersBlock__flight-info-airplane-info">
+                      <span class="passengersBlock__flight-info-airplane-name">
+                        Boeing 777
+                      </span>
+                      <span class="passengersBlock__flight-info-flight-number">
+                        200ER
+                      </span>
+                    </span>
+                  </span>
+                </div>
 
                 <div ng-if="vm.loadingSeatMap" class="seat-map-loader"
                      ng-bind-html=" 'web.extraServices.seat.loader' | aliasStatic"></div>
@@ -230,15 +246,20 @@
             </div>
           </div>
 
-          <div class="passengersTable__cancel">
-            <a href ng-click="vm.switchService()" class="passengersTable__link passengersTable__link_cancel">
-              {{ 'web.extraServices.seat.cancel' | aliasStatic}}
-            </a>
-          </div>
 
         </div>
       </div>
 
+
+      <div class="passengersTable__bottom-row">
+        <div class="passengersTable__cancel">
+          <a href ng-click="vm.switchService()" class="passengersTable__link passengersTable__link_cancel">
+            {{ 'web.extraServices.seat.cancel' | aliasStatic}}
+          </a>
+        </div>
+
+
+      </div>
     </div>
   </div>
 
