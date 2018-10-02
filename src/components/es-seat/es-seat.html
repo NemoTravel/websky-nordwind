@@ -49,20 +49,21 @@
             </div>
           </td>
           <td>
-            <a href ng-click="vm.switchService()" ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
-               class="btn showDrop_js ">
-                                <span class="show">
-                                    {{ 'web.extraServices.seat.select' | aliasStatic}}
-                                </span>
-              <span class="hide">
-                                    {{ 'web.extraServices.seat.deselect' | aliasStatic}}
-                                </span>
-            </a>
           </td>
         </tr>
         </tbody>
       </table>
 
+      <a href ng-click="vm.switchService()"
+         ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
+         class="btn showDrop_js ">
+                                <span class="show">
+                                    {{ 'web.extraServices.seat.select' | aliasStatic}}
+                                </span>
+        <span class="hide">
+                                    {{ 'web.extraServices.seat.deselect' | aliasStatic}}
+                                </span>
+      </a>
     </div>
   </div>
 

@@ -227,11 +227,17 @@ order-prices[mode="pricesNotIssued"]
 
 .top__i
   overflow: hidden
-  margin-bottom: 50px
+  padding-bottom: 50px
+  position: relative
 
   table
     width: 100%
     position: relative
+
+  .btn
+    top: 110px
+    transform: none
+
   .text
     display: flex
 
@@ -248,24 +254,28 @@ order-prices[mode="pricesNotIssued"]
   .name
     margin-left: 40px
     position: relative
+    display: flex
+    align-items: center
 
     &:after
       content: ''
       position: absolute
-      width: 200%
+      width: 1000%
       height: 1px
       left: 0
       bottom: 0
       background-color: #dddddd
+
+    [fancybox="popupAlias"]
+      display: none
+    p
+      display: none
 
     h2
       color: $black
       font-size: 48px
       font-weight: $normalFontWeight
       line-height: $defaultLineHegith
-
-  .invoiceInfo .btn
-    top: 100px
 
 .foodSelect,
 .seatSelect
@@ -413,7 +423,7 @@ order-prices[mode="pricesNotIssued"]
 .passengersBlock_row
   &-menu
     .item
-      cursor: default
+    cursor: default
     &-foodSorting
       padding: 0
       ul
@@ -516,5 +526,10 @@ order-prices[mode="pricesNotIssued"]
 .drop
   &__i
     position: relative
+  &__decline
+    position: relative
+
+.header
+  display: none
 /* ==== END redefine old styles ==== */
 

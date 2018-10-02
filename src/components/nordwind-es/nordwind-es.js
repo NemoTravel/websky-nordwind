@@ -4,9 +4,12 @@ angular.module('app').component('nordwindEs', {
         orderInfo: '=',
         loading: '='
     },
-    controller: ['$scope', 'backend', 'utils', nordwindEsController],
-    controllerAs: 'vm'
+    controllerAs: 'vm',
+    controller: 'nordwindEsController'
 });
+
+angular.module('app').controller('nordwindEsController',
+    ['$scope', 'backend', 'utils', nordwindEsController]);
 
 
 function nordwindEsController($scope, backend, utils) {
@@ -17,14 +20,18 @@ function nordwindEsController($scope, backend, utils) {
     vm.handleEsSelect = handleEsSelect;
     vm.closePopup = closePopup;
     vm.addInsurance = addInsurance;
-
+    vm.loading = true;
 
     backend.ready.then(function () {
 
         // show additional prices on the flight
         backend.addExtraServiceListener(function (val) {
+            if (!val) {
+                vm.loading = true;
+            }
             if (val) {
                 backend.updateOrderInfo().then(function (resp) {
+                    vm.loading = false;
                     vm.orderInfo = resp;
                 });
             }
@@ -40,7 +47,6 @@ function nordwindEsController($scope, backend, utils) {
         });
 
     });
-
 
     function addInsurance() {
         var insuranceEs = _.find(vm.es, {code: 'insurance'});
