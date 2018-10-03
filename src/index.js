@@ -16,14 +16,7 @@ angular.module('app').run(['$rootScope', 'redirect', 'backend', function ($rootS
         if (route === 'add-services' && pnr && lastName) {
             lastName = decodeURIComponent(lastName);
 
-            backend.searchOrder(pnr, lastName).then(function (resp) {
-                if (resp.addingExtraServicesAllowed) {
-                    redirect.goToAddServices();
-                } else {
-                    redirect.goToSearchOrder(pnr, lastName);
-                }
-            });
-
+            redirect.goToSearchOrder(pnr, lastName);
         }
 
     })
