@@ -26,6 +26,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-util": "^3.0.8",
+    "lvovich": "^1.0.5",
     "strictify": "^0.2.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"

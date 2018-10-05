@@ -87,7 +87,7 @@
                          ng-class="{'seatSelect__routes-item--active': flightNum == vm.selectedFlight}">
 
                       <geo-marker prefix="arr__point" key="es-meal" city="flight.destinationcity"
-                                  cityname="flight.destinationcityName"
+                                  cityname="flight.destinationcityName|toCity"
                                   port="flight.destinationport"></geo-marker>
                     </div>
 

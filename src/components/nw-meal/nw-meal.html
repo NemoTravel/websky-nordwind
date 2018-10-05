@@ -6,7 +6,7 @@
         <tr>
           <td>
             <div class="text">
-              <div class="iconBox">
+              <div class="iconBox" ng-click="vm.switchService()">
                 <i class="icon_meal"></i>
               </div>
               <div class="name">
@@ -78,8 +78,9 @@
               <div class="foodSelect__routes-item" ng-click="vm.selectFlightPassenger(flightNum, 0)"
                    ng-class="{'foodSelect__routes-item--active': flightNum == vm.selectedFlight}">
 
+
                 <geo-marker prefix="arr__point" key="es-meal" city="flight.destinationcity"
-                            cityname="flight.destinationcityName"
+                            cityname="flight.destinationcityName|toCity"
                             port="flight.destinationport"></geo-marker>
               </div>
 
@@ -256,13 +257,14 @@
               <div class="passengersTable__totalPrice-wrp">
 
                 <wrap ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]">
-                <span class="passengersTable__totalPrice-descr-text">
-                  {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasStatic}}
-                </span>
+                  <span class="passengersTable__totalPrice-descr-text">
+                    {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasStatic}}
+                  </span>
                   <span class="passengersTable__totalPrice"
                         ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price">
-                                            </span>
+                                              </span>
                 </wrap>
+
               </div>
 
             </div>

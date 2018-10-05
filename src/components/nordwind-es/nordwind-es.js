@@ -24,16 +24,13 @@ function nordwindEsController($scope, backend, utils) {
 
     backend.ready.then(function () {
 
-        // show additional prices on the flight
+        // show new prices on the flight
         backend.addExtraServiceListener(function (val) {
             if (!val) {
                 vm.loading = true;
             }
             if (val) {
-                backend.updateOrderInfo().then(function (resp) {
-                    vm.loading = false;
-                    vm.orderInfo = resp;
-                });
+                vm.loading = false;
             }
         });
 
@@ -53,7 +50,6 @@ function nordwindEsController($scope, backend, utils) {
         vm.service = vm.es.insurance;
         insuranceEs.active = !insuranceEs.active;
 
-        console.log(insuranceEs);
         if (insuranceEs.active) {
             if (insuranceEs.items.length === 1) {
                 backend.modifyExtraService(getInsuranceSubmitParams(insuranceEs.items[0]));

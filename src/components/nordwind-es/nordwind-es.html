@@ -71,7 +71,7 @@
           <div class="es-popup__close" ng-click="vm.closePopup()"></div>
         </div>
         <div class="es-popup__inner">
-          <es-meal service="vm.es.meal"></es-meal>
+          <nw-meal service="vm.es.meal" locked="vm.locked" close-handler="vm.closePopup()"></nw-meal>
         </div>
       </div>
     </div>
