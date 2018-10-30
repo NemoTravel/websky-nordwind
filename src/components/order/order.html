@@ -43,7 +43,7 @@
 
 
       <div ng-if="vm.orderInfo.header.status == 'paid'" class="btn_receipt_cont">
-        <a ng-href="./receipt?pnr={{ vm.orderInfo.header.regnum }}&lastName={{ vm.orderInfo.header.lastName }}" target="_blank"
+        <a ng-href="./receipt?pnr={{ vm.orderInfo.header.regnum }}&lastName={{ vm.orderInfo.header.lastName }}&tabId={{ vm.tabId }}" target="_blank"
            class="show_receipt">
           {{ 'web.orderInfo.actions.receipt' | aliasStatic}}
         </a>
