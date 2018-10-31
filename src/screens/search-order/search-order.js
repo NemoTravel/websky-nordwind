@@ -16,6 +16,7 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
     vm.confirmHandler = confirmHandler;
     vm.clear = clear;
     vm.addPassenger = addPassenger;
+    vm.swithcSubmitButtonHoverState = swithcSubmitButtonHoverState;
 
     backend.ready.then(function () {
 
@@ -25,7 +26,11 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
         vm.pnrOrTicketRegexp = backend.applicationConstants.pnrOrTicketRegexp;
         vm.ticketRegexp = backend.applicationConstants.ticketRegexp;
 
-        if ($routeParams.pnrOrTicketNumber && $routeParams.lastName && backend.getParam('site.searchOrdersBy') === 'LAST_NAME_PNR_TICKET') {
+        if (
+            $routeParams.pnrOrTicketNumber &&
+            $routeParams.lastName &&
+            backend.getParam('site.searchOrdersBy') === 'LAST_NAME_PNR_TICKET'
+        ) {
             vm.searchParams.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
             vm.searchParams.lastName = $routeParams.lastName;
             vm.loading = false;
@@ -33,6 +38,7 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
         } else {
             updateOrderInfoHandler();
         }
+
     });
 
     function clear() {
@@ -45,7 +51,10 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
 
     function submitSearch() {
         vm.submitTouched = true;
-        if ((!backend.getParam('site.useSearchOrderAgreeCheckbox') || vm.searchOrderAgree) && vm.searchOrderForm.$valid) {
+        if (
+            (!backend.getParam('site.useSearchOrderAgreeCheckbox') || vm.searchOrderAgree) &&
+            vm.searchOrderForm.$valid
+        ) {
             vm.searchLoading = true;
             vm.errorMessage = false;
             backend.searchOrderByParams(vm.searchParams, !!vm.partiallyAddedPassengers.length).then(function (resp) {
@@ -68,6 +77,7 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
                     // because need to redirect to add-services
                     // only if adding extra services allowed
                     updateOrderInfoHandler(function () {
+                        console.log('inside updateOrderInfoHandler(callback)');
                         if (vm.orderInfo.addingExtraServicesAllowed) {
                             redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
                         }
@@ -113,4 +123,9 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
     function addPassenger() {
         vm.showSearchForm = true;
     }
+
+    function swithcSubmitButtonHoverState() {
+        vm.submitButtonHover = !vm.submitButtonHover;
+    }
+
 }

@@ -1,8 +1,12 @@
-<app-loader ng-if="vm.loading || vm.confirmLoading || vm.searchOrderLoading || vm.modifyServicesLoading || vm.orderServicesLoading"></app-loader>
+<app-loader ng-if="vm.loading ||
+        vm.confirmLoading ||
+        vm.searchOrderLoading ||
+        vm.modifyServicesLoading ||
+        vm.orderServicesLoading">
+</app-loader>
 
 <section class="out" ng-if="!vm.loading">
-
-    <app-header></app-header>
+  <app-header></app-header>
 
 
 	<div ng-if="vm.orderInfo && !vm.fatalError || vm.showBackButton" class="content content-add-services">
@@ -108,10 +112,16 @@
                             </payment-type-select>
                         </wrap>
 
-                        <div class="iconfirm">
-							<div class="iconfirm__i">
-								<div class="customCheckbox">
-									<label><input type="checkbox" id="iconfirm" ng-model="vm.agree"/><span></span></label>
+            <div class="iconfirm">
+              <div class="iconfirm__i">
+                <div class="customCheckbox">
+                  <label>
+                    <input type="checkbox" id="iconfirm" ng-model="vm.agree"/>
+                    <span></span>
+                  </label>
+                  <div ng-if="!vm.agree && vm.submitButtonHover" class="errorMessage">
+                      {{ 'web.addServices.agreeTooltip' | aliasStatic}}
+                    </div>
 								</div>
 								<p>
 									<label for="iconfirm">
@@ -135,7 +145,12 @@
                             {{ 'web.buttons.clearSession' | aliasStatic}}
                         </a>
 
-						<a href ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading" ng-click="vm.submitPayment()" ng-class="{ disabled: (!vm.agree || !vm.selectedPaymentForm || !vm.selectedPaymentType || vm.modifyServicesLoading || vm.orderServicesLoading) }" class="btn btn_next">
+            <a href ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading" ng-click="vm.submitPayment()"
+               ng-class="{disabled: (!vm.agree || !vm.selectedPaymentForm ||
+               !vm.selectedPaymentType || vm.modifyServicesLoading || vm.orderServicesLoading)}"
+               ng-mouseenter="vm.swithcSubmitButtonHoverState();"
+               ng-mouseleave="vm.swithcSubmitButtonHoverState();"
+               class="btn btn_next">
 							<span class="mobileHide">
                                 {{  vm.isFreePricevariant ? 'web.buttons.confirmAddServices' : 'web.buttons.gotoPayment' | aliasStatic}}
                             </span>
