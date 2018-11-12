@@ -112,6 +112,7 @@
 															ng-model="passenger.lastName"
                                                             ng-blur="vm.lastNameBlurHandler(passengerNumber)"
 															required
+															   uppercase-by-input
 															ng-pattern="vm.passengersCheck.passengerLastNameRegexp"
 															class="textInp inp-animate-placeholder"
 															error-highlight="{{vm.submitTouched}}">
@@ -133,6 +134,7 @@
                                                             ng-blur="vm.firstNameBlurHandler(passengerNumber)"
 															required
 															ng-pattern="vm.passengersCheck.passengerFirstNameRegexp"
+															   uppercase-by-input
 															class="textInp inp-animate-placeholder"
 															error-highlight="{{vm.submitTouched}}">
 														<label class="inp-animate-label">
@@ -407,6 +409,7 @@
 															autocomplete="off"
 															ng-model="vm.customer.lastName"
 															required
+                                 uppercase-by-input
 															ng-pattern="'customer.lastNameRegexp' | param"
 															class="textInp inp-animate-placeholder"
 															error-highlight="{{vm.submitTouched}}">
@@ -427,6 +430,7 @@
 															autocomplete="off"
 															ng-model="vm.customer.firstName"
 															required
+                                 uppercase-by-input
 															ng-pattern="'customer.firstNameRegexp' | param"
 															class="textInp inp-animate-placeholder"
 															error-highlight="{{vm.submitTouched}}">
