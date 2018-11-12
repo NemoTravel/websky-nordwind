@@ -9,84 +9,209 @@ angular.module('app').component('nordwindEs', {
 });
 
 angular.module('app').controller('nordwindEsController',
-    ['$scope', 'backend', 'utils', nordwindEsController]);
+    ['$scope', 'backend', 'utils', '$routeParams', '$window', 'redirect', nordwindEsController]);
 
 
-function nordwindEsController($scope, backend, utils) {
+function nordwindEsController($scope, backend, utils, $routeParams, $window, redirect) {
     var vm = this;
 
-
+    vm.loading = true;
+    vm.searchOrderLoading = true;
+    vm.orderServicesLoading = true;
+    vm.extraServicesList = [];
     vm.selected = null;
+
+    vm.openOrder = openOrder;
+    vm.submitPayment = submitPayment;
+    vm.paymentFormChangeHandler = paymentFormChangeHandler;
+    vm.reloadPage = reloadPage;
+    vm.clearSession = clearSession;
     vm.handleEsSelect = handleEsSelect;
     vm.closePopup = closePopup;
-    vm.addInsurance = addInsurance;
-    vm.loading = true;
+
+    $scope.$on('plasticCardForPaymentChangeEvent', function (event, data) {
+        vm.card = data;
+    });
 
     backend.ready.then(function () {
+        angular.element('title').text(backend.getAliasWithPrefix('web.pageTitle.', 'addServices'));
 
-        // show new prices on the flight
-        backend.addExtraServiceListener(function (val) {
-            if (!val) {
-                vm.loading = true;
-            }
-            if (val) {
-                vm.loading = false;
-            }
-        });
+        vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
+        vm.lastName = $routeParams.lastName;
 
-        backend.getExtraServices().then(function (response) {
+        vm.loading = false;
 
-            vm.extraServicesList = response.extraServices.slice();
-            vm.es = utils.reformatAvailableExtraServices(response.extraServices.slice(), vm.orderInfo, undefined);
+        backend.clearOrderInfoListeners();
+        backend.clearUpdateOrderServicesListeners();
 
-            activateAllServicesByDefault();
-            vm.loading = false;
-        });
+        vm.orderInfo = backend.getOrderInfo();
+
+        if (vm.orderInfo) {
+            orderReadyHandler();
+        } else {
+            backend.searchOrder(vm.pnrOrTicketNumber, vm.lastName, true).then(orderReadyHandler, function (resp) {
+                vm.searchOrderLoading = false;
+                vm.orderServicesLoading = false;
+                vm.errorMessage = resp.error;
+            });
+        }
 
     });
 
-    function addInsurance() {
-        var insuranceEs = _.find(vm.es, {code: 'insurance'});
-        vm.service = vm.es.insurance;
-        insuranceEs.active = !insuranceEs.active;
+    function orderReadyHandler() {
+        backend.addOrderInfoListener(function (orderInfo) {
+            vm.orderInfo = orderInfo;
+        });
 
-        if (insuranceEs.active) {
-            if (insuranceEs.items.length === 1) {
-                backend.modifyExtraService(getInsuranceSubmitParams(insuranceEs.items[0]));
+        backend.addUpdateOrderServicesListener(function (resp) {
+            vm.orderInfo = resp[1];
+            vm.priceVariant = resp[2];
+            vm.isFreePricevariant = utils.isFreePricevariant(resp[2]);
+
+            if (vm.isFreePricevariant) {
+                vm.showNeedSelectPaymentFormMesage = false;
             }
-        } else {
-            backend.removeExtraService({
-                code: insuranceEs.onlineMode ? 'insuranceOnline' : 'insurance'
+
+            vm.es = utils.reformatAvailableExtraServices(resp[0], vm.orderInfo, vm.es);
+            vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
+
+
+            _.forEach(vm.es, function(esItem) {
+                esItem.active = true;
             });
+
+            _.forEach(vm.esList, function (esItem) {
+                vm.extraServicesList.push(esItem);
+            });
+
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+
+            if (backend.getParam('ffp.enable') && (vm.orderInfo.hasBonusCard || vm.orderInfo.ffpSumm)) {
+                backend.ffpBonus().then(function (resp) {
+                    vm.ffpBonus = resp.total || 0;
+                });
+            }
+        }, function (resp) {
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+            vm.errorMessage = resp.error;
+
+            if (vm.errorMessage === 'web.extraServices.submitError') {
+                vm.showBackButton = true;
+            }
+        });
+
+
+        backend.updateOrderServices(true).then(function () {
+            vm.loading = true;
+
+            backend.switchDefaultSelectedServices(vm.esList, vm.es, vm.orderInfo).then(function () {
+                vm.loading = false;
+            });
+        });
+
+        backend.addExtraServiceListener(function (state) {
+            vm.modifyServicesLoading = !state;
+            vm.orderServicesLoading = true;
+        });
+
+        backend.addExtraServiceErrorListener(function (resp, req) {
+            if (!req || req.code !== 'seat') {
+                vm.modifyServicesError = resp.error;
+            }
+
+            vm.modifyServicesLoading = false;
+            vm.orderServicesLoading = true;
+        });
+    }
+
+    function submitPayment(removeInsuranceAeroexpress) {
+        if (vm.agree && !vm.modifyServicesLoading && !vm.orderServicesLoading) {
+            if (vm.selectedPaymentForm && vm.selectedPaymentType) {
+                if (backend.getParam('site.rossiyaAirlineMode')) {
+                    fancyboxTools.openHandler('popupOrderEmailRequired', false, {
+                        phoneRequiredToo: true,
+                        submitCallback: function submitCallback(email, phone) {
+                            submitPaymentConfirm(removeInsuranceAeroexpress, email, phone);
+                        }
+                    });
+                } else {
+                    submitPaymentConfirm(removeInsuranceAeroexpress);
+                }
+            } else {
+                vm.showNeedSelectPaymentFormMesage = true;
+            }
         }
     }
 
+    function submitPaymentConfirm(removeInsuranceAeroexpress, email, phone) {
+        vm.confirmLoading = true;
 
-    function getInsuranceSubmitParams(item, passenger_id) {
-        var params = {
-            code: 'insurance',
-            ins: item.ins,
-            tins: item.tins
-        };
-        if (passenger_id) {
-            params.passenger_id = passenger_id;
+        if (vm.confirmError) {
+            delete vm.confirmError;
         }
-        if (vm.service.onlineMode) {
-            params.code = 'insuranceOnline';
-            params.productCode = item.productCode;
-        }
-        return params;
+
+        backend.startPaymentForExtraServices(vm.selectedPaymentForm, vm.selectedPaymentType, removeInsuranceAeroexpress, email, phone, vm.card).then(function (resp) {
+            if (resp.pnr && resp.lastName) {
+                redirect.goToConfirmOrder(resp.pnr, resp.lastName);
+            } else if (resp.eraseAeroexpressBecauseOfCurrency || resp.eraseInsuranceBecauseOfCurrency) {
+                fancyboxTools.openHandler('popupChangeCurrencyError', false, {
+                    eraseAeroexpressBecauseOfCurrency: resp.eraseAeroexpressBecauseOfCurrency,
+                    eraseInsuranceBecauseOfCurrency: resp.eraseInsuranceBecauseOfCurrency,
+                    mode: 'addServices',
+                    submitCallback: submitPayment
+                });
+            } else if (resp.removedSvcs && resp.removedSvcs.length) {
+                fancyboxTools.openHandler('popupRemovedServicesWarning', false, {
+                    submitCallback: function submitCallback() {
+                        submitPaymentConfirm(removeInsuranceAeroexpress, email, phone);
+                    },
+                    closeCallback: function closeCallback() {
+                        backend.updateOrderServices(true);
+                    },
+
+                    removedSvcs: resp.removedSvcs,
+                    svcsToIssue: resp.svcsToIssue,
+                    noExtraServicesLeft: resp.noExtraServicesLeft,
+                    disableOutsideCloseClick: true
+                });
+            }
+
+            vm.confirmLoading = false;
+        }, function (resp) {
+            if (resp.error === 'web.noBookedConfirmedExtraServices') {
+                vm.fatalError = resp.error;
+            } else {
+                vm.confirmError = resp.error;
+            }
+
+            vm.confirmLoading = false;
+        });
     }
 
-    // по умолчанию все сервисы должны быть открыты
-    // если не вызвать эту функцию в попапе
-    // доп. услуга будет скрыта
-    function activateAllServicesByDefault() {
-        _.forEach(vm.es, function (es) {
-            es.active = true;
-        })
+    function paymentFormChangeHandler() {
+        vm.showNeedSelectPaymentFormMesage = false;
     }
 
+    function reloadPage() {
+        $window.location.reload();
+        return false;
+    }
+
+    function openOrder(pnrOrTicketNumber, lastName) {
+        if (backend.getParam('site.separatePassengersSearchOrder')) {
+            redirect.goToViewSeparateOrder(pnrOrTicketNumber, lastName);
+        } else {
+            redirect.goToSearchOrder(pnrOrTicketNumber, lastName);
+        }
+    }
+
+    function clearSession() {
+        backend.clearSession().then(function () {
+            redirect.goToSearchOrder();
+        });
+    }
 
     function handleEsSelect(esCode, service) {
         vm.selected = esCode;
@@ -95,5 +220,6 @@ function nordwindEsController($scope, backend, utils) {
     function closePopup() {
         vm.selected = null;
     }
+
 
 }
