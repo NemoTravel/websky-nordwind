@@ -1,6 +1,6 @@
 angular.module('app').component('nwMeal', {
     templateUrl: 'components/nw-meal/nw-meal.html',
-    controller: ['$scope', '$element','backend', 'utils', MealController],
+    controller: ['$scope', '$element', 'backend', 'utils', MealController],
     controllerAs: 'vm',
     bindings: {
         service: '=service',
@@ -38,6 +38,7 @@ function MealController($scope, $element, backend, utils) {
     }
 
     backend.addOrderInfoListener(function (orderInfo) {
+        console.log(orderInfo);
         vm.orderInfo = orderInfo;
     }, false, true);
 

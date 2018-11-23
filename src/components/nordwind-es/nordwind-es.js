@@ -33,8 +33,14 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
         vm.card = data;
     });
 
+
     backend.ready.then(function () {
         angular.element('title').text(backend.getAliasWithPrefix('web.pageTitle.', 'addServices'));
+
+        backend.addOrderInfoListener(function (orderInfo) {
+            vm.orderInfo = orderInfo;
+            console.log(orderInfo);
+        }, false, true);
 
         vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
         vm.lastName = $routeParams.lastName;
@@ -76,7 +82,7 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
             vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
 
 
-            _.forEach(vm.es, function(esItem) {
+            _.forEach(vm.es, function (esItem) {
                 esItem.active = true;
             });
 

@@ -16,7 +16,6 @@ function nordwindMealController(backend) {
 
         backend.getExtraServices().then(function (extraServices) {
             vm.extraServicesList = extraServices.slice();
-
         });
 
     });
