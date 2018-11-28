@@ -1,10 +1,8 @@
-<app-loader ng-if="vm.loading || vm.popupChoosePayMethodPending"></app-loader>
-
 <div ng-if="vm.errorMessage" class="message_error">
   {{ vm.errorMessage | aliasDynamic }}
 </div>
 
-<div ng-if="vm.orderInfo && !vm.errorMessage && !vm.popupChoosePayMethodPending" class="invoice">
+<div ng-if="!vm.errorMessage && !vm.popupChoosePayMethodPending" class="invoice">
   <div class="invoice__i">
     <div ng-if="vm.orderInfo.header.regnum" class="invoiceInfo">
 
@@ -15,7 +13,7 @@
         </span>
         <span class="status" ng-class="{ notPayed: vm.orderInfo.header.status == 'cancelled' }">
           {{ 'web.orderInfo.label.orderStatus.' | aliasWithPrefix:vm.orderInfo.header.status }}<wrap
-                ng-if="vm.orderInfo.paymentform">,
+            ng-if="vm.orderInfo.paymentform">,
           {{ 'web.orderinfo.paymenttype.' | aliasWithPrefix:vm.orderInfo.paymentform }}
           </wrap>{{ '. ' }}
           <wrap ng-if="vm.orderInfo.header.status == 'booked' ||
@@ -43,7 +41,8 @@
 
 
       <div ng-if="vm.orderInfo.header.status == 'paid'" class="btn_receipt_cont">
-        <a ng-href="./receipt?pnr={{ vm.orderInfo.header.regnum }}&lastName={{ vm.orderInfo.header.lastName }}&tabId={{ vm.tabId }}" target="_blank"
+        <a ng-href="./receipt?pnr={{ vm.orderInfo.header.regnum }}&lastName={{ vm.orderInfo.header.lastName }}&tabId={{ vm.tabId }}"
+           target="_blank"
            class="show_receipt">
           {{ 'web.orderInfo.actions.receipt' | aliasStatic}}
         </a>
@@ -132,7 +131,7 @@
                             <span ng-if="connection.previousAirport && connection.nextAirport &&
                              connection.previousAirport != connection.nextAirport" class="terminalChange">
                               {{ 'web.choosenFlight.airportChange' | aliasStatic}} (<span
-                                    class="terminalName">{{ connection.previousAirport }}</span>
+                                class="terminalName">{{ connection.previousAirport }}</span>
                               <span class="terminalName">{{ connection.nextAirport }}</span>)
                             </span>
                             <span ng-if="connection.previousAirport == connection.nextAirport &&
@@ -140,7 +139,7 @@
                             connection.nextTerminal &&
                             connection.previousTerminal != connection.nextTerminal" class="terminalChange">
                               {{ 'web.choosenFlight.terminalChange' | aliasStatic}} (<span
-                                    class="terminalName">{{ connection.previousTerminal }}</span>
+                                class="terminalName">{{ connection.previousTerminal }}</span>
                               <span class="terminalName">{{ connection.nextTerminal }}</span>)
                             </span>
                           </div>
@@ -349,43 +348,43 @@
     </div>
 
     <!--<div class="row">-->
-      <!--<div class="col">-->
-        <!--<div class="invoiceServicesSelected">-->
-          <!--<div class="invoiceServicesSelected__i">-->
-            <!--<h2 class="title">-->
-              <!--{{ 'web.orderInfo.extraServices' | aliasStatic}}-->
-            <!--</h2>-->
+    <!--<div class="col">-->
+    <!--<div class="invoiceServicesSelected">-->
+    <!--<div class="invoiceServicesSelected__i">-->
+    <!--<h2 class="title">-->
+    <!--{{ 'web.orderInfo.extraServices' | aliasStatic}}-->
+    <!--</h2>-->
 
-            <!--<grouped-services-list order="vm.orderInfo" mode="all"></grouped-services-list>-->
+    <!--<grouped-services-list order="vm.orderInfo" mode="all"></grouped-services-list>-->
 
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div ng-if="vm.orderInfo.addingExtraServicesAllowed" class="otherServices">-->
-          <!--<div class="otherServices__i">-->
-            <!--<h2 class="title">-->
-              <!--{{ 'web.orderInfo.addExtraServices' | aliasStatic}}-->
-            <!--</h2>-->
-            <!--<wrap ng-bind-html=" 'web.orderInfo.addExtraServices.htmlItems' | aliasStatic"></wrap>-->
-            <!--<div class="btnRow">-->
-              <!--<a href ng-click="vm.openAddServices(vm.orderInfo.header.regnum, vm.orderInfo.header.lastName)" class="btn btn_select">-->
-                <!--{{ 'web.buttons.addServices' | aliasStatic}}-->
-              <!--</a>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div ng-if="vm.orderInfo.addingExtraServicesAllowed" class="otherServices">-->
+    <!--<div class="otherServices__i">-->
+    <!--<h2 class="title">-->
+    <!--{{ 'web.orderInfo.addExtraServices' | aliasStatic}}-->
+    <!--</h2>-->
+    <!--<wrap ng-bind-html=" 'web.orderInfo.addExtraServices.htmlItems' | aliasStatic"></wrap>-->
+    <!--<div class="btnRow">-->
+    <!--<a href ng-click="vm.openAddServices(vm.orderInfo.header.regnum, vm.orderInfo.header.lastName)" class="btn btn_select">-->
+    <!--{{ 'web.buttons.addServices' | aliasStatic}}-->
+    <!--</a>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
 
-      <!--<a href name="invoiceHeader"></a>-->
+    <!--<a href name="invoiceHeader"></a>-->
 
-      <!--<div class="col">-->
-        <!--<div class="invoiceTotal">-->
-          <!--<div class="invoiceTotal__i">-->
-            <!--<order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>-->
-            <!--<order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>-->
-            <!--<order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
+    <!--<div class="col">-->
+    <!--<div class="invoiceTotal">-->
+    <!--<div class="invoiceTotal__i">-->
+    <!--<order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>-->
+    <!--<order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>-->
+    <!--<order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
     <!--</div>-->
 
     <order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>
