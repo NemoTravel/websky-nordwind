@@ -1,4 +1,3 @@
-
 <app-loader ng-if="vm.loading || vm.searchLoading"></app-loader>
 
 <section class="out" ng-if="!vm.loading">
@@ -10,7 +9,8 @@
     <div class="wrap wrap_pt32">
       <div class="content__i">
 
-        <div ng-if="vm.showSearchForm" class="orderSearchForm orderSearchForm_change orderSearchForm--order" style="display: block;">
+        <div ng-if="vm.showSearchForm" class="orderSearchForm orderSearchForm_change orderSearchForm--order"
+             style="display: block;">
 
           <div class="search-order-form-header" ng-bind-html=" 'web.order.form.header' | aliasStatic"></div>
 
@@ -104,7 +104,8 @@
                               </div>
                             </div>
                           </div>
-                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' " class="col">
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' "
+                               class="col">
                             <div class="inp">
                               <div class="inp__i">
                                 <error-message
@@ -124,7 +125,9 @@
                               </div>
                             </div>
                           </div>
-                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' || vm.needToSpecifyDocument " class="col">
+                          <div
+                              ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' || vm.needToSpecifyDocument "
+                              class="col">
                             <div class="inp">
                               <div class="inp__i">
                                 <error-message
@@ -144,7 +147,8 @@
                               </div>
                             </div>
                           </div>
-                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' " class="col">
+                          <div ng-if=" ('site.searchOrdersBy' | param) == 'LAST_NAME_DOCUMENT_FLIGHT_DATE' "
+                               class="col">
 
                             <div id="calendarContainer">
 
@@ -199,7 +203,8 @@
                 <div ng-if=" 'site.useSearchOrderAgreeCheckbox' | param " class="iconfirm iconfirm--order">
                   <div class="iconfirm__i">
                     <div class="customCheckbox">
-                      <label><input type="checkbox" id="searchOrderAgreeChb" ng-model="vm.searchOrderAgree"/><span></span></label>
+                      <label><input type="checkbox" id="searchOrderAgreeChb"
+                                    ng-model="vm.searchOrderAgree"/><span></span></label>
                       <div ng-if="!vm.searchOrderAgree && vm.submitButtonHover" class="errorMessage">
                         {{ 'web.searchOrderAgreeTooltip' | aliasStatic}}
                       </div>
@@ -221,7 +226,8 @@
           </div>
         </div>
 
-        <separate-order-passengers-list ng-if="vm.partiallyAddedPassengers.length && !vm.orderInfo" passengers="vm.partiallyAddedPassengers"></separate-order-passengers-list>
+        <separate-order-passengers-list ng-if="vm.partiallyAddedPassengers.length && !vm.orderInfo"
+                                        passengers="vm.partiallyAddedPassengers"></separate-order-passengers-list>
 
         <div ng-if="vm.partiallyAddedPassengers.length && !vm.orderInfo" class="searchResultsControl">
           <div class="searchResultsControl__i">
@@ -238,7 +244,6 @@
         </div>
 
 
-
         <div ng-if="vm.errorMessage" class="message_error">
           {{ vm.errorMessage | aliasDynamic }}
         </div>
@@ -251,7 +256,7 @@
             </a>
           </p>
 
-          <order order-info="vm.orderInfo"></order>
+          <order loading="vm.loading" order-info="vm.orderInfo"></order>
 
         </wrap>
 
