@@ -4,7 +4,8 @@ angular.module('app').component('nwMeal', {
     controllerAs: 'vm',
     bindings: {
         service: '=service',
-        locked: '=locked'
+        locked: '=locked',
+        closePopup: '&',
     }
 });
 
@@ -24,6 +25,7 @@ function MealController($scope, $element, backend, utils) {
     vm.hasAlias = backend.hasAlias;
     vm.getAvailablePassengersCount = utils.getAvailablePassengersCount;
     vm.checkServiceRemovalProhibited = backend.checkServiceRemovalProhibited;
+    vm.closePopup = vm.closePopup();
 
     vm.canScrollRight = true;
     vm.canScrollLeft = false;
@@ -62,6 +64,7 @@ function MealController($scope, $element, backend, utils) {
                     code: 'meal'
                 });
             }
+            vm.closePopup();
         }
     }
 

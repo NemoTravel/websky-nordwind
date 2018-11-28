@@ -258,7 +258,7 @@
 
                 <wrap ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]">
                   <span class="passengersTable__totalPrice-descr-text">
-                    {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasStatic}}
+                    {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasDynamic}}
                   </span>
                   <span class="passengersTable__totalPrice"
                         ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price">
