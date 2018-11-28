@@ -13,8 +13,6 @@ function MealController($scope, $element, backend, utils) {
     var vm = this,
         passengersTableContainer = $element.find('div.passengersTableContainer');
 
-    console.log('hello world');
-
     vm.switchService = switchService;
     vm.selectFlightPassenger = selectFlightPassenger;
     vm.selectFirstAvailablePassengerFlight = selectFirstAvailablePassengerFlight;
