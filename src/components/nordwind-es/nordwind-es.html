@@ -1,3 +1,8 @@
+<app-loader
+    ng-if="vm.loading || vm.searchLoading ||
+    vm.confirmLoading || vm.searchOrderLoading ||
+    vm.modifyServicesLoading || vm.orderServicesLoading"></app-loader>
+
 <wrap ng-if="vm.extraServicesList.length > 0">
   <div class="extra-services">
     <h3 class="extra-services__heading">{{ 'web.extraServices.heading' | aliasStatic }}</h3>
@@ -16,7 +21,7 @@
 
 
         <div class="extra-services__item-descr-block">
-          <!--TODO: refactor for DRY principle -->
+          <!--TODO: refactor this -->
           <div class="extra-services__item-descr-wrp" ng-if="extraService.code === 'insurance'">
             <h3 class="extra-services__item-service-name">
               {{ extraService.title }}
@@ -39,12 +44,16 @@
           </div>
           <a ng-if="extraService.code !== 'insurance'"
              class="extra-services__item-button"
-             ng-click="vm.handleEsSelect(extraService.code)"> Выбрать </a>
+             ng-click="vm.handleEsSelect(extraService.code)">
+            Выбрать</a>
 
           <a ng-if="extraService.code === 'insurance'"
              class="extra-services__item-button"
-             ng-click="vm.handleEsSelect(extraService.code)">
-            <span>Выбрать</span>
+             ng-class="{'extra-services__item-button--active': vm.es.insurance.active}"
+             ng-click="vm.es.insurance.items.length === 1 ? vm.switchInsurance() : vm.handleEsSelect(extraService.code)">
+
+            <span ng-if="!vm.es.insurance.active || vm.es.insurance.items.length > 1">Выбрать</span>
+            <span ng-if="vm.es.insurance.active && vm.es.insurance.items.length === 1">Отменить</span>
           </a>
         </div>
 
@@ -59,7 +68,7 @@
           <div class="es-popup__close" ng-click="vm.closePopup()"></div>
         </div>
         <div class="es-popup__inner">
-          <es-insurance service="vm.es.insurance"></es-insurance>
+          <nw-insurance close-popup="vm.closePopup" service="vm.es.insurance"></nw-insurance>
         </div>
       </div>
     </div>
@@ -71,7 +80,8 @@
           <div class="es-popup__close" ng-click="vm.closePopup()"></div>
         </div>
         <div class="es-popup__inner">
-          <nw-meal service="vm.es.meal" locked="vm.locked" close-handler="vm.closePopup()"></nw-meal>
+          <nw-meal close-popup="vm.closePopup" service="vm.es.meal"
+                   ></nw-meal>
         </div>
       </div>
     </div>
@@ -83,7 +93,7 @@
           <div class="es-popup__close" ng-click="vm.closePopup()"></div>
         </div>
         <div class="es-popup__inner">
-          <es-seat service="vm.es.seat"></es-seat>
+          <nw-seat service="vm.es.seat" close-popup="vm.closePopup" ></nw-seat>
         </div>
       </div>
     </div>
@@ -106,7 +116,7 @@
         </div>
         <div class="es-popup__inner">
           <es-aeroexpress service="vm.es.aeroexpress"
-                          locked="vm.locked"></es-aeroexpress>
+                          ></es-aeroexpress>
         </div>
       </div>
     </div>
@@ -119,7 +129,7 @@
         </div>
         <div class="es-popup__inner">
           <es-common service="vm.es[esCode]" code="esCode"
-                     locked="vm.locked"></es-common>
+                     ></es-common>
         </div>
       </div>
     </div>

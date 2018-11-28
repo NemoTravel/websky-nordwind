@@ -2,17 +2,18 @@ angular.module('app').component('nordwindEs', {
     templateUrl: 'components/nordwind-es/nordwind-es.html',
     bindings: {
         orderInfo: '=',
-        loading: '='
+        loading: '=',
     },
+    bindToController: true,
     controllerAs: 'vm',
     controller: 'nordwindEsController'
 });
 
 angular.module('app').controller('nordwindEsController',
-    ['$scope', 'backend', 'utils', '$routeParams', '$window', 'redirect', nordwindEsController]);
+    ['$scope', 'backend', 'utils', '$routeParams', '$window', 'redirect', '$rootScope', nordwindEsController]);
 
 
-function nordwindEsController($scope, backend, utils, $routeParams, $window, redirect) {
+function nordwindEsController($scope, backend, utils, $routeParams, $window, redirect, $rootScope) {
     var vm = this;
 
     vm.loading = true;
@@ -20,6 +21,8 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
     vm.orderServicesLoading = true;
     vm.extraServicesList = [];
     vm.selected = null;
+    vm.switchInsurance = switchInsurance;
+
 
     vm.openOrder = openOrder;
     vm.submitPayment = submitPayment;
@@ -39,7 +42,6 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
 
         backend.addOrderInfoListener(function (orderInfo) {
             vm.orderInfo = orderInfo;
-            console.log(orderInfo);
         }, false, true);
 
         vm.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
@@ -82,8 +84,13 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
             vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
 
 
+            // make all items active by default
+            // except insurance
             _.forEach(vm.es, function (esItem) {
-                esItem.active = true;
+                if (esItem.code === 'insurance' && esItem.items.length === 1) {
+                } else {
+                    esItem.active = true;
+                }
             });
 
             _.forEach(vm.esList, function (esItem) {
@@ -213,6 +220,21 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
         }
     }
 
+    function switchInsurance() {
+        if (!vm.loading) {
+            if (!vm.es.insurance.active) {
+                if (vm.es.insurance.items.length === 1) {
+                    backend.modifyExtraService(getInsuranceSubmitParams(vm.es.insurance.items[0]));
+                }
+            } else {
+                backend.removeExtraService({
+                    code: vm.es.insurance.onlineMode ? 'insuranceOnline' : 'insurance'
+                });
+                vm.es.insurance.active = false;
+            }
+        }
+    }
+
     function clearSession() {
         backend.clearSession().then(function () {
             redirect.goToSearchOrder();
@@ -225,6 +247,22 @@ function nordwindEsController($scope, backend, utils, $routeParams, $window, red
 
     function closePopup() {
         vm.selected = null;
+    }
+
+    function getInsuranceSubmitParams(item, passenger_id) {
+        var params = {
+            code: 'insurance',
+            ins: item.ins,
+            tins: item.tins
+        };
+        if (passenger_id) {
+            params.passenger_id = passenger_id;
+        }
+        if (vm.es.insurance.onlineMode) {
+            params.code = 'insuranceOnline';
+            params.productCode = item.productCode;
+        }
+        return params;
     }
 
 
