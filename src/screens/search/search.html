@@ -1,0 +1,208 @@
+<app-loader ng-if="vm.loadingVariants || (vm.loadingPeriodVariants && vm.searchResultError) || vm.loading"></app-loader>
+
+<section class="out" ng-if="!vm.loading" replace-with>
+  <app-header></app-header>
+
+  <div class="searchSteps">
+    <div class="wrap">
+      <div class="searchSteps__i">
+        <ol>
+          <li ng-if="vm.formOpened" class="active">
+            {{ 'web.steps.search' | aliasStatic}}
+          </li>
+          <li ng-if="vm.formOpened">
+            {{ 'web.steps.selectVariant' | aliasStatic}}
+          </li>
+          <li ng-if="!vm.formOpened" class="prev">
+            <a href="{{ 'web.site.firstStepUrl' | aliasStatic }}">
+              {{ 'web.steps.search' | aliasStatic}}
+            </a>
+          </li>
+          <li ng-if="!vm.formOpened" class="active">
+            {{ 'web.steps.selectVariant' | aliasStatic}}
+          </li>
+          <li>
+            {{ vm.isSinglePassenger(vm.searchParams.passengers) ? ( 'web.steps.passenger' | aliasStatic) :
+            ('web.steps.passengers' | aliasStatic) }}
+          </li>
+          <li>
+            {{ 'web.steps.extraServices' | aliasStatic}}
+          </li>
+          <li>
+            {{ 'web.steps.payment' | aliasStatic}}
+          </li>
+          <li>
+            {{ 'web.steps.order' | aliasStatic}}
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <search-form ng-if="!( 'tempParams.useWebskyAwesomeSearchForm' | param )"
+    submit="vm.searchSubmitHandler"
+    change="vm.searchChangeHandler"
+    update-params="vm.updateSearchParams"
+    switch="vm.showSearchSwitch"
+    opened="vm.formOpened"
+    limits="vm.bookingLimits"
+    nearest="vm.nearestDates"
+    error="vm.searchResultError"
+    lsp="vm.lastSearchParams"
+    ffp="!!vm.ffpUser"
+    ffp-login-error="vm.ffpLoginError">
+  </search-form>
+
+  <awesome-search-form ng-if="( 'tempParams.useWebskyAwesomeSearchForm' | param )"
+    submit="vm.searchSubmitHandler"
+    change="vm.searchChangeHandler"
+    update-params="vm.updateSearchParams"
+    switch="vm.showSearchSwitch"
+    opened="vm.formOpened"
+    limits="vm.bookingLimits"
+    nearest="vm.nearestDates"
+    error="vm.searchResultError"
+    lsp="vm.lastSearchParams"
+    ffp="!!vm.ffpUser"
+    ffp-login-error="vm.ffpLoginError">
+  </awesome-search-form>
+
+  <div class="profileInfo" ng-if="vm.ffpUser">
+    <div class="wrap">
+      <div class="profileInfo__i">
+        <div class="milesText">
+          {{ 'web.search.bonus.cardNumberLabel' | aliasStatic}}
+          {{ vm.ffpUser.cardNumber }},
+          {{ 'web.search.bonus.accountLabel' | aliasStatic}}
+          <strong ng-bind-html="{ value: vm.ffpUser.balance, currency: 'miles' } | price"></strong>
+          <div class="milesCross" ng-click="vm.logoutFFP();">
+            <i class="icon_remove"></i>
+            <div class="infoDrop">
+              <div class="infoDrop__i">
+                <p>
+                  {{ 'web.search.bonus.logoutLabel' | aliasStatic}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content content-search-result" ng-if="vm.showRestoreSearchMessage">
+    <div class="wrap wrap_pt32">
+      <div class="content__i">
+        <div class="infoMessage infoMessage_info infoMessage_restoreSearch">
+          <div class="infoMessage__i">
+            <p>
+              {{ 'web.messages.updateSearch' | aliasStatic}}
+            </p>
+            <p>
+              {{ 'web.messages.restoreSearchTextStart' | aliasStatic}}
+              <a href ng-click="vm.restoreLastSearch();" class="link">
+                {{ 'web.messages.restoreSearchLink' | aliasStatic}}
+              </a>
+              {{ 'web.messages.restoreSearchTextEnd' | aliasStatic}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content content-search-result" ng-if="vm.searchResult || vm.searchResultErrorButHasPeriodVariants">
+    <div class="wrap wrap_pt32">
+      <div class="content__i">
+        <div ng-if="vm.searchResultErrorButHasPeriodVariants" class="orderSearchError">
+          <div class="orderSearchError__i">
+            <p ng-bind-html=" 'web.messages.searchResultErrorButHasPeriodVariants.header' | aliasStatic"></p>
+            <p ng-bind-html=" 'web.messages.searchResultErrorButHasPeriodVariants.text' | aliasStatic"></p>
+          </div>
+        </div>
+
+        <wrap ng-if="!vm.ffpUser">
+          <search-mono-brand-cartesian-variants
+                  ng-if="( 'search.useMonoBrandCartesian' | param )"
+                  result="vm.searchResult"
+                  period="vm.searchResultPeriod"
+                  loading="vm.loadingPeriodVariants"
+                  params="vm.searchParams"
+                  limits="vm.bookingLimits"
+                  resubmit="vm.searchSubmitHandler"
+                  select="vm.monoBrandCartesianVariantSelectHandler">
+          </search-mono-brand-cartesian-variants>
+          <wrap ng-if="!( 'search.useMonoBrandCartesian' | param )">
+            <search-variants
+                    ng-if="!vm.searchResult.fareGroups"
+                    result="vm.searchResult"
+                    params="vm.searchParams"
+                    select="vm.variantSelectHandler">
+            </search-variants>
+            <search-fare-group-variants
+                    ng-if="vm.searchResult.fareGroups"
+                    result="vm.searchResult"
+                    period="vm.searchResultPeriod"
+                    loading="vm.loadingPeriodVariants"
+                    params="vm.searchParams"
+                    limits="vm.bookingLimits"
+                    resubmit="vm.searchSubmitHandler"
+                    select="vm.fareGroupVariantSelectHandler">
+            </search-fare-group-variants>
+          </wrap>
+        </wrap>
+
+        <search-ffp-variants
+                ng-if="vm.ffpUser"
+                result="vm.searchResult"
+                period="vm.searchResultPeriod"
+                params="vm.searchParams"
+                limits="vm.bookingLimits"
+                resubmit="vm.searchSubmitHandler"
+                select="vm.ffpVariantSelectHandler">
+        </search-ffp-variants>
+
+        <a name="selected-variant"></a>
+
+        <selected-variant
+                ng-if="vm.selectedVariantsInfo"
+                loading="vm.loadingPricingVariant"
+                info="vm.selectedVariantsInfo"
+                pricing="vm.pricingVariant">
+        </selected-variant>
+
+        <div ng-if="vm.pricingVariantError" class="infoMessage infoMessage_error">
+          <div class="infoMessage__i">
+            <p>{{ vm.pricingVariantError | aliasDynamic }}</p>
+          </div>
+        </div>
+
+        <div class="searchResultsControl" ng-if="vm.searchResult">
+          <div class="searchResultsControl__i">
+            <a ng-href="#{{vm.pricingVariant ? $root.ROUTES.PASSENGERS : $root.ROUTES.SEARCH}}"
+               class="btn btn_next"
+               ng-class="{ disabled: (!vm.pricingVariant || vm.loadingPricingVariant),
+               'loading-start': vm.loadingPricingVariant }">
+              <span class="loader" ng-if="vm.loadingPricingVariant">
+                  <img alt="" src="themes/websky/assets/static/img/general/form/loader-circle-64.gif" />
+              </span>
+              <span class="mobileHide">
+                {{ vm.isSinglePassenger(vm.searchParams.passengers) ? ( 'web.buttons.gotoPassenger' | aliasStatic) :
+                ( 'web.buttons.gotoPassengers' | aliasStatic) }}
+              </span>
+              <span class="mobileShow">
+                {{ 'web.buttons.next' | aliasStatic}}
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="push"></div>
+</section>
+
+<app-footer ng-if="!vm.loading"></app-footer>
+
+<popup-intermodal ng-if="!vm.loading" list="vm.intermodalList"></popup-intermodal>

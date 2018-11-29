@@ -1,5 +1,6 @@
 require('./screens/add-services/AddServicesScreenController');
 require('./screens/search-order/search-order');
+require('./directives/replaceWith');
 
 angular.module('app').run(['$rootScope', 'redirect', 'backend', function ($rootScope, redirect, backend) {
     $rootScope.$on('$locationChangeStart', function (e) {
