@@ -14,7 +14,7 @@ app.controller('isRouteController', ['$scope', 'backend', isRouteController]);
 
 function isRouteController($scope, backend) {
     var vm = $scope.$parent.vm;
-    var searchResult = null;
+    vm.originalBrands = false;
 
 
     backend.ready.then(function () {
@@ -30,17 +30,21 @@ function isRouteController($scope, backend) {
     $scope.$watch(angular.bind(this, function () {
         return vm.searchResult
     }), function (newSearchResult) {
-        searchResult = newSearchResult;
+
+        if (newSearchResult && typeof vm.originalBrands === 'boolean') {
+            // Нужно закэшировать оригинальные бренды
+            // т.к. потом они заменятся а поскольку в js не примитивы передаются по ссылке
+            // нужно будет восстанавливать из этого массива значения если
+            // выбраны направления которые не переопределяются
+            vm.originalBrands = angular.copy(backend.getBrandConfig());
+        }
 
         var replaceInfo = false;
-
         _.forEach(vm.redefineRules, function (redefineRule) {
             _.forEach(redefineRule.routes, function (flight) {
                 _.forEach(newSearchResult.segmentRows, function (segment) {
                     _.forEach(segment, function (segmentFlight) {
-                        console.log(segment);
                         if (segmentFlight.flightsInfo.origincity === flight.from && segmentFlight.flightsInfo.destinationcity === flight.to) {
-                            console.log('we redefine some rules here, head to web.brandConfig.redefine');
                             replaceInfo = true;
                         }
                     })
@@ -50,16 +54,26 @@ function isRouteController($scope, backend) {
 
         if (replaceInfo) {
             replaceInfoInBrandList(newSearchResult.brandsList);
+        } else {
+            if (typeof vm.originalBrands !== 'boolean' && newSearchResult.brandsList) {
+                // Восстанавливаем кэшированное значение
+                newSearchResult.brandsList = newSearchResult.brandsList.map(function (e, i) {
+                    return vm.originalBrands.filter(function (item) {
+                        return item.code === e.code;
+                    })[0];
+                });
+                console.log(newSearchResult.brandsList);
+            }
         }
 
-    });
+    }, true);
 
 
     function replaceInfoInBrandList(brandsList) {
 
         _.forEach(vm.redefineRules, function (rules) {
             _.forEach(rules.brands, function (replaceWithBrand) {
-                _.forEach(brandsList, function (brand) {
+                _.forEach(brandsList.slice(), function (brand) {
                     if (brand.code === replaceWithBrand.brand) {
                         replaceBrandInfo(brand, replaceWithBrand)
                     }
@@ -70,6 +84,7 @@ function isRouteController($scope, backend) {
 
 
     function replaceBrandInfo(brand, replaceWithBrand) {
+        console.log('we redefine some rules here, head to web.brandConfig.redefine');
         console.log(brand, replaceWithBrand);
         _.forEach(brand.props, function (brandProp) {
             if (replaceWithBrand.props[brandProp.code]) {
