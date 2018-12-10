@@ -25,30 +25,32 @@ function isRouteController($scope, backend, $location) {
             console.error('redefine rules parse error', e);
         }
         vm.redefineRules = redefineRules;
+
+        $scope.$watch(angular.bind(this, function () {
+            return vm.selectedVariantsInfo;
+        }), restoreBrandsInfo);
+
+        $scope.$watch(angular.bind(this, function () {
+            return vm.searchResult
+        }), function (newSearchResult) {
+
+            if ($location.path() === '/search-order') {
+                return;
+            }
+
+            onNewSearchResult(newSearchResult);
+        });
+
+        $scope.$watch(angular.bind(this, function () {
+            if (vm.orderInfo) {
+                return vm.orderInfo.flights
+            }
+        }), function (newFlights) {
+            onNewSearchOrderFlights(newFlights);
+        });
+
     });
 
-    $scope.$watch(angular.bind(this, function () {
-        return vm.selectedVariantsInfo;
-    }), restoreBrandsInfo);
-
-    $scope.$watch(angular.bind(this, function () {
-        return vm.searchResult
-    }), function (newSearchResult) {
-
-        if ($location.path() === '/search-order') {
-            return;
-        }
-
-        onNewSearchResult(newSearchResult);
-    });
-
-    $scope.$watch(angular.bind(this, function () {
-        if (vm.orderInfo) {
-            return vm.orderInfo.flights
-        }
-    }), function (newFlights) {
-        onNewSearchOrderFlights(newFlights);
-    });
 
     function onNewSearchOrderFlights(flights) {
         if (!flights) {
