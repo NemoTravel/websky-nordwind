@@ -2,13 +2,15 @@
 
 angular.module('app').controller(
     'SearchOrderScreenController',
-    ['$routeParams', 'backend', 'redirect', '$timeout', SearchOrderScreenController]
+    ['$scope', '$routeParams', 'backend', 'redirect', '$timeout', 'utils', SearchOrderScreenController]
 );
 
-function SearchOrderScreenController($routeParams, backend, redirect, $timeout) {
+function SearchOrderScreenController($scope, $routeParams, backend, redirect, $timeout, utils) {
 
     var vm = this;
     vm.loading = true;
+    vm.searchOrderLoading = true;
+    vm.orderServicesLoading = true;
     vm.showSearchForm = true;
     vm.searchParams = {};
     vm.partiallyAddedPassengers = [];
@@ -21,6 +23,7 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
     backend.ready.then(function () {
 
         angular.element('title').text(backend.getAliasWithPrefix('web.pageTitle.', 'searchOrder'));
+
 
         vm.passengerLastNameRegexp = backend.applicationConstants.passengerLastNameRegexp;
         vm.pnrOrTicketRegexp = backend.applicationConstants.pnrOrTicketRegexp;
@@ -39,7 +42,75 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
             updateOrderInfoHandler();
         }
 
+        // add-services logic
+        backend.clearOrderInfoListeners();
+        backend.clearUpdateOrderServicesListeners();
+
+        backend.addOrderInfoListener(function (orderInfo) {
+            vm.orderInfo = orderInfo;
+        });
+
+        backend.addUpdateOrderServicesListener(function (resp) {
+            vm.orderInfo = resp[1];
+            vm.priceVariant = resp[2];
+            vm.isFreePricevariant = utils.isFreePricevariant(resp[2]);
+
+            if (vm.isFreePricevariant) {
+                vm.showNeedSelectPaymentFormMesage = false;
+            }
+
+            vm.es = utils.reformatAvailableExtraServices(resp[0], vm.orderInfo, vm.es);
+            vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
+
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+
+            if (backend.getParam('ffp.enable') && (vm.orderInfo.hasBonusCard || vm.orderInfo.ffpSumm)) {
+                backend.ffpBonus().then(function (resp) {
+                    vm.ffpBonus = resp.total || 0;
+                });
+            }
+        }, function (resp) {
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+            vm.errorMessage = resp.error;
+        });
+
+        backend.updateOrderServices(true).then(function () {
+            vm.loading = true;
+
+            backend.switchDefaultSelectedServices(vm.esList, vm.es, vm.orderInfo).then(function () {
+                vm.loading = false;
+            }, function (resp) {
+                vm.errorMessage = resp.error;
+                vm.loading = false;
+            });
+        });
+
+        backend.addExtraServiceListener(function (state) {
+            vm.modifyServicesLoading = !state;
+            vm.orderServicesLoading = true;
+        });
+
+        backend.addExtraServiceErrorListener(function (resp, req) {
+            if (!req || req.code !== 'seat') {
+                vm.modifyServicesError = resp.error;
+            }
+
+            vm.modifyServicesLoading = false;
+            vm.orderServicesLoading = true;
+        });
+
     });
+
+    function submitPayment(removeInsuranceAeroExpress) {
+        if (vm.agree && !vm.modifyServicesLoading && !vm.orderServicesLoading) {
+            if (vm.selectedPaymentForm && vm.selectedPaymentType) {
+                submitPaymentConfirm(removeInsuranceAeroexpress);
+            }
+        }
+    }
+
 
     function clear() {
         backend.clearSession();
@@ -76,12 +147,7 @@ function SearchOrderScreenController($routeParams, backend, redirect, $timeout) 
                     // call updateOrderInfo with callback
                     // because need to redirect to add-services
                     // only if adding extra services allowed
-                    updateOrderInfoHandler(function () {
-                        console.log('inside updateOrderInfoHandler(callback)');
-                        if (vm.orderInfo.addingExtraServicesAllowed) {
-                            redirect.goToAddServices(vm.searchParams.pnrOrTicketNumber, vm.searchParams.lastName);
-                        }
-                    });
+                    updateOrderInfoHandler();
                 } else {
                     if (resp.partiallyAddedPassengers) {
                         vm.partiallyAddedPassengers = resp.partiallyAddedPassengers;
