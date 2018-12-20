@@ -2,10 +2,11 @@
 
 angular.module('app').controller(
     'SearchOrderScreenController',
-    ['$scope', '$routeParams', 'backend', 'redirect', '$timeout', 'utils', SearchOrderScreenController]
+    ['$scope', '$routeParams', 'backend',
+        'redirect', '$timeout', 'utils', 'fancyboxTools', SearchOrderScreenController]
 );
 
-function SearchOrderScreenController($scope, $routeParams, backend, redirect, $timeout, utils) {
+function SearchOrderScreenController($scope, $routeParams, backend, redirect, $timeout, utils, fancyboxTools) {
 
     var vm = this;
     vm.loading = true;
@@ -104,11 +105,12 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
 
     });
 
-    function submitPayment(removeInsuranceAeroExpress) {
+    function submitPayment(removeInsuranceAeroexpress) {
         if (vm.agree && !vm.modifyServicesLoading && !vm.orderServicesLoading) {
-
             if (vm.selectedPaymentForm && vm.selectedPaymentType) {
-                submitPaymentConfirm(removeInsuranceAeroExpress);
+                submitPaymentConfirm(removeInsuranceAeroexpress);
+            } else {
+                vm.showNeedSelectPaymentFormMesage = true;
             }
         }
     }
@@ -120,13 +122,59 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
             delete vm.confirmError;
         }
 
-
         backend.startPaymentForExtraServices(vm.selectedPaymentForm, vm.selectedPaymentType,
             removeInsuranceAeroexpress, email, phone, vm.card).then(function (resp) {
-            console.log(vm.selectedPaymentForm, vm.selectedPaymentType, removeInsuranceAeroexpress, email, phone, vm.card);
+            if (resp.pnr && resp.lastName) {
+                redirect.goToConfirmOrder();
+            } else if (resp.eraseAeroexpressBecauseOfCurrency || resp.eraseInsuranceBecauseOfCurrency) {
+                fancyboxTools.openHandler('popupChangeCurrencyError', false, {
+                    eraseAeroexpressBecauseOfCurrency: resp.eraseAeroexpressBecauseOfCurrency,
+                    eraseInsuranceBecauseOfCurrency: resp.eraseInsuranceBecauseOfCurrency,
+                    mode: 'addServices',
+                    submitCallback: submitPayment
+                });
+            } else if (resp.removedSvcs && resp.removedSvcs.length) {
+                fancyboxTools.openHandler('popupRemovedServicesWarning', false, {
+                    submitCallback: function submitCallback() {
+                        submitPaymentConfirm(removeInsuranceAeroexpress, email, phone);
+                    },
+                    closeCallback: function closeCallback() {
+                        backend.updateOrderServices(true);
+                    },
+
+                    removedSvcs: resp.removedSvcs,
+                    svcsToIssue: resp.svcsToIssue,
+                    noExtraServicesLeft: resp.noExtraServicesLeft,
+                    disableOutsideCloseClick: true
+                });
+            }
+
+            vm.confirmLoading = false;
+        }, function (resp) {
+            if (resp.error === 'web.noBookedConfirmedExtraServices') {
+                vm.fatalError = resp.error;
+            } else {
+                vm.confirmError = resp.error;
+            }
+
+            vm.confirmLoading = false;
         });
     }
 
+    function paymentFormChangeHandler() {
+        vm.showNeedSelectPaymentFormMesage = false;
+    }
+
+    function reloadPage() {
+        $window.location.reload();
+        return false;
+    }
+
+    function clearSession() {
+        backend.clearSession().then(function () {
+            redirect.goToSearchOrder();
+        });
+    }
 
     function clear() {
         backend.clearSession();
@@ -209,5 +257,4 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
     function swithcSubmitButtonHoverState() {
         vm.submitButtonHover = !vm.submitButtonHover;
     }
-
 }
