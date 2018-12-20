@@ -14,6 +14,7 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
     vm.showSearchForm = true;
     vm.searchParams = {};
     vm.partiallyAddedPassengers = [];
+    vm.submitPayment = submitPayment;
     vm.submitSearch = submitSearch;
     vm.confirmHandler = confirmHandler;
     vm.clear = clear;
@@ -105,10 +106,25 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
 
     function submitPayment(removeInsuranceAeroExpress) {
         if (vm.agree && !vm.modifyServicesLoading && !vm.orderServicesLoading) {
+
             if (vm.selectedPaymentForm && vm.selectedPaymentType) {
-                submitPaymentConfirm(removeInsuranceAeroexpress);
+                submitPaymentConfirm(removeInsuranceAeroExpress);
             }
         }
+    }
+
+    function submitPaymentConfirm(removeInsuranceAeroexpress, email, phone) {
+        vm.confirmLoading = true;
+
+        if (vm.confirmError) {
+            delete vm.confirmError;
+        }
+
+
+        backend.startPaymentForExtraServices(vm.selectedPaymentForm, vm.selectedPaymentType,
+            removeInsuranceAeroexpress, email, phone, vm.card).then(function (resp) {
+            console.log(vm.selectedPaymentForm, vm.selectedPaymentType, removeInsuranceAeroexpress, email, phone, vm.card);
+        });
     }
 
 

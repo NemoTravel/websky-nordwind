@@ -1,0 +1,500 @@
+<app-loader ng-if="vm.loading || vm.popupChoosePayMethodPending"></app-loader>
+
+<div ng-if="vm.errorMessage" class="message_error">
+  {{ vm.errorMessage | aliasDynamic }}
+</div>
+
+<div ng-if="!vm.loading && vm.orderInfo && !vm.errorMessage && !vm.popupChoosePayMethodPending" class="invoice">
+  <div class="invoice__i">
+    <div ng-if="vm.orderInfo.header.regnum" class="invoiceInfo">
+      <div class="invoiceInfo__i">
+        <span class="orderNum">
+          {{ 'web.orderInfo.orderNum' | aliasStatic}}
+          {{ vm.orderInfo.header.regnum }}
+        </span>
+        <span class="status" ng-class="{ notPayed: vm.orderInfo.header.status == 'cancelled' }">
+          {{ 'web.orderInfo.label.orderStatus.' | aliasWithPrefix:vm.orderInfo.header.status }}<wrap
+            ng-if="vm.orderInfo.paymentform">,
+          {{ 'web.orderinfo.paymenttype.' | aliasWithPrefix:vm.orderInfo.paymentform }}
+          </wrap>{{ '. ' }}
+          <wrap ng-if="vm.orderInfo.header.status == 'booked' ||
+          vm.orderInfo.header.status == 'being_paid' ||
+          vm.orderInfo.header.status == 'payment_received'">
+              <wrap ng-if="vm.orderInfo.header.paymentNotAllow">
+                {{ 'web.orderInfo.label.timeoutPaymentNotAllow' | aliasStatic}}
+                {{ vm.orderInfo.header.validThru }}
+              </wrap>
+              <wrap ng-if="!vm.orderInfo.header.paymentNotAllow">
+                {{ 'web.orderInfo.label.timeout' | aliasStatic}}
+                {{ vm.orderInfo.header.validThru }}
+              </wrap>
+          </wrap>
+          <wrap ng-if="(!vm.orderInfo.hasFailedServices || vm.ignoreFailedServices) && vm.orderInfo.paycode">
+            <br/>
+            {{ 'web.orderInfo.label.paycode' | aliasStatic}}
+            <b>{{ vm.orderInfo.paycode }}</b>
+          </wrap>
+        </span>
+      </div>
+      <div ng-if="vm.orderInfo.header.status == 'paid'" class="btn_receipt_cont">
+        <a ng-href="./receipt?pnr={{ vm.orderInfo.header.regnum }}&lastName={{ vm.orderInfo.header.lastName }}&tabId={{ vm.tabId }}"
+           target="_blank"
+           class="show_receipt">
+          {{ 'web.orderInfo.actions.receipt' | aliasStatic}}
+        </a>
+        <a href fancybox="popupSendReceipt" class="send_receipt"></a>
+      </div>
+    </div>
+
+    <wrap ng-transclude="extra-services">
+    </wrap>
+
+    <div class="invoiceDrops">
+      <div ng-if="vm.orderInfo.flights.length" class="item dropWrapper" ng-class="{ active: vm.dropState[0] }">
+        <div class="item__i">
+          <div class="title">
+            <a href ng-click="vm.dropState[0] = !vm.dropState[0]" class="openDrop">
+              <span class="circle"><i class="icon_triangle"></i></span>
+              <route-desc segments="vm.orderInfo.flights" flights="vm.orderInfo.plainFlights"></route-desc>
+            </a>
+          </div>
+
+          <div class="drop" ng-class="{ show_js: vm.dropState[0] }">
+            <div class="drop__i">
+
+              <div class="choosenFlight">
+                <div class="choosenFlight__i">
+                  <div class="chooseResult">
+                    <div class="chooseResult__i chooseResult__i__order">
+                      <div ng-repeat="(segNum, segment) in vm.orderInfo.flights" class="flight">
+                        <div class="route_item_container" ng-repeat="(flightNum, flight) in segment.flights">
+                          <div class="route_item">
+                            <div class="route__i route_container">
+                              <div class="route_table">
+                                <div class="dep">
+                                  <div class="dep__date"
+                                       ng-class="{ nextDay: flight.departuredayshift,
+                                       attention: flight.departuredayshift}">
+                                    {{ flight.departuredate | formatDate: 'D MMM, dd' }}
+                                  </div>
+                                  <div class="dep__time">
+                                    {{ flight.departuretime }}
+                                  </div>
+                                  <geo-marker prefix="dep__point" key="booking" city="flight.origincity"
+                                              cityname="flight.origincityName" port="flight.originport"
+                                              portname="flight.originportName">
+                                  </geo-marker>
+                                </div>
+                                <div class="info">
+                                  <i class="icon_plane"></i>
+                                  <div class="info__number">{{ flight.company.code_en }}-{{ flight.racenumber }}</div>
+                                  <div class="info__timeEnRoute">{{ flight.flighttime | timeAsWords }}</div>
+                                </div>
+                                <div class="arr">
+                                  <div class="arr__date"
+                                       ng-class="{ nextDay: flight.arrivaldayshift, attention: flight.arrivaldayshift}">
+                                    {{ flight.arrivaldate | formatDate: 'D MMM, dd' }}
+                                  </div>
+                                  <div class="arr__time">
+                                    {{ flight.arrivaltime }}
+                                  </div>
+                                  <geo-marker prefix="arr__point" key="booking" city="flight.destinationcity"
+                                              cityname="flight.destinationcityName" port="flight.destinationport"
+                                              portname="flight.destinationportName">
+                                  </geo-marker>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="route__i additional">
+                              <span class="additional__company">
+                                {{ 'web.choosenFlight.company' | aliasStatic}}
+                                {{ flight.company.name }}
+                              </span>
+                              <span class="additional__company" ng-if="flight.operatingCompany">
+                                {{ 'web.search.results.operatingCompany' | aliasStatic}}
+                                {{ flight.operatingCompany.name }}
+                              </span>
+                              <span class="additional__plane">
+                                {{ flight.airplaneName }}
+                              </span>
+                            </div>
+                          </div>
+                          <div ng-if="segment.connections[flightNum]"
+                               ng-init="connection=segment.connections[flightNum]" class="transfer">
+                            <span class="transfer__text">
+                                <strong>
+                                  {{ 'web.choosenFlight.connection' | aliasStatic}}
+                                  {{ connection.time | timeAsWords }}
+                                </strong>
+                            </span>
+                            <span ng-if="connection.previousAirport && connection.nextAirport &&
+                             connection.previousAirport != connection.nextAirport" class="terminalChange">
+                              {{ 'web.choosenFlight.airportChange' | aliasStatic}} (<span
+                                class="terminalName">{{ connection.previousAirport }}</span>
+                              <span class="terminalName">{{ connection.nextAirport }}</span>)
+                            </span>
+                            <span ng-if="connection.previousAirport == connection.nextAirport &&
+                            connection.previousTerminal &&
+                            connection.nextTerminal &&
+                            connection.previousTerminal != connection.nextTerminal" class="terminalChange">
+                              {{ 'web.choosenFlight.terminalChange' | aliasStatic}} (<span
+                                class="terminalName">{{ connection.previousTerminal }}</span>
+                              <span class="terminalName">{{ connection.nextTerminal }}</span>)
+                            </span>
+                          </div>
+                          <div ng-repeat="landing in flight.landings" class="landing">
+                        							<span class="landing__text">
+                        								<strong>{{ 'web.searchScheduleResult.landing' | aliasStatic}}</strong>
+                        							</span>
+                            <p class="landing__airport">
+                              {{ landing.landingCityName }} ({{ landing.landingTime | timeAsWords }})
+                            </p>
+                          </div>
+                        </div>
+                        <div ng-if="segment.flights.length > 1" class="timeEnRoute">
+                          {{ 'web.choosenFlight.flighttime' | aliasStatic}} {{ segment.flightTime | timeAsWords }}
+                        </div>
+
+                        <brand-props-info ng-if="segment.flights[0].brand && ( 'search.useMonoBrandCartesian' | param )"
+                                          brand-name="segment.flights[0].brandName"
+                                          brand-available-props="segment.flights[0].brandAvailableProps"
+                                          brand-paid-props="segment.flights[0].brandPaidProps"
+                                          brand-unavailable-props="segment.flights[0].brandUnavailableProps">
+                          <brand-props-info>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item dropWrapper" ng-class="{ active: vm.dropState[1] }">
+        <div class="item__i">
+          <div class="title">
+            <a href ng-click="vm.dropState[1] = !vm.dropState[1]" class="openDrop">
+              <span class="circle"><i class="icon_triangle"></i></span>
+              {{ 'web.orderInfo.passengers' | aliasStatic}}
+              <span ng-repeat="(num, passenger) in vm.orderInfo.passengers">
+								<span ng-if="num">, </span>
+								{{ passenger.lastName }} {{ passenger.firstName }}
+							</span>
+            </a>
+          </div>
+          <div class="drop" ng-class="{ show_js: vm.dropState[1] }">
+            <div class="drop__i">
+              <div class="passengerInvoiceInfo">
+                <div class="passengerInvoiceInfo__i">
+                  <div class="row">
+                    <table ng-repeat="(num, passenger) in vm.orderInfo.passengers">
+                      <tbody ng-class="{ withoutSeat: !passenger.hasSeats }">
+                      <tr ng-if="passenger.lastName && passenger.firstName">
+                        <th colspan="3">
+                          <i ng-if="!passenger.hasSeats" class="icon_child-discount"></i>
+                          <strong>
+                            {{ passenger.lastName }} {{ passenger.firstName }}
+                          </strong>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p ng-if="passenger.dateOfBirth">
+                            {{ 'web.orderInfo.passenger.dateOfBirth' | aliasStatic}}
+                            {{ passenger.dateOfBirth }}
+                          </p>
+                          <p ng-if="passenger.gender">
+                            {{ 'web.orderInfo.passenger.gender' | aliasStatic}}
+                            {{ 'web.orderInfo.label.gender.' | aliasWithPrefix:passenger.gender }}
+                          </p>
+                          <p ng-if="passenger.nationality">
+                            {{ 'web.orderInfo.passenger.nationality' | aliasStatic}}
+                            {{ passenger.nationality }}
+                          </p>
+                          <p ng-if="passenger.phone">
+                            {{ 'web.orderInfo.passenger.phone' | aliasStatic}}
+                            {{ passenger.phone }}
+                          </p>
+                          <p ng-if="passenger.eMail">
+                            {{ 'web.orderInfo.passenger.eMail' | aliasStatic}}
+                            {{ passenger.eMail }}
+                          </p>
+                        </td>
+
+                        <td class="documentCode--{{ passenger.documentCode }}">
+                          <p ng-if="passenger.documentType">
+                            {{ 'web.orderInfo.passenger.documentType' | aliasStatic}}
+                            {{ passenger.documentType }}
+                          </p>
+                          <p ng-if="passenger.documentNumber">
+                            {{ 'web.orderInfo.passenger.documentNumber' | aliasStatic}}
+                            {{ passenger.documentNumber }}
+                          </p>
+                          <p class="documentDate" ng-if="passenger.documentDate">
+                            {{ 'web.orderInfo.passenger.documentDate' | aliasStatic}}
+                            {{ passenger.documentDate }}
+                          </p>
+                        </td>
+                        <td>
+                          <p ng-if="passenger.tickets">
+                            <strong>
+                              {{ 'web.orderInfo.passenger.ticket' | aliasStatic}}
+                              <span ng-repeat="(tickNum, ticket) in passenger.tickets">
+                                <span ng-if="tickNum">, </span>
+                                {{ ticket }}
+                              </span>
+                            </strong>
+                          </p>
+                          <p ng-if="passenger.bonusCard">
+                            {{ 'web.orderInfo.passenger.bonusCard' | aliasStatic}}
+                            {{ passenger.bonusCard }}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr ng-if="passenger.specialNeedSsrsList">
+                        <td colspan="3">
+                          <div class="passenger-special-needs">
+                            <a href class="link passenger-special-needs__switch"
+                               ng-click="vm.specialNeedShowState[num] = !vm.specialNeedShowState[num];">
+                              {{ 'web.orderInfo.passenger.specialNeed.select' | aliasStatic }}
+                            </a>
+                            <div class="passenger-special-needs__list" ng-if="vm.specialNeedShowState[num]">
+                              <div class="passenger-special-needs__item"
+                                   ng-repeat="(ssrNum, ssr) in passenger.specialNeedSsrsList track by $index"
+                                   ng-bind-html=" 'web.orderInfo.passenger.specialNeed.ssr.' | aliasWithPrefix:ssr ">
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item dropWrapper" ng-class="{ active: vm.dropState[2] }">
+        <div class="item__i">
+          <div class="title">
+            <a href ng-click="vm.dropState[2] = !vm.dropState[2]" class="openDrop">
+              <span class="circle">
+                <i class="icon_triangle"></i>
+              </span>
+              {{ 'web.orderInfo.label.customer' | aliasStatic}}
+              <span>
+								{{ vm.orderInfo.customer.lastName }} {{ vm.orderInfo.customer.firstName }}
+							</span>
+            </a>
+          </div>
+          <div class="drop" ng-class="{ show_js: vm.dropState[2] }">
+            <div class="drop__i">
+              <div class="passengerInvoiceInfo">
+                <div class="passengerInvoiceInfo__i">
+                  <div class="row">
+                    <table>
+                      <tbody>
+                      <tr>
+                        <td ng-if="vm.orderInfo.customer.phone">
+                          <p>
+                            {{ 'web.orderInfo.customer.phone' | aliasStatic}}
+                            {{ vm.orderInfo.customer.phone }}
+                          </p>
+                        </td>
+                        <td ng-if="vm.orderInfo.customer.eMail">
+                          <p>
+                            {{ 'web.orderInfo.customer.eMail' | aliasStatic}}
+                            {{ vm.orderInfo.customer.eMail }}
+                          </p>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="vm.orderInfo.history.length" class="item dropWrapper" ng-class="{ active: vm.dropState[3] }">
+        <div class="item__i">
+          <div class="title">
+            <a href ng-click="vm.dropState[3] = !vm.dropState[3]" class="openDrop">
+              <span class="circle">
+                <i class="icon_triangle"></i>
+              </span>
+              {{ 'web.orderInfo.history' | aliasStatic}}
+            </a>
+          </div>
+
+          <div class="drop" ng-class="{ show_js: vm.dropState[3] }">
+            <div class="drop__i">
+              <div class="invoiceHistory">
+                <div class="invoiceHistory__i">
+                  <table>
+                    <tbody>
+                    <tr ng-repeat="rec in vm.orderInfo.history">
+                      <td>
+                        <strong>{{ rec.date }}</strong>
+                      </td>
+                      <td>
+                        <p>{{ rec.type }}</p>
+                        <p ng-if="rec.comment">{{ rec.comment }}</p>
+                      </td>
+                      <td class="col_amount">
+                        <p ng-if="rec.amount" ng-bind-html="{ value: rec.amount, currency: rec.currency } | price"></p>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="invoiceServicesSelected">
+          <div class="invoiceServicesSelected__i">
+            <h2 class="title">
+              {{ 'web.orderInfo.extraServices' | aliasStatic}}
+            </h2>
+
+            <grouped-services-list order="vm.orderInfo" mode="all"></grouped-services-list>
+
+          </div>
+        </div>
+        <div ng-if="vm.orderInfo.addingExtraServicesAllowed" class="otherServices">
+          <div class="otherServices__i">
+            <h2 class="title">
+              {{ 'web.orderInfo.addExtraServices' | aliasStatic}}
+            </h2>
+            <wrap ng-bind-html=" 'web.orderInfo.addExtraServices.htmlItems' | aliasStatic"></wrap>
+            <div class="btnRow">
+              <a href="#{{$root.ROUTES.ADD_SERVICES}}" class="btn btn_select">
+                {{ 'web.buttons.addServices' | aliasStatic}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href name="invoiceHeader"></a>
+
+      <div class="col">
+        <div class="invoiceTotal">
+          <div class="invoiceTotal__i">
+            <order-prices order="vm.orderInfo" mode="pricesIssued"></order-prices>
+            <order-ffp-prices summ="vm.orderInfo.ffpSumm" bonus="vm.ffpBonus"></order-ffp-prices>
+            <order-prices order="vm.orderInfo" mode="pricesNotIssued"></order-prices>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+        ng-if="(vm.orderInfo.price != vm.orderInfo.amountToPay || vm.orderInfo.currencyToPay != vm.orderInfo.currency) && vm.showPaymentFrame"
+        class="amountToPayWarning">
+      <span ng-bind-html=" 'web.messages.amountToPayWarning' | aliasStatic "></span>
+      <span ng-bind-html="{ value: vm.orderInfo.amountToPay, currency: vm.orderInfo.currencyToPay } | price"></span>
+    </div>
+
+    <wrap ng-transclude="payment">
+    </wrap>
+
+    <payment-frame ng-if="vm.showPaymentFrame" url="vm.orderInfo.paymentRedirectTo"></payment-frame>
+
+    <div ng-if="!vm.showPaymentFrame" class="btn-row">
+      <ul>
+        <li ng-if="vm.orderInfo.possiblePaymentForms">
+          <a href class="btn btn-change-pay-method" fancybox="popupChoosePayMethod">
+            {{ 'web.buttons.changePayMethod' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if=" 'site.bookingEnabled' | param ">
+          <a href ng-click="vm.newBooking()" class="btn btn-new-booking">
+            {{ 'web.buttons.newBooking' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if=" !('site.bookingEnabled' | param) ">
+          <a href ng-click="vm.clearSession()" class="btn btn-clear-session">
+            {{ 'web.buttons.clearSession' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.cancellationAllowed">
+          <a href fancybox="popupCancelOrder" class="btn">
+            {{ 'web.orderInfo.actions.cancel' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.refundAllowed">
+          <a href ng-click="vm.openRefund(vm.orderInfo.header.regnum, vm.orderInfo.header.lastName)" class="btn">
+            {{ 'web.orderInfo.actions.refund' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.exchangeAllowed">
+          <a href ng-click="vm.openExchange()" class="btn">
+            {{ 'web.orderInfo.actions.exchange' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.retryRegisterAllowed">
+          <a href ng-click="vm.retryPayment()" class="btn">
+            {{ 'web.buttons.retryPay' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.paymentConfirmationAllowed">
+          <a href fancybox="popupIssueTickets" class="btn">
+            {{ 'web.buttons.issueTickets' | aliasStatic}}
+          </a>
+        </li>
+        <li ng-if="vm.orderInfo.bindAlowed">
+          <a href ng-click="vm.bindOrder()" class="btn">
+            {{ 'web.buttons.bindOrder' | aliasStatic}}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-if="vm.showBindOrderSuccessMessage" class="infoMessage">
+      <br/><br/>
+      <div class="infoMessage__i">
+        <p ng-bind-html=" 'web.messages.bindOrderSuccess' | aliasStatic"></p>
+      </div>
+    </div>
+
+    <div ng-if="vm.showBindOrderFailMessage" class="infoMessage infoMessage_error">
+      <br/><br/>
+      <div class="infoMessage__i">
+        <p ng-bind-html=" 'web.messages.bindOrderFail' | aliasStatic"></p>
+      </div>
+    </div>
+
+    <div ng-if="vm.choosePayMethodFailMsg" class="infoMessage infoMessage_error">
+      <br/><br/>
+      <div class="infoMessage__i">
+        <p>
+          {{vm.choosePayMethodFailMsg | aliasStatic}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<wrap ng-if="!vm.loading && !vm.popupChoosePayMethodPending">
+  <popup-cancel-order></popup-cancel-order>
+  <popup-remark></popup-remark>
+  <popup-issue-tickets mode="vm.orderInfo.paymentform"></popup-issue-tickets>
+  <popup-removed-services-warning-by-order order="vm.orderInfo"></popup-removed-services-warning-by-order>
+  <popup-send-receipt></popup-send-receipt>
+  <popup-aeroexpress-refund></popup-aeroexpress-refund>
+  <popup-choose-pay-method order-info="vm.orderInfo" ng-if="vm.orderInfo.possiblePaymentForms">
+  </popup-choose-pay-method>
+</wrap>

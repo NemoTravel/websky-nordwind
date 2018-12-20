@@ -256,12 +256,102 @@
             </a>
           </p>
 
-          <!--nw-es-list -->
-          <extra-services-list ng-if="vm.es" es="vm.es" list="vm.esList"
-                               locked="vm.modifyServicesLoading || vm.orderServicesLoading"></extra-services-list>
-          <!--end nw-es-list -->
 
-          <order replace-with order-info="vm.orderInfo"></order>
+          <order-with-es replace-with order-info="vm.orderInfo">
+            <!--nw-es-list -->
+            <extra-services-list ng-if="vm.es" es="vm.es" list="vm.esList"
+                                 locked="vm.modifyServicesLoading || vm.orderServicesLoading"></extra-services-list>
+            <!--end nw-es-list -->
+
+            <div ng-if="vm.orderInfo.hasSelectedExtraServices && vm.priceVariant" class="payMethods">
+              <div class="payMethods__i">
+
+
+                <wrap ng-show="!vm.isFreePricevariant">
+                  <h2 class="title">
+                    {{ 'web.paymentTypeSelect.header' | aliasStatic}}
+                  </h2>
+                  <payment-type-select price-variant="vm.priceVariant"
+                                       change-handler="vm.paymentFormChangeHandler"
+                                       selected-payment-type="vm.selectedPaymentType"
+                                       selected-payment-form="vm.selectedPaymentForm">
+                  </payment-type-select>
+                </wrap>
+
+                <div class="iconfirm">
+                  <div class="iconfirm__i">
+                    <div class="customCheckbox">
+                      <label>
+                        <input type="checkbox" id="iconfirm" ng-model="vm.agree"/>
+                        <span></span>
+                      </label>
+                      <div ng-if="!vm.agree && vm.submitButtonHover" class="errorMessage">
+                        {{ 'web.addServices.agreeTooltip' | aliasStatic}}
+                      </div>
+                    </div>
+                    <p>
+                      <label for="iconfirm">
+                        <wrap ng-bind-html=" 'web.addServices.agree' | aliasStatic"></wrap>
+                      </label>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="searchResultsControl">
+              <div class="searchResultsControl__i">
+
+                <a href ng-click="vm.openOrder(vm.pnrOrTicketNumber, vm.lastName)" class="btn btn_back">
+                  {{ 'web.addServices.backToOrder' | aliasStatic}}
+                </a>
+
+                <a href ng-click="vm.clearSession()" ng-if=" !('site.bookingEnabled' | param) "
+                   class="btn btn-clear-session">
+                  {{ 'web.buttons.clearSession' | aliasStatic}}
+                </a>
+
+                <a href ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading"
+                   ng-click="vm.submitPayment()"
+                   ng-class="{disabled: (!vm.agree || !vm.selectedPaymentForm ||
+               !vm.selectedPaymentType || vm.modifyServicesLoading || vm.orderServicesLoading)}"
+                   ng-mouseenter="vm.swithcSubmitButtonHoverState();"
+                   ng-mouseleave="vm.swithcSubmitButtonHoverState();"
+                   class="btn btn_next">
+							<span class="mobileHide">
+                                {{  vm.isFreePricevariant ? 'web.buttons.confirmAddServices' : 'web.buttons.gotoPayment' | aliasStatic}}
+                            </span>
+                  <span class="mobileShow">
+                                {{ 'web.buttons.next' | aliasStatic}}
+                            </span>
+                </a>
+
+              </div>
+            </div>
+
+
+            <div ng-if="vm.showNeedSelectPaymentFormMesage" class="infoMessage infoMessage_error">
+              <div class="infoMessage__i">
+                <p>
+                  {{ 'web.messages.needSelectPaymentForm' | aliasStatic}}
+                </p>
+              </div>
+            </div>
+
+            <div ng-if="vm.confirmError" class="infoMessage infoMessage_error">
+              <div class="infoMessage__i">
+                <p ng-if=" vm.confirmError === true ">
+                  {{ 'web.messages.startPaymentForExtraServicesError' | aliasStatic}}
+                </p>
+                <p ng-if=" vm.confirmError !== true ">
+                  {{ vm.confirmError | aliasDynamic }}
+                </p>
+              </div>
+            </div>
+
+
+          </order-with-es>
 
         </wrap>
 
