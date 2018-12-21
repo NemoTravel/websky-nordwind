@@ -59,7 +59,7 @@
             }))
             .pipe(sourcemaps.write())
             .pipe(rename({prefix: 'styles-', basename: 'nordwind'}))
-            .pipe(gulp.dest('build/index.css/'));
+            .pipe(gulp.dest('build/'));
     });
 
     gulp.task('watch', function() {
