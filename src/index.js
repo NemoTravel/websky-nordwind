@@ -1,6 +1,7 @@
 require('./screens/add-services/AddServicesScreenController');
 require('./screens/search-order/search-order');
 require('./directives/replaceWith');
+require('./components/nw-meal-popup/nw-meal-popup');
 require('./components/order-with-es/order-with-es');
 
 // TODO: remove it!!
