@@ -1,6 +1,9 @@
 (function() {
 
     var gulp = require('gulp'),
+        sass = require('gulp-sass'),
+        rename = require('gulp-rename'),
+        autoprefixer = require('gulp-autoprefixer'),
         del = require('del'),
         browserify = require('browserify'),
         strictify = require('strictify'),
@@ -45,11 +48,25 @@
             .pipe(gulp.dest('build/'));
     });
 
-    gulp.task('watch', function() {
-        gulp.watch('src/**/*.*', gulp.series('build:js', 'build:html'));
+
+    gulp.task('build:css', function () {
+        return gulp.src('src/css/**/*.sass')
+            .pipe(sourcemaps.init())
+            .pipe(sass().on('error', sass.logError))
+            .pipe(autoprefixer({
+                browsers: ['last 5 versions'],
+                cascade: false
+            }))
+            .pipe(sourcemaps.write())
+            .pipe(rename({prefix: 'styles-', basename: 'nordwind'}))
+            .pipe(gulp.dest('build/index.css/'));
     });
 
-    gulp.task('build', gulp.series('build:js', 'build:html'));
+    gulp.task('watch', function() {
+        gulp.watch('src/**/*.*', gulp.series('build:js', 'build:html', 'build:css'));
+    });
+
+    gulp.task('build', gulp.series('build:js', 'build:html', 'build:css'));
 
     gulp.task('default', gulp.series('build', 'watch'));
 
