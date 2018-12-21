@@ -1,0 +1,56 @@
+@import "variables"
+
+%heading
+  &--big
+    font-size: $bigHeadingFontSize
+    margin-bottom: 30px
+    color: $black
+    font-weight: $bolderFontWeight
+    line-height: $defaultLineHegith
+
+  &--subheading
+    font-size: $subheadingFontSize
+    font-weight: $bolderFontWeight
+    line-height: $defaultLineHegith
+    color: $black
+
+%text
+  &--small
+    color: $textGrayColor
+    font-size: $textFontSize
+    font-weight: $normalFontWeight
+    line-height: $textLineHeight
+
+  &--highlight
+    color: $brandRedColor
+
+  &--bold
+    font-weight: $bolderFontWeight
+    font-size: $accentTextFontSize
+
+  &--accent
+    color: $black
+    font-size: 18px
+    font-weight: $normalFontWeight
+
+%btn
+  border-radius: 3px
+  border: 1px solid $brandRedColor
+  color: $brandRedColor
+  font-size: $accentTextFontSize
+  font-weight: $bolderFontWeight
+  text-align: center
+  display: inline-block
+  padding: 10px
+  cursor: pointer
+
+  &--hover
+    background-color: $brandRedColor
+    color: $white
+
+  &--white
+    background-color: transparent
+    color: $white
+    display: block
+    padding: 10px
+    border: 1px solid $white
