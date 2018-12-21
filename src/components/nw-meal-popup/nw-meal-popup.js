@@ -1,15 +1,21 @@
-angular.module('app').component('nwMealPopup', {
+angular.module('app').component('nwEsPopup', {
     templateUrl: 'components/nw-meal-popup/nw-meal-popup.html',
     controller: 'nwMealPopupController',
+    bindToController: true,
     controllerAs: 'vm',
+    bindings: {
+        locked: '=',
+        esCode: '<',
+        es: '='
+    },
     transclude: {
-        'es-meal': 'div',
+        'extra-service': 'wrap',
     },
 });
 
-angular.module('app').controller('nwMealPopupController', ['$scope', 'backend', nwMealPopupController]);
+angular.module('app').controller('nwMealPopupController', ['$scope', 'backend', 'fancyboxTools', nwMealPopupController]);
 
-function nwMealPopupController(fancyboxTools, backend) {
+function nwMealPopupController($scope, backend, fancyboxTools) {
 
     var vm = this;
     var submitCallback = false;
@@ -20,7 +26,7 @@ function nwMealPopupController(fancyboxTools, backend) {
     // vm.emptyPatronymicPassengers = [];
     // vm.confirmPassengers = false;
 
-    fancyboxTools.setOpenListener('nw-meal-popup', function (link, params) {
+    fancyboxTools.setOpenListener('nw-es-popup', function (link, params) {
         // if (params) {
         //     submitCallback = params.submitCallback;
         //     vm.emptyPatronymicPassengers = params.emptyPatronymicPassengers;
