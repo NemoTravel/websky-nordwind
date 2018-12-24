@@ -13,6 +13,7 @@ angular.module('app').component('nwEsPopup', {
     },
 });
 
+
 angular.module('app').controller('nwMealPopupController', ['$scope', 'backend', 'fancyboxTools', nwMealPopupController]);
 
 function nwMealPopupController($scope, backend, fancyboxTools) {
@@ -22,17 +23,18 @@ function nwMealPopupController($scope, backend, fancyboxTools) {
 
     vm.close = close;
     vm.submit = submit;
-    // vm.getCountryLocalNameByCode = backend.getCountryLocalNameByCode;
-    // vm.emptyPatronymicPassengers = [];
-    // vm.confirmPassengers = false;
 
-    fancyboxTools.setOpenListener('nw-es-popup', function (link, params) {
-        // if (params) {
-        //     submitCallback = params.submitCallback;
-        //     vm.emptyPatronymicPassengers = params.emptyPatronymicPassengers;
-        //     vm.confirmPassengers = params.confirmPassengers;
-        //     vm.getDocumentTypeNameByCode = params.getDocumentTypeNameByCode;
-        // }
+    vm.popupId = '#nw-' + vm.esCode + '-popup';
+
+    fancyboxTools.setOpenListener('nw-' + vm.esCode + '-popup', function (link, params) {
+        var popup = angular.element(vm.popupId);
+        var popupWrapper = popup.parents('.fancybox-wrap');
+
+        // нужно прописать класс, чтобы проставить ширину попапа
+        if (!popupWrapper.hasClass('extra-service__popup')) {
+            popupWrapper.addClass('extra-service__popup');
+        }
+
     });
 
     function submit() {
@@ -45,6 +47,4 @@ function nwMealPopupController($scope, backend, fancyboxTools) {
     function close() {
         jQuery.fancybox.close();
     }
-
-
 }
