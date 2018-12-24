@@ -1,2 +1,7 @@
+/* ==== extra services popup width ==== */
+.extra-service__popup .popup {
+  width: 1000px; }
 
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJpbmRleC5jc3MiLCJzb3VyY2VzQ29udGVudCI6W119 */
+/* ==== END extra services popup width ==== */
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LnNhc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBS0EsMENBQTBDO0FBRTFDO0VBRUksY0FBYSxFQUFHOztBQUVwQiw4Q0FBOEMiLCJmaWxlIjoiaW5kZXguY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQGltcG9ydCBcIm1peGluc1wiO1xuQGltcG9ydCBcInZhcmlhYmxlc1wiO1xuQGltcG9ydCBcImJsb2Nrc1wiO1xuXG5cbi8qID09PT0gZXh0cmEgc2VydmljZXMgcG9wdXAgd2lkdGggPT09PSAqL1xuXG4uZXh0cmEtc2VydmljZV9fcG9wdXAge1xuICAucG9wdXAge1xuICAgIHdpZHRoOiAxMDAwcHg7IH0gfVxuXG4vKiA9PT09IEVORCBleHRyYSBzZXJ2aWNlcyBwb3B1cCB3aWR0aCA9PT09ICovXG4iXX0= */

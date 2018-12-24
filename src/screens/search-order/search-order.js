@@ -31,6 +31,11 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
         vm.pnrOrTicketRegexp = backend.applicationConstants.pnrOrTicketRegexp;
         vm.ticketRegexp = backend.applicationConstants.ticketRegexp;
 
+
+        backend.clearOrderInfoListeners();
+        backend.clearUpdateOrderServicesListeners();
+
+
         if (
             $routeParams.pnrOrTicketNumber &&
             $routeParams.lastName &&
@@ -39,68 +44,18 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
             vm.searchParams.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
             vm.searchParams.lastName = $routeParams.lastName;
             vm.loading = false;
+            console.log('submit search');
             $timeout(submitSearch);
         } else {
+            console.log('else block');
             updateOrderInfoHandler();
+            initAddServicesListeners();
         }
 
         // add-services logic
-        backend.clearOrderInfoListeners();
-        backend.clearUpdateOrderServicesListeners();
-
         backend.addOrderInfoListener(function (orderInfo) {
+            console.log('add order info listener');
             vm.orderInfo = orderInfo;
-        });
-
-        backend.addUpdateOrderServicesListener(function (resp) {
-            vm.orderInfo = resp[1];
-            vm.priceVariant = resp[2];
-            vm.isFreePricevariant = utils.isFreePricevariant(resp[2]);
-
-            if (vm.isFreePricevariant) {
-                vm.showNeedSelectPaymentFormMesage = false;
-            }
-
-            vm.es = utils.reformatAvailableExtraServices(resp[0], vm.orderInfo, vm.es);
-            vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
-
-            vm.searchOrderLoading = false;
-            vm.orderServicesLoading = false;
-
-            if (backend.getParam('ffp.enable') && (vm.orderInfo.hasBonusCard || vm.orderInfo.ffpSumm)) {
-                backend.ffpBonus().then(function (resp) {
-                    vm.ffpBonus = resp.total || 0;
-                });
-            }
-        }, function (resp) {
-            vm.searchOrderLoading = false;
-            vm.orderServicesLoading = false;
-            vm.errorMessage = resp.error;
-        });
-
-        backend.updateOrderServices(true).then(function () {
-            vm.loading = true;
-
-            backend.switchDefaultSelectedServices(vm.esList, vm.es, vm.orderInfo).then(function () {
-                vm.loading = false;
-            }, function (resp) {
-                vm.errorMessage = resp.error;
-                vm.loading = false;
-            });
-        });
-
-        backend.addExtraServiceListener(function (state) {
-            vm.modifyServicesLoading = !state;
-            vm.orderServicesLoading = true;
-        });
-
-        backend.addExtraServiceErrorListener(function (resp, req) {
-            if (!req || req.code !== 'seat') {
-                vm.modifyServicesError = resp.error;
-            }
-
-            vm.modifyServicesLoading = false;
-            vm.orderServicesLoading = true;
         });
 
     });
@@ -205,6 +160,7 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
                 vm.showSearchForm = false;
                 vm.submitTouched = false;
 
+                initAddServicesListeners();
 
                 if (resp.orderCompletelyInitialized) {
                     vm.partiallyAddedPassengers = [];
@@ -223,6 +179,62 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
                 vm.searchLoading = false;
             }, errorHandler);
         }
+    }
+
+    function initAddServicesListeners() {
+
+        backend.addUpdateOrderServicesListener(function (resp) {
+            vm.orderInfo = resp[1];
+            vm.priceVariant = resp[2];
+            vm.isFreePricevariant = utils.isFreePricevariant(resp[2]);
+
+            if (vm.isFreePricevariant) {
+                vm.showNeedSelectPaymentFormMesage = false;
+            }
+
+            vm.es = utils.reformatAvailableExtraServices(resp[0], vm.orderInfo, vm.es);
+            vm.esList = utils.getAvailableExtraServicesList(resp[0], vm.es);
+
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+
+            if (backend.getParam('ffp.enable') && (vm.orderInfo.hasBonusCard || vm.orderInfo.ffpSumm)) {
+                backend.ffpBonus().then(function (resp) {
+                    vm.ffpBonus = resp.total || 0;
+                });
+            }
+        }, function (resp) {
+            vm.searchOrderLoading = false;
+            vm.orderServicesLoading = false;
+            vm.errorMessage = resp.error;
+        });
+
+        backend.updateOrderServices(true).then(function () {
+            vm.loading = true;
+
+            backend.switchDefaultSelectedServices(vm.esList, vm.es, vm.orderInfo).then(function () {
+                vm.loading = false;
+            }, function (resp) {
+                vm.errorMessage = resp.error;
+                vm.loading = false;
+            });
+        });
+
+        backend.addExtraServiceListener(function (state) {
+            vm.modifyServicesLoading = !state;
+            vm.orderServicesLoading = true;
+        });
+
+        backend.addExtraServiceErrorListener(function (resp, req) {
+            if (!req || req.code !== 'seat') {
+                vm.modifyServicesError = resp.error;
+            }
+
+            vm.modifyServicesLoading = false;
+            vm.orderServicesLoading = true;
+        });
+
+
     }
 
     function updateOrderInfoHandler(cb) {
