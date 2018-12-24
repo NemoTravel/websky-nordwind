@@ -1,0 +1,41 @@
+<div class="list">
+
+  <div ng-repeat="esCode in vm.list track by $index" ng-if="vm.es[esCode]" class="item dropWrapper item-{{esCode}}"
+       ng-class="{ active: vm.es[esCode].active }">
+
+    <a href fancybox="nw-{{ esCode }}-popup">{{ esCode }}</a><br>
+    <nw-es-popup ng-if="esCode == 'meal'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-meal ng-if="esCode == 'meal'" service="vm.es.meal" locked="vm.locked"></es-meal>
+      </wrap>
+    </nw-es-popup>
+    <nw-es-popup ng-if="esCode == 'seat'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-seat ng-if="esCode == 'seat'" service="vm.es.seat" locked="vm.locked"></es-seat>
+      </wrap>
+    </nw-es-popup>
+    <nw-es-popup ng-if="esCode == 'baggage'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-baggage ng-if="esCode == 'baggage'" service="vm.es.baggage" locked="vm.locked"></es-baggage>
+      </wrap>
+    </nw-es-popup>
+    <nw-es-popup ng-if="esCode == 'insurance'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-insurance ng-if="esCode == 'insurance'" service="vm.es.insurance" locked="vm.locked"></es-insurance>
+      </wrap>
+    </nw-es-popup>
+    <nw-es-popup ng-if="esCode == 'aeroexpress'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-aeroexpress ng-if="esCode == 'aeroexpress'" service="vm.es.aeroexpress" locked="vm.locked"></es-aeroexpress>
+      </wrap>
+    </nw-es-popup>
+    <nw-es-popup ng-if="esCode == 'common'" es-code="esCode" locked="vm.locked" es="vm.es">
+      <wrap>
+        <es-common ng-if="vm.isCommonService(esCode)" service="vm.es[esCode]" code="esCode"></es-common>
+      </wrap>
+    </nw-es-popup>
+
+  </div>
+
+</div>
+
