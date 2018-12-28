@@ -3,6 +3,8 @@ require('./screens/search-order/search-order');
 require('./directives/replaceWith');
 require('./components/nw-meal-popup/nw-meal-popup');
 require('./components/order-with-es/order-with-es');
+require('./components/nw-extra-services-list/nw-extra-services-list');
+require('./components/nw-meal/nw-meal');
 
 // TODO: remove it!!
 angular.module('app').config(['$compileProvider', function ($compileProvider) {

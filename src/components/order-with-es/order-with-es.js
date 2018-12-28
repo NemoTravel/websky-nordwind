@@ -5,7 +5,7 @@ app.component('orderWithEs', {
     controller: 'orderWithEsController',
     controllerAs: 'vm',
     transclude: {
-        'extra-services': 'extraServicesList',
+        'extra-services': 'nwExtraServicesList',
         'payment': 'div'
     },
     bindings: {
