@@ -5,6 +5,8 @@ require('./components/nw-meal-popup/nw-meal-popup');
 require('./components/order-with-es/order-with-es');
 require('./components/nw-extra-services-list/nw-extra-services-list');
 require('./components/nw-meal/nw-meal');
+require('./components/nw-seat/nw-seat');
+require('./filters/toCity');
 
 // TODO: remove it!!
 angular.module('app').config(['$compileProvider', function ($compileProvider) {
