@@ -31,19 +31,6 @@
                         </div>
                     </td>
                     <td>
-                        <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
-                            <div class="price__i">
-                                <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
-                            </div>
-                        </div>
-                        <div ng-if="!vm.service.active && vm.service.minPrice" class="price">
-                            <div class="price__i">
-                                <p>
-                                    {{ 'web.extraServices.minPrice' | aliasStatic}}
-                                </p>
-                                <h3 ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"></h3>
-                            </div>
-                        </div>
                     </td>
                     <td>
                         <a href ng-click="vm.switchService()" ng-class="{ active: vm.service.active, control_disabled: vm.locked }" class="btn showDrop_js ">
@@ -183,6 +170,19 @@
                             <a href ng-click="vm.switchService()" class="passengersTable__link passengersTable__link_cancel">
                                 {{ 'web.extraServices.meal.cancel' | aliasStatic }}
                             </a>
+                            <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
+                                <div class="price__i">
+                                    <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
+                                </div>
+                            </div>
+                            <div ng-if="!vm.service.active && vm.service.minPrice" class="price">
+                                <div class="price__i">
+                                    <p>
+                                        {{ 'web.extraServices.minPrice' | aliasStatic}}
+                                    </p>
+                                    <h3 ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"></h3>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -351,6 +351,9 @@
                         <a href ng-click="vm.switchService()" class="passengersTable__link passengersTable__link_cancel">
                             {{ 'web.extraServices.meal.cancel' | aliasStatic}}
                         </a>
+
+
+
                     </div>
                 </div>
             </div>
