@@ -17,6 +17,9 @@
       background-color: $brandLightGrayColor
       padding: 0
 
+  .fancybox-inner
+    overflow: visible !important
+
   .fancybox-close
     display: block
     width: 60px
@@ -559,9 +562,15 @@ order-prices[mode="pricesNotIssued"]
         color: $white
 
 .passengersTable
+  &__cancel
+    position: absolute
+    bottom: -50px
+    width: 100%
+    display: flex
+    justify-content: space-between
+
   &__link
     &_cancel
-      position: initial
       @extend %btn
       @extend %btn--white
 
@@ -575,7 +584,7 @@ order-prices[mode="pricesNotIssued"]
   &__totalPrice-wrp
     right: 0
     color: $white
-    font-size: $accentTextFontSize
+    //font-size: $accentTextFontSize
     font-weight: $bolderFontWeight
     line-height: 30px
 
@@ -617,7 +626,7 @@ order-prices[mode="pricesNotIssued"]
   width: 11px
 
 .drop
-  &__i
+  //&__i
     position: relative
 
   &__decline
