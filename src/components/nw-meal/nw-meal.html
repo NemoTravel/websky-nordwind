@@ -70,6 +70,26 @@
       <div class="foodSelect">
         <div class="foodSelect__i">
 
+          <div class="foodSelect__subheading">
+            <div class="foodSelect__es-name">
+              <p class="text">
+                {{ 'web.extraServices.meal.subheadingEsDescr' | aliasStatic }}
+              </p>
+              <!-- /.text -->
+            </div>
+            <!-- /.foodSelect__es-name -->
+            <a ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]" href
+               ng-click="vm.switchService()"
+               class="foodSelect__subheading-cancel">
+              {{ 'web.extraServices.meal.subheadingCancelES' | aliasStatic }}
+              <i class="icon icon_close"></i>
+              <!-- /.icon icon_close -->
+            </a>
+            <!-- /.foodSelect__subheading-cancel -->
+          </div>
+          <!-- /.foodSelect__subheading -->
+
+
           <div class="foodSelect__routes">
             <div class="foodSelect__routes-list"
                  ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
@@ -443,7 +463,6 @@
               {{ 'web.extraServices.meal.cancel' | aliasStatic}}
             </a>
 
-            <h1>hello nw-meal</h1>
             <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
               <div class="price__i">
                 <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
