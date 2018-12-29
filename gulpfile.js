@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     var gulp = require('gulp'),
         sass = require('gulp-sass'),
@@ -6,6 +6,7 @@
         autoprefixer = require('gulp-autoprefixer'),
         del = require('del'),
         browserify = require('browserify'),
+        babelify = require('babelify'),
         strictify = require('strictify'),
         buffer = require('vinyl-buffer'),
         ngHtml2Js = require('gulp-ng-html2js'),
@@ -15,11 +16,11 @@
         sourcemaps = require('gulp-sourcemaps'),
         concat = require('gulp-concat');
 
-    gulp.task('clean', function() {
+    gulp.task('clean', function () {
         return del('build');
     });
 
-    gulp.task('build:html', function() {
+    gulp.task('build:html', function () {
         return gulp.src('src/**/*.html')
             .pipe(minifyHtml({
                 empty: true,
@@ -28,7 +29,7 @@
             }))
             .pipe(ngHtml2Js({
                 moduleName: 'app',
-                rename: function(url) {
+                rename: function (url) {
                     return url.replace('src/', '');
                 }
             }))
@@ -38,7 +39,10 @@
     });
 
     gulp.task('build:js', function () {
-        return browserify('src/index.js', { transform: strictify })
+        return browserify('src/index.js')
+            .transform(strictify)
+            .transform(babelify)
+            .transform("babelify", {presets: ["@babel/preset-env"]})
             .bundle()
             .pipe(source('controllers-nordwind.js'))
             .pipe(buffer())
@@ -62,7 +66,7 @@
             .pipe(gulp.dest('build/'));
     });
 
-    gulp.task('watch', function() {
+    gulp.task('watch', function () {
         gulp.watch('src/**/*.*', gulp.series('build:js', 'build:html', 'build:css'));
     });
 
