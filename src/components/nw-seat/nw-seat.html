@@ -58,6 +58,25 @@
       <div class="seatSelect">
         <div class="seatSelect__i">
 
+          <div class="foodSelect__subheading">
+            <div class="foodSelect__es-name">
+              <p class="text">
+                {{ 'web.extraServices.seat.subheadingEsDescr' | aliasStatic }}
+              </p>
+              <!-- /.text -->
+            </div>
+            <!-- /.foodSelect__es-name -->
+            <a ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]" href
+               ng-click="vm.switchService()"
+               class="foodSelect__subheading-cancel">
+              {{ 'web.extraServices.seat.subheadingCancelES' | aliasStatic }}
+              <i class="icon icon_close"></i>
+              <!-- /.icon icon_close -->
+            </a>
+            <!-- /.foodSelect__subheading-cancel -->
+          </div>
+          <!-- /.foodSelect__subheading -->
+
           <div class="passengersBlock">
             <div class="passengersBlock_row">
               <div class="passengersBlock_row-control">

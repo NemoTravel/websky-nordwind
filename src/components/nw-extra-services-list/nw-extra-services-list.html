@@ -11,7 +11,7 @@
     </nw-es-popup>
     <nw-es-popup ng-if="esCode == 'seat'" es-code="esCode" locked="vm.locked" es="vm.es">
       <wrap>
-        <es-seat ng-if="esCode == 'seat'" service="vm.es.seat" locked="vm.locked"></es-seat>
+        <nw-seat ng-if="esCode == 'seat'" service="vm.es.seat" locked="vm.locked"></nw-seat>
       </wrap>
     </nw-es-popup>
     <nw-es-popup ng-if="esCode == 'baggage'" es-code="esCode" locked="vm.locked" es="vm.es">

@@ -17,7 +17,7 @@ app.controller('extraServicesListController', ['utils', extraServicesListControl
 
 function extraServicesListController(utils) {
 
-    var vm = this;
+    const vm = this;
     vm.isCommonService = utils.isCommonServiceCode;
 
 }

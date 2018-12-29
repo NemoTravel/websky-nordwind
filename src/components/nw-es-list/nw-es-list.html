@@ -6,7 +6,7 @@
     <a href fancybox="nw-{{ esCode }}-popup">{{ esCode }}</a><br>
     <nw-es-popup ng-if="esCode == 'meal'" es-code="esCode" locked="vm.locked" es="vm.es">
       <wrap>
-        <es-meal ng-if="esCode == 'meal'" service="vm.es.meal" locked="vm.locked"></es-meal>
+        <nw-meal ng-if="esCode == 'meal'" service="vm.es.meal" locked="vm.locked"></nw-meal>
       </wrap>
     </nw-es-popup>
     <nw-es-popup ng-if="esCode == 'seat'" es-code="esCode" locked="vm.locked" es="vm.es">
