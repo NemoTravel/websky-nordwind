@@ -3,7 +3,20 @@
   <div ng-repeat="esCode in vm.list track by $index" ng-if="vm.es[esCode]" class="item dropWrapper item-{{esCode}}"
        ng-class="{ active: vm.es[esCode].active }">
 
-    <a href fancybox="nw-{{ esCode }}-popup">{{ esCode }}</a><br>
+    <!-- Скрыть кнопку вызова попапа если в страховке только один человек -->
+    <a href fancybox="nw-{{ esCode }}-popup"
+       ng-if="esCode === 'insurance' && !vm.isSingleItemInInsurance">{{ esCode }}</a>
+
+    <!--Показать кнопку страховки с колбэком добавляющем ее в заказ, без вызова попапа-->
+    <a href
+       ng-if="esCode === 'insurance' && vm.isSingleItemInInsurance"
+       ng-click="vm.switchInsurance()"
+    >
+      {{ esCode }}</a>
+
+    <a href fancybox="nw-{{ esCode }}-popup"
+       ng-if="esCode !== 'insurance'">{{ esCode }}</a>
+
     <nw-es-popup ng-if="esCode == 'meal'" es-code="esCode" locked="vm.locked" es="vm.es">
       <wrap>
         <nw-meal ng-if="esCode == 'meal'" service="vm.es.meal" locked="vm.locked"></nw-meal>
