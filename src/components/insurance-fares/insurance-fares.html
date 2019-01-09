@@ -41,8 +41,10 @@
            vm.switch(insuranceItemNum, vm.paxKey);">
       Выбрать
     </a>
-    <i class="icon-close" ng-if="insuranceItem.selected"
+    <i class="insurance-fares__cross-icon icon icon_close"
+       ng-if="insuranceItem.selected"
        ng-click="insuranceItem.selected = !insuranceItem.selected;
-           vm.switch(insuranceItemNum, vm.paxKey);"></i>
+           vm.switch(insuranceItemNum, vm.paxKey);">
+    </i>
   </div>
 </div>
