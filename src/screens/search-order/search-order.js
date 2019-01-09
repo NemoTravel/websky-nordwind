@@ -44,17 +44,14 @@ function SearchOrderScreenController($scope, $routeParams, backend, redirect, $t
             vm.searchParams.pnrOrTicketNumber = $routeParams.pnrOrTicketNumber;
             vm.searchParams.lastName = $routeParams.lastName;
             vm.loading = false;
-            console.log('submit search');
             $timeout(submitSearch);
         } else {
-            console.log('else block');
             updateOrderInfoHandler();
             initAddServicesListeners();
         }
 
         // add-services logic
         backend.addOrderInfoListener(function (orderInfo) {
-            console.log('add order info listener');
             vm.orderInfo = orderInfo;
         });
 
