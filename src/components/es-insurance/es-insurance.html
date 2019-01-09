@@ -71,7 +71,7 @@
                 <div class="insuranceSelect__i">
 
                     <insurance-fares ng-if="!vm.service.itemsByPassengers"
-                        items="vm.service.items" 
+                        items="vm.service.items"
                         pax-key=" 'common' "
                         switch="vm.switchServiceItem">
                     </insurance-fares>
@@ -79,21 +79,25 @@
                     <wrap ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
                         ng-if="vm.service.itemsByPassengers[passengerNum].length">
 
-                        <div class="passenger">
+                        <div class="passenger" ng-class="{'active': vm.service.itemsByPassengers[passengerNum][0].selected}">
                             <div class="passenger__link__i">
+                              <i class="passenger__icon icon icon_passenger" ng-class="{'active': vm.service.itemsByPassengers[passengerNum][0].selected}">
+                              </i>
+                              <!-- /.passenger__icon icon icon_passenger -->
                                 <div class="passenger__link__i__name">
                                     <strong>
                                         {{ passenger.lastName }} {{ passenger.firstName }}
                                     </strong>
                                 </div>
                             </div>
+
+                            <insurance-fares
+                                items="vm.service.itemsByPassengers[passengerNum]"
+                                pax-key="passengerNum"
+                                switch="vm.switchServiceItem">
+                            </insurance-fares>
                         </div>
 
-                        <insurance-fares
-                            items="vm.service.itemsByPassengers[passengerNum]" 
-                            pax-key="passengerNum"
-                            switch="vm.switchServiceItem">
-                        </insurance-fares>
 
                     </wrap>
 
@@ -158,7 +162,7 @@
                 <div class="insuranceSelect__i">
 
                     <insurance-fares ng-if="!vm.service.itemsByPassengers"
-                        items="vm.service.items" 
+                        items="vm.service.items"
                         pax-key=" 'common' "
                         switch="vm.switchServiceItem">
                     </insurance-fares>
@@ -177,7 +181,7 @@
                         </div>
 
                         <insurance-fares
-                            items="vm.service.itemsByPassengers[passengerNum]" 
+                            items="vm.service.itemsByPassengers[passengerNum]"
                             pax-key="passengerNum"
                             switch="vm.switchServiceItem">
                         </insurance-fares>
