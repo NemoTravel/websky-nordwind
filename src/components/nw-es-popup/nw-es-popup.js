@@ -20,15 +20,19 @@ function nwMealPopupController($scope, backend, fancyboxTools) {
 
     var vm = this;
     var submitCallback = false;
+    vm.isSingleItemInInsurance = false;
 
     vm.close = close;
     vm.submit = submit;
 
     vm.popupId = '#nw-' + vm.esCode + '-popup';
 
+
+
     fancyboxTools.setOpenListener('nw-' + vm.esCode + '-popup', function (link, params) {
         var popup = angular.element(vm.popupId);
         var popupWrapper = popup.parents('.fancybox-wrap');
+
 
         // нужно прописать класс, чтобы проставить ширину попапа
         if (!popupWrapper.hasClass('extra-service__popup')) {
