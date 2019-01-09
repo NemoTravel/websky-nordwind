@@ -1,5 +1,5 @@
 angular.module('app').component('nwEsPopup', {
-    templateUrl: 'components/nw-meal-popup/nw-meal-popup.html',
+    templateUrl: 'components/nw-es-popup/nw-es-popup.html',
     controller: 'nwMealPopupController',
     bindToController: true,
     controllerAs: 'vm',
