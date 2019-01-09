@@ -1,0 +1,47 @@
+<div class="seatMap" ng-class="{ control_disabled: vm.locked }">
+    <div class="seatMap__i">
+        <div ng-repeat="deck in vm.seatMap.decks" class="planeBody deck-code-{{deck.code}}">
+            <div ng-if="deck.code" class="deck-label deck-label-{{deck.code}}" ng-bind-html="'web.seatMap.deckLabel.' | aliasWithPrefix:deck.code"></div>
+            <div class="planeBody__i">
+                <table ng-repeat="cabin in deck.cabins" class="cabin-code-{{cabin.code}}">
+                    <tbody>
+
+                        <tr class="colNameRow">
+                            <td ng-repeat="col in cabin.colNames track by $index">
+                                <wrap ng-if="col">
+                                    {{ col }}
+                                </wrap>
+                            </td>
+                        </tr>
+
+                        <tr ng-repeat="row in cabin.rows" class="row-number-{{row.number}} {{ vm.getRowSeatsUniqueCssPropertiesClasses(row.chairs) }}" ng-class="{ wingsStart: row.wingsStart, atWing: row.atWing, wingsEnd: row.wingsEnd }">
+                            <td ng-repeat="item in row.items">
+
+                                <div ng-if="item.type == 'chair'"
+                                    class="seat seat-cost-{{ vm.replaceDots(item.cost || 'none') }} seat-rfisc-{{ item.rfisc || 'none' }}  seat-map-color-group-{{ item.rfiscIndex != undefined ? item.rfiscIndex : 'none' }}  {{ vm.getSeatCssPropertiesClasses(item) }}"
+                                    ng-click="vm.setPassengerFlightSeat(item, cabin.allowed, row.number)"
+                                    ng-class="{ seat_disabled: (!item.available || !cabin.allowed), active: vm.isSelectedByActivePassenger(row.number + item.number), selectedByOrderPassenger: vm.isSelectedByOrderPassenger(row.number + item.number), 'seat-auto-assigned': item.autoAssigned }">
+                                        <div ng-if="item.available && cabin.allowed" class="seatName">
+                                            {{ row.number }}{{ item.number }}
+                                            <wrap ng-if="item.cost">
+                                                {{' - '}}
+                                                <wrap ng-bind-html="{ value: item.cost, currency: item.currency } | price"></wrap>
+                                            </wrap>
+                                        </div>
+                                </div>
+
+                                <!--<div-->
+                                    <!--ng-if="item.type === 'aisle'"-->
+                                    <!--class="seatMap__aisle">-->
+                                    <!--{{ row-number }}-->
+                                <!--</div>-->
+                                <!-- /.seatMap__aisle -->
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
