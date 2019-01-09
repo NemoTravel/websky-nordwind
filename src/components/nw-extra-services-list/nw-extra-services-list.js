@@ -1,4 +1,4 @@
-var app = angular.module('app');
+const app = angular.module('app');
 
 app.component('nwExtraServicesList', {
     templateUrl: 'components/nw-extra-services-list/nw-extra-services-list.html',
@@ -47,7 +47,7 @@ function extraServicesListController(utils, backend) {
     }
 
     function getInsuranceSubmitParams(item, passenger_id) {
-        var params = {
+        const params = {
             code: "insurance",
             ins: item.ins,
             tins: item.tins
