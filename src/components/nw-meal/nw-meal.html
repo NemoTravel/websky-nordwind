@@ -1,496 +1,630 @@
 <div class="item__i mobileHide">
-  <div class="top">
-    <div class="top__i">
-      <table>
-        <tbody>
-        <tr>
-          <td>
-            <div class="text">
-              <div class="iconBox">
-                <i class="icon_meal"></i>
-              </div>
-              <div class="name">
-                <h2>
-                  {{ 'web.extraServices.meal.header' | aliasStatic}}
-                  <a href fancybox="popupAlias" data-popup-alias="web.extraServicesRules.meal">
-                                            <span class="infoBoxWrap">
-                                                <i class="icon_info"></i>
-                                                <span class="infoBox">
-                                                    <span class="infoBox__i">
-                                                        {{ 'web.extraServices.serviceDesc' | aliasStatic}}
-                                                    </span>
-                                                </span>
-                                            </span>
-                  </a>
-                </h2>
-                <p>
-                  {{ 'web.extraServices.meal.desc' | aliasStatic}}
-                </p>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
-              <div class="price__i">
-                <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
-              </div>
-            </div>
-            <div ng-if="!vm.service.active && vm.service.minPrice" class="price">
-              <div class="price__i">
-                <p>
-                  {{ 'web.extraServices.minPrice' | aliasStatic}}
-                </p>
-                <h3 ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"></h3>
-              </div>
-            </div>
-          </td>
-          <td>
-            <a href ng-click="vm.switchService()"
-               ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
-               class="btn showDrop_js ">
-                                <span class="show">
-                                    {{ 'web.extraServices.meal.select' | aliasStatic}}
-                                </span>
-              <span class="hide">
-                                    {{ 'web.extraServices.meal.deselect' | aliasStatic}}
-                                </span>
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+	<div class="top">
+		<div class="top__i">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<div class="text">
+								<div class="iconBox"><i class="icon_meal"></i></div>
+								<div class="name">
+									<h2>
+										{{ 'web.extraServices.meal.header' | aliasStatic}}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.meal"
+										>
+											<span class="infoBoxWrap">
+												<i class="icon_info"></i>
+												<span class="infoBox">
+													<span class="infoBox__i">
+														{{ 'web.extraServices.serviceDesc' | aliasStatic}}
+													</span>
+												</span>
+											</span>
+										</a>
+									</h2>
+									<p>{{ 'web.extraServices.meal.desc' | aliasStatic}}</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div
+								ng-if="vm.service.active && vm.service.editablePrice"
+								class="price"
+							>
+								<div class="price__i">
+									<h3
+										ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"
+									></h3>
+								</div>
+							</div>
+							<div
+								ng-if="!vm.service.active && vm.service.minPrice"
+								class="price"
+							>
+								<div class="price__i">
+									<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+									<h3
+										ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
+									></h3>
+								</div>
+							</div>
+						</td>
+						<td>
+							<a
+								href
+								ng-click="vm.switchService()"
+								ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
+								class="btn showDrop_js "
+							>
+								<span class="show">
+									{{ 'web.extraServices.meal.select' | aliasStatic}}
+								</span>
+								<span class="hide">
+									{{ 'web.extraServices.meal.deselect' | aliasStatic}}
+								</span>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-    </div>
-  </div>
-
-
-  <div class="drop" ng-class="{ active: vm.service.active, show_js: vm.service.active }">
-    <div class="drop__i">
-
-      <div class="foodSelect">
-        <div class="foodSelect__i">
-
-          <div class="foodSelect__subheading">
-            <div class="foodSelect__es-name">
-              <p class="text">
-                {{ 'web.extraServices.meal.subheadingEsDescr' | aliasStatic }}
-              </p>
-              <!-- /.text -->
-            </div>
-            <!-- /.foodSelect__es-name -->
-            <a ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]" href
-               ng-click="vm.switchService()"
-               class="foodSelect__subheading-cancel">
-              {{ 'web.extraServices.meal.subheadingCancelES' | aliasStatic }}
-              <i class="icon icon_close"></i>
-              <!-- /.icon icon_close -->
-            </a>
-            <!-- /.foodSelect__subheading-cancel -->
-          </div>
-          <!-- /.foodSelect__subheading -->
-
-
-          <div class="foodSelect__routes">
-            <div class="foodSelect__routes-list"
-                 ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
-
-
-              <div class="foodSelect__routes-item" ng-click="vm.selectFlightPassenger(flightNum, 0)"
-                   ng-class="{'foodSelect__routes-item--active': flightNum == vm.selectedFlight}">
-
-                <geo-marker prefix="arr__point" key="es-meal" city="flight.destinationcity"
-                            cityname="flight.destinationcityName"
-                            port="flight.destinationport"></geo-marker>
-              </div>
-
-
-            </div>
-          </div>
-
-          <!-- routes -->
-          <div class="foodSelect__routes-info">
-            <div class="passengersBlock_row-control-outer"
-                 ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
-              <div class="passengersBlock_row-control-passengers"
-                   ng-if="flightNum === vm.selectedFlight">
-
-                <i class="passengersBlock_row-control-passengers-icon" aria-hidden="true"></i>
-
-                <div>
-                                    <span class="passengersBlock_row-control-passengers-racenumber">
-                                        {{ flight.carrier }} - {{flight.racenumber}}
-                                    </span>
-                </div>
-
-                <geo-marker prefix="dep__point" key="es-meal" city="flight.origincity"
-                            cityname="flight.origincityName" port="undefined"
-                            portname="undefined"></geo-marker>
-                <span class="foodSelect__airport-code">
-                                    {{ flight.origincity }}
-                                </span>
-
-
-                <i class="foodSelect__arrow-right icon icon--arrow-right" aria-hidden="true"></i>
-
-
-                <geo-marker prefix="arr__point" key="es-meal" city="flight.destinationcity"
-                            cityname="flight.destinationcityName" port="undefined"
-                            portname="undefined"></geo-marker>
-                <span class="foodSelect__airport-code">
-                                    {{ flight.destinationcity }}
-                                </span>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="passengersBlock">
-            <div class="passengersBlock_row">
-              <div class="passengersBlock_row-control">
-                <div class="passengersBlock_row-control-outer"
-                     ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights">
-                  <div class="passengersBlock_row-control-droporder"
-                       ng-show="flightNum == vm.selectedFlight">
-                    <div class="passengersBlock_row-control-droporder-passenger"
-                         ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-                         ng-if="vm.service.availableByPassengerSegments[passengerNum]">
-                      <div class="passengersBlock_row-control-droporder-passenger-outer"
-                           ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
-                           ng-class="{active: passengerNum == vm.selectedPassenger}">
-                        <i class="passengersBlock_row-control-droporder-passenger-icon"
-                           aria-hidden="true"></i>
-                        <span class="passengersBlock_row-control-droporder-passenger-name">{{ passenger.lastName }} {{ passenger.firstName }}</span>
-                      </div>
-
-                      <!-- passengersBlock_row-control-droporder-passenger-order -->
-                      <div ng-if="vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]"
-                           class="passengersBlock_row-control-droporder-passenger-order"
-                           ng-repeat="(indexMealSelect, itemMealSelect) in vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum] track by $index">
-
-                        <div class="passengersBlock_row-control-droporder-passenger-order-outer">
-                          <span>{{itemMealSelect.title}}</span>
-                          <span
-                              ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price"></span>
-                          <i class="passengersBlock_row-control-droporder-passenger-order-remove"
-                             ng-click="vm.selectFlightPassenger(flightNum, passengerNum); vm.removePassengerFlightMeal(passengerNum, flightNum)"
-                             aria-hidden="true"></i>
-                        </div>
-
-                      </div>
-                      <!-- end passengersBlock_row-control-droporder-passenger-order -->
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="passengersBlock_row-menu">
-
-                <div ng-if="!vm.mealMenu" class="passengersBlock_row-menu__no-food">
-                  {{ 'web.extraServices.meal.noFood' | aliasStatic}}
-                </div>
-
-                <div ng-if=" vm.service.subgroups.length > 1 && vm.mealMenu"
-                     class="passengersBlock_row-menu-foodSorting">
-                  <ul>
-                    <li ng-class="{ active: vm.mealMenuSubgroup === false }">
-                      <a href ng-click="vm.mealMenuSubgroup = false">{{ 'web.meal.subgroup.' |
-                        aliasWithPrefix:'all' }}</a>
-                    </li>
-                    <li ng-repeat="(subgroupNum, subgroupCode) in vm.service.subgroups"
-                        ng-class="{ active: vm.mealMenuSubgroup === subgroupNum }">
-                      <a href ng-click="vm.mealMenuSubgroup = subgroupNum">{{ 'web.meal.subgroup.'
-                        | aliasWithPrefix:subgroupCode }}</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="list customScroll_height customScroll_js" custom-scroll>
-                  <div class="list__i isotopeGrid">
-
-                    <wrap ng-repeat="(subgroupNum, subgroup) in vm.mealMenu">
-                      <div ng-repeat="mealItem in subgroup"
-                           ng-if=" vm.mealMenuSubgroup === subgroupNum || vm.mealMenuSubgroup === false "
-                           ng-class="{ active: mealItem.active, control_disabled: vm.locked }"
-                           class="item">
-                        <div class="food_wrap">
-                          <div class="img">
-                                                      <span class="item__status-count"
-                                                            ng-if="mealItem.alreadySelectedCount">
-                                                        {{ mealItem.alreadySelectedCount }}
-                                                      </span>
-                            <img ng-src="{{vm.mealImagesPath}}/{{ mealItem.serviceType }}-{{ mealItem.rfisc }}.jpg"
-                                 alt=""/>
-                          </div>
-                          <div class="food_info">
-                            <div class="name">
-                              <p>{{ mealItem.title }}</p>
-                              <p class="price"
-                                 ng-bind-html="{ value: mealItem.price, currency: mealItem.currency } | price"></p>
-                            </div>
-                            <div class="description">
-                              <a ng-if="vm.hasAlias('web.extraServices.meal.ingredientsDescriptionContent.' + mealItem.serviceType + '.' + mealItem.rfisc)"
-                                 href fancybox="popupAlias"
-                                 class="link link--ingredientsDescription"
-                                 data-popup-alias="web.extraServices.meal.ingredientsDescriptionContent.{{mealItem.serviceType}}.{{mealItem.rfisc}}">
-                                {{ 'web.extraServices.meal.ingredientsDescriptionLabel'
-                                | aliasStatic }}
-                              </a>
-                              <p ng-bind-html="mealItem.description"></p>
-                            </div>
-
-                            <button class="item__btn"
-                                    ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
-                                    ng-if="mealItem.alreadySelectedCount < 1">
-                              {{ 'web.extraServices.meal.choose' | aliasStatic}}
-                            </button>
-
-                            <button class="item__btn"
-                                    ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
-                                    ng-if="mealItem.alreadySelectedCount > 0 && mealItem.alreadySelectedCount !== mealItem.limit">
-                              {{ 'web.extraServices.meal.addAnother' | aliasStatic}}
-                            </button>
-
-                            <button class="item__btn"
-                                    ng-class="{selected: mealItem.alreadySelectedCount == mealItem.limit}"
-                                    ng-if="mealItem.alreadySelectedCount == mealItem.limit">
-                              {{ 'web.extraServices.meal.selected' | aliasStatic}}
-                            </button>
-
-                          </div>
-                        </div>
-                      </div>
-                    </wrap>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="passengersTable__bottom-row"
-						ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+	<div
+		class="drop"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
+		<div class="drop__i">
+			<div class="foodSelect">
+				<div class="foodSelect__i">
+					<div class="foodSelect__subheading">
+						<div class="foodSelect__es-name">
+							<p class="text">
+								{{ 'web.extraServices.meal.subheadingEsDescr' | aliasStatic }}
+							</p>
+							<!-- /.text -->
+						</div>
+						<!-- /.foodSelect__es-name -->
+						<a
+							ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+							href
+							ng-click="vm.switchService()"
+							class="foodSelect__subheading-cancel"
 						>
-              <div class="passengersTable__cancel">
-                <a href ng-click="vm.switchService()"
-                   class="passengersTable__link passengersTable__link_cancel">
-                  {{ 'web.extraServices.meal.cancel' | aliasStatic }}
-                </a>
-              </div>
+							{{ 'web.extraServices.meal.subheadingCancelES' | aliasStatic }}
+							<i class="icon icon_close"></i>
+							<!-- /.icon icon_close -->
+						</a>
+						<!-- /.foodSelect__subheading-cancel -->
+					</div>
+					<!-- /.foodSelect__subheading -->
 
+					<div class="foodSelect__routes">
+						<div
+							class="foodSelect__routes-list"
+							ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+						>
+							<div
+								class="foodSelect__routes-item"
+								ng-click="vm.selectFlightPassenger(flightNum, 0)"
+								ng-class="{'foodSelect__routes-item--active': flightNum == vm.selectedFlight}"
+							>
+								<geo-marker
+									prefix="arr__point"
+									key="es-meal"
+									city="flight.destinationcity"
+									cityname="flight.destinationcityName"
+									port="flight.destinationport"
+								></geo-marker>
+							</div>
+						</div>
+					</div>
 
-              <div class="passengersTable__totalPrice-wrp">
+					<!-- routes -->
+					<div class="foodSelect__routes-info">
+						<div
+							class="passengersBlock_row-control-outer"
+							ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+						>
+							<div
+								class="passengersBlock_row-control-passengers"
+								ng-if="flightNum === vm.selectedFlight"
+							>
+								<i
+									class="passengersBlock_row-control-passengers-icon"
+									aria-hidden="true"
+								></i>
 
-                <span class="passengersTable__totalPrice-descr-text">
-                  {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasStatic}}
-                </span>
-                  <span class="passengersTable__totalPrice"
-                        ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price">
-                                            </span>
-              </div>
+								<div>
+									<span
+										class="passengersBlock_row-control-passengers-racenumber"
+									>
+										{{ flight.carrier }} - {{flight.racenumber}}
+									</span>
+								</div>
 
-            </div>
-          </div>
+								<geo-marker
+									prefix="dep__point"
+									key="es-meal"
+									city="flight.origincity"
+									cityname="flight.origincityName"
+									port="undefined"
+									portname="undefined"
+								></geo-marker>
+								<span class="foodSelect__airport-code">
+									{{ flight.origincity }}
+								</span>
 
-        </div>
+								<i
+									class="foodSelect__arrow-right icon icon--arrow-right"
+									aria-hidden="true"
+								></i>
 
-      </div>
-    </div>
+								<geo-marker
+									prefix="arr__point"
+									key="es-meal"
+									city="flight.destinationcity"
+									cityname="flight.destinationcityName"
+									port="undefined"
+									portname="undefined"
+								></geo-marker>
+								<span class="foodSelect__airport-code">
+									{{ flight.destinationcity }}
+								</span>
+							</div>
+						</div>
+					</div>
 
+					<div class="passengersBlock">
+						<div class="passengersBlock_row">
+							<div class="passengersBlock_row-control">
+								<div
+									class="passengersBlock_row-control-outer"
+									ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+								>
+									<div
+										class="passengersBlock_row-control-droporder"
+										ng-show="flightNum == vm.selectedFlight"
+									>
+										<div
+											class="passengersBlock_row-control-droporder-passenger"
+											ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+											ng-if="vm.service.availableByPassengerSegments[passengerNum]"
+										>
+											<div
+												class="passengersBlock_row-control-droporder-passenger-outer"
+												ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+												ng-class="{active: passengerNum == vm.selectedPassenger}"
+											>
+												<i
+													class="passengersBlock_row-control-droporder-passenger-icon"
+													aria-hidden="true"
+												></i>
+												<span
+													class="passengersBlock_row-control-droporder-passenger-name"
+													>{{ passenger.lastName }} {{ passenger.firstName
+													}}</span
+												>
+											</div>
 
-  </div>
+											<!-- passengersBlock_row-control-droporder-passenger-order -->
+											<div
+												ng-if="vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]"
+												class="passengersBlock_row-control-droporder-passenger-order"
+												ng-repeat="(indexMealSelect, itemMealSelect) in vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum] track by $index"
+											>
+												<div
+													class="passengersBlock_row-control-droporder-passenger-order-outer"
+												>
+													<span>{{itemMealSelect.title}}</span>
+													<span
+														ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price"
+													></span>
+													<i
+														class="passengersBlock_row-control-droporder-passenger-order-remove"
+														ng-click="vm.selectFlightPassenger(flightNum, passengerNum); vm.removePassengerFlightMeal(passengerNum, flightNum)"
+														aria-hidden="true"
+													></i>
+												</div>
+											</div>
+											<!-- end passengersBlock_row-control-droporder-passenger-order -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="passengersBlock_row-menu">
+								<div
+									ng-if="!vm.mealMenu"
+									class="passengersBlock_row-menu__no-food"
+								>
+									{{ 'web.extraServices.meal.noFood' | aliasStatic}}
+								</div>
+
+								<div
+									ng-if=" vm.service.subgroups.length > 1 && vm.mealMenu"
+									class="passengersBlock_row-menu-foodSorting"
+								>
+									<ul>
+										<li ng-class="{ active: vm.mealMenuSubgroup === false }">
+											<a href ng-click="vm.mealMenuSubgroup = false"
+												>{{ 'web.meal.subgroup.' | aliasWithPrefix:'all' }}</a
+											>
+										</li>
+										<li
+											ng-repeat="(subgroupNum, subgroupCode) in vm.service.subgroups"
+											ng-class="{ active: vm.mealMenuSubgroup === subgroupNum }"
+										>
+											<a href ng-click="vm.mealMenuSubgroup = subgroupNum"
+												>{{ 'web.meal.subgroup.' | aliasWithPrefix:subgroupCode
+												}}</a
+											>
+										</li>
+									</ul>
+								</div>
+								<div
+									class="list customScroll_height customScroll_js"
+									custom-scroll
+								>
+									<div class="list__i isotopeGrid">
+										<wrap ng-repeat="(subgroupNum, subgroup) in vm.mealMenu">
+											<div
+												ng-repeat="mealItem in subgroup"
+												ng-if=" vm.mealMenuSubgroup === subgroupNum || vm.mealMenuSubgroup === false "
+												ng-class="{ active: mealItem.active, control_disabled: vm.locked }"
+												class="item"
+											>
+												<div class="food_wrap">
+													<div class="img">
+														<span
+															class="item__status-count"
+															ng-if="mealItem.alreadySelectedCount"
+														>
+															{{ mealItem.alreadySelectedCount }}
+														</span>
+														<img
+															ng-src="{{vm.mealImagesPath}}/{{ mealItem.serviceType }}-{{ mealItem.rfisc }}.jpg"
+															alt=""
+														/>
+													</div>
+													<div class="food_info">
+														<div class="name">
+															<p>{{ mealItem.title }}</p>
+															<p
+																class="price"
+																ng-bind-html="{ value: mealItem.price, currency: mealItem.currency } | price"
+															></p>
+														</div>
+														<div class="description">
+															<a
+																ng-if="vm.hasAlias('web.extraServices.meal.ingredientsDescriptionContent.' + mealItem.serviceType + '.' + mealItem.rfisc)"
+																href
+																fancybox="popupAlias"
+																class="link link--ingredientsDescription"
+																data-popup-alias="web.extraServices.meal.ingredientsDescriptionContent.{{mealItem.serviceType}}.{{mealItem.rfisc}}"
+															>
+																{{
+																'web.extraServices.meal.ingredientsDescriptionLabel'
+																| aliasStatic }}
+															</a>
+															<p ng-bind-html="mealItem.description"></p>
+														</div>
+
+														<button
+															class="item__btn"
+															ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+															ng-if="mealItem.alreadySelectedCount < 1"
+														>
+															{{ 'web.extraServices.meal.choose' | aliasStatic}}
+														</button>
+
+														<button
+															class="item__btn"
+															ng-click="vm.mealCountChangeHandler(subgroupNum, mealItem, +1)"
+															ng-if="mealItem.alreadySelectedCount > 0 && mealItem.alreadySelectedCount !== mealItem.limit"
+														>
+															{{ 'web.extraServices.meal.addAnother' |
+															aliasStatic}}
+														</button>
+
+														<button
+															class="item__btn"
+															ng-class="{selected: mealItem.alreadySelectedCount == mealItem.limit}"
+															ng-if="mealItem.alreadySelectedCount == mealItem.limit"
+														>
+															{{ 'web.extraServices.meal.selected' |
+															aliasStatic}}
+														</button>
+													</div>
+												</div>
+											</div>
+										</wrap>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div
+							class="passengersTable__bottom-row"
+							ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+						>
+							<div class="passengersTable__cancel">
+								<a
+									href
+									ng-click="vm.switchService()"
+									class="passengersTable__link passengersTable__link_cancel"
+								>
+									{{ 'web.extraServices.meal.cancel' | aliasStatic }}
+								</a>
+							</div>
+
+							<div class="passengersTable__totalPrice-wrp">
+								<span class="passengersTable__totalPrice-descr-text">
+									{{ 'web.extraService.' + vm.service.code + '.totalPrice' |
+									aliasStatic}}
+								</span>
+								<span
+									class="passengersTable__totalPrice"
+									ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
+								>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="item__i mobileShow">
+	<div class="top">
+		<div class="top__i">
+			<a href>
+				<div class="row">
+					<table>
+						<tbody>
+							<tr>
+								<td><i class="icon_meal"></i></td>
+								<td>
+									<div class="name">
+										{{ 'web.extraServices.meal.header' | aliasStatic}}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.meal"
+										>
+											<i class="icon_info"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</a>
+			<div class="row">
+				<a href>
+					<div
+						ng-if="vm.service.active && vm.service.editablePrice"
+						class="price"
+					>
+						<div class="price__i">
+							<h3
+								ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"
+							></h3>
+						</div>
+					</div>
+					<div ng-if="!vm.service.active && vm.service.minPrice" class="price">
+						<div class="price__i">
+							<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+							<h3
+								ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
+							></h3>
+						</div>
+					</div>
+				</a>
+				<a
+					href
+					ng-click="vm.switchService()"
+					ng-class="{ active: vm.service.active }"
+					class="btn showDrop_js "
+				>
+					<span class="show">
+						{{ 'web.extraServices.meal.select' | aliasStatic}}
+					</span>
+					<span class="hide">
+						{{ 'web.extraServices.meal.deselect' | aliasStatic}}
+					</span>
+				</a>
+			</div>
+		</div>
+	</div>
 
-  <div class="top">
-    <div class="top__i">
-      <a href>
-        <div class="row">
-          <table>
-            <tbody>
-            <tr>
-              <td><i class="icon_meal"></i></td>
-              <td>
-                <div class="name">
-                  {{ 'web.extraServices.meal.header' | aliasStatic}}
-                  <a href fancybox="popupAlias" data-popup-alias="web.extraServicesRules.meal">
-                    <i class="icon_info"></i>
-                  </a>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </a>
-      <div class="row">
-        <a href>
-          <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
-            <div class="price__i">
-              <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
-            </div>
-          </div>
-          <div ng-if="!vm.service.active && vm.service.minPrice" class="price">
-            <div class="price__i">
-              <p>
-                {{ 'web.extraServices.minPrice' | aliasStatic}}
-              </p>
-              <h3 ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"></h3>
-            </div>
-          </div>
-        </a>
-        <a href ng-click="vm.switchService()" ng-class="{ active: vm.service.active }" class="btn showDrop_js ">
-                    <span class="show">
-                        {{ 'web.extraServices.meal.select' | aliasStatic}}
-                    </span>
-          <span class="hide">
-                        {{ 'web.extraServices.meal.deselect' | aliasStatic}}
-                    </span>
-        </a>
-      </div>
-    </div>
-  </div>
+	<div
+		class="drop"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
+		<div class="drop__i">
+			<div class="foodSelect drop_mobile">
+				<div class="foodSelect__i">
+					<div class="passengersContainer">
+						<div
+							class="passengersTableContainer"
+							ng-class="{ one_passenger: (vm.getAvailablePassengersCount(vm.service.availableByPassengerSegments) == 1) }"
+						>
+							<a
+								href
+								ng-click="vm.scrollToEnd();"
+								class="passengersTableContainer__control passengersTableContainer__control_next"
+								ng-class="{ control_disabled: !vm.canScrollRight }"
+							></a>
+							<table class="passengersTable passengersTableMobile">
+								<tbody>
+									<tr class="headRow">
+										<td class="firstCol">
+											<a
+												href
+												ng-click="vm.scrollToStart();"
+												class="passengersTable__control passengersTable__control_prev"
+												ng-class="{ control_disabled: !vm.canScrollLeft }"
+											></a>
+										</td>
+										<td
+											ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+											ng-if="vm.service.availableByPassengerSegments[passengerNum]"
+										>
+											{{ passenger.lastName }} {{ passenger.firstName }}
+										</td>
+									</tr>
+									<tr
+										ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+										ng-if="vm.service.availableBySegments[flightNum]"
+										class="contentRow"
+									>
+										<td class="firstCol">
+											<div class="date">
+												{{ flight.daten| formatDate: 'D MMMM, dd'}}
+											</div>
+											<div class="route">
+												<div class="route__dep">
+													<span class="route__dep__city"
+														>{{ flight.originport }}</span
+													>
+												</div>
+												<div class="route__plane">
+													<i class="icon_plane"></i>
+												</div>
+												<div class="route__arr">
+													<span class="route__arr__city"
+														>{{ flight.destinationport }}</span
+													>
+												</div>
+											</div>
+										</td>
 
-  <div class="drop" ng-class="{ active: vm.service.active, show_js: vm.service.active }">
-    <div class="drop__i">
+										<td
+											ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+											ng-if="vm.service.availableByPassengerSegments[passengerNum]"
+											ng-class="{ active: vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum }"
+											ng-init="selectedPassengerFlightMeals = vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]"
+										>
+											<!--  -->
+											<div ng-if="!selectedPassengerFlightMeals">
+												<a
+													href
+													fancybox="popupMeal"
+													ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+													class="passengersTable__link"
+													ng-class="{ passengersTable__link_select: (!selectedPassengerFlightMeals && vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum) }"
+												>
+													<wrap
+														ng-if="vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum"
+													>
+														{{ 'web.extraServices.meal.selectItem' |
+														aliasStatic}}
+													</wrap>
 
-      <div class="foodSelect drop_mobile">
-        <div class="foodSelect__i">
-          <div class="passengersContainer">
-            <div class="passengersTableContainer"
-                 ng-class="{ one_passenger: (vm.getAvailablePassengersCount(vm.service.availableByPassengerSegments) == 1) }">
-              <a href ng-click="vm.scrollToEnd();"
-                 class="passengersTableContainer__control passengersTableContainer__control_next"
-                 ng-class="{ control_disabled: !vm.canScrollRight }"></a>
-              <table class="passengersTable passengersTableMobile">
-                <tbody>
-                <tr class="headRow">
-                  <td class="firstCol">
-                    <a href ng-click="vm.scrollToStart();"
-                       class="passengersTable__control passengersTable__control_prev"
-                       ng-class="{ control_disabled: !vm.canScrollLeft }"></a>
-                  </td>
-                  <td ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-                      ng-if="vm.service.availableByPassengerSegments[passengerNum]">
-                    {{ passenger.lastName }} {{ passenger.firstName }}
-                  </td>
-                </tr>
-                <tr ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
-                    ng-if="vm.service.availableBySegments[flightNum]" class="contentRow">
-                  <td class="firstCol">
-                    <div class="date">
-                      {{ flight.daten| formatDate: 'D MMMM, dd'}}
-                    </div>
-                    <div class="route">
-                      <div class="route__dep">
-                        <span class="route__dep__city">{{ flight.originport }}</span>
-                      </div>
-                      <div class="route__plane">
-                        <i class="icon_plane"></i>
-                      </div>
-                      <div class="route__arr">
-                        <span class="route__arr__city">{{ flight.destinationport }}</span>
-                      </div>
-                    </div>
-                  </td>
+													<wrap
+														ng-if="!(vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum)"
+													>
+														{{ 'web.extraServices.meal.noneSelected' |
+														aliasStatic}}
+													</wrap>
+												</a>
+											</div>
 
-                  <td ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-                      ng-if="vm.service.availableByPassengerSegments[passengerNum]"
-                      ng-class="{ active: vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum }"
-                      ng-init="selectedPassengerFlightMeals = vm.orderInfo.groupedEditableExtraServices.meal[passengerNum][flightNum]">
+											<div
+												ng-if="selectedPassengerFlightMeals"
+												ng-repeat="(indexMealSelect, itemMealSelect) in selectedPassengerFlightMeals track by $index"
+											>
+												<a
+													href
+													fancybox="popupMeal"
+													ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+													class="passengersTable__link"
+													ng-class="{ passengersTable__link_empty: !selectedPassengerFlightMeals }"
+												>
+													<wrap ng-if="selectedPassengerFlightMeals">
+														{{ itemMealSelect.title }}
+													</wrap>
+												</a>
 
-                    <!--  -->
-                    <div ng-if="!selectedPassengerFlightMeals">
+												<span
+													ng-if="selectedPassengerFlightMeals"
+													class="passengersTable__priceSeat"
+													ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price"
+												>
+												</span>
 
-                      <a href fancybox="popupMeal"
-                         ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
-                         class="passengersTable__link"
-                         ng-class="{ passengersTable__link_select: (!selectedPassengerFlightMeals && vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum) }">
+												<a
+													ng-if="selectedPassengerFlightMeals"
+													href
+													ng-click="vm.removePassengerFlightMeal(passengerNum, flightNum)"
+													class="btn-remove"
+												>
+													<span class="infoBoxWrap">
+														<i class="icon_remove"></i>
+														<span class="infoBox">
+															<span class="infoBox__i">
+																{{
+																'web.extraServices.meal.cancelByPassengerSegment'
+																| aliasStatic }}
+															</span>
+														</span>
+													</span>
+												</a>
+											</div>
+											<!--  -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="passengersTable__cancel">
+						<a
+							href
+							ng-click="vm.switchService()"
+							class="passengersTable__link passengersTable__link_cancel"
+						>
+							{{ 'web.extraServices.meal.cancel' | aliasStatic}}
+						</a>
 
-                        <wrap ng-if="vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum">
-                          {{ 'web.extraServices.meal.selectItem' | aliasStatic}}
-                        </wrap>
+						<div
+							ng-if="vm.service.active && vm.service.editablePrice"
+							class="price"
+						>
+							<div class="price__i">
+								<h3
+									ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"
+								></h3>
+							</div>
+						</div>
+						<div
+							ng-if="!vm.service.active && vm.service.minPrice"
+							class="price"
+						>
+							<div class="price__i">
+								<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+								<h3
+									ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
+								></h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                        <wrap ng-if="!(vm.selectedFlight == flightNum && vm.selectedPassenger == passengerNum)">
-                          {{ 'web.extraServices.meal.noneSelected' | aliasStatic}}
-                        </wrap>
-
-                      </a>
-
-                    </div>
-
-                    <div ng-if="selectedPassengerFlightMeals"
-                         ng-repeat="(indexMealSelect, itemMealSelect) in selectedPassengerFlightMeals track by $index">
-
-                      <a href fancybox="popupMeal"
-                         ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
-                         class="passengersTable__link"
-                         ng-class="{ passengersTable__link_empty: !selectedPassengerFlightMeals }">
-
-                        <wrap ng-if="selectedPassengerFlightMeals">
-                          {{ itemMealSelect.title }}
-                        </wrap>
-
-                      </a>
-
-                      <span ng-if="selectedPassengerFlightMeals"
-                            class="passengersTable__priceSeat"
-                            ng-bind-html="{ value: itemMealSelect.totalPrice, currency: itemMealSelect.currency } | price">
-                                          </span>
-
-                      <a ng-if="selectedPassengerFlightMeals" href
-                         ng-click="vm.removePassengerFlightMeal(passengerNum, flightNum)"
-                         class="btn-remove">
-
-                                            <span class="infoBoxWrap">
-                                              <i class="icon_remove"></i>
-                                              <span class="infoBox">
-                                                <span class="infoBox__i">
-                                                  {{ 'web.extraServices.meal.cancelByPassengerSegment' | aliasStatic }}
-                                                </span>
-                                              </span>
-                                            </span>
-                      </a>
-
-                    </div>
-                    <!--  -->
-
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="passengersTable__cancel">
-            <a href ng-click="vm.switchService()"
-               class="passengersTable__link passengersTable__link_cancel">
-              {{ 'web.extraServices.meal.cancel' | aliasStatic}}
-            </a>
-
-            <div ng-if="vm.service.active && vm.service.editablePrice" class="price">
-              <div class="price__i">
-                <h3 ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"></h3>
-              </div>
-            </div>
-            <div ng-if="!vm.service.active && vm.service.minPrice" class="price">
-              <div class="price__i">
-                <p>
-                  {{ 'web.extraServices.minPrice' | aliasStatic}}
-                </p>
-                <h3 ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"></h3>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <popup-meal menu="vm.mealMenu"
-              passenger="vm.orderInfo.passengers[vm.selectedPassenger]"
-              flight="vm.orderInfo.plainFlights[vm.selectedFlight]"
-              handler="vm.mealCountChangeHandler"
-              path="vm.mealImagesPath"
-              subgroups="vm.service.subgroups">
-  </popup-meal>
-
+	<popup-meal
+		menu="vm.mealMenu"
+		passenger="vm.orderInfo.passengers[vm.selectedPassenger]"
+		flight="vm.orderInfo.plainFlights[vm.selectedFlight]"
+		handler="vm.mealCountChangeHandler"
+		path="vm.mealImagesPath"
+		subgroups="vm.service.subgroups"
+	>
+	</popup-meal>
 </div>
-
