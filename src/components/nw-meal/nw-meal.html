@@ -264,7 +264,9 @@
                 </div>
               </div>
             </div>
-            <div class="passengersTable__bottom-row">
+            <div class="passengersTable__bottom-row"
+						ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+						>
               <div class="passengersTable__cancel">
                 <a href ng-click="vm.switchService()"
                    class="passengersTable__link passengersTable__link_cancel">
@@ -275,14 +277,12 @@
 
               <div class="passengersTable__totalPrice-wrp">
 
-                <wrap ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]">
                 <span class="passengersTable__totalPrice-descr-text">
                   {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasStatic}}
                 </span>
                   <span class="passengersTable__totalPrice"
                         ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price">
                                             </span>
-                </wrap>
               </div>
 
             </div>
