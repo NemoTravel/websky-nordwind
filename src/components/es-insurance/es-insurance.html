@@ -31,45 +31,6 @@
 								</div>
 							</div>
 						</td>
-						<td>
-							<div
-								ng-if="vm.service.active && vm.service.editablePrice"
-								class="price"
-							>
-								<div class="price__i">
-									<h3
-										ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"
-									></h3>
-								</div>
-							</div>
-							<div ng-if="!vm.service.active" class="price">
-								<div class="price__i">
-									<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
-									<h3
-										ng-bind-html="{ value: vm.service.fullPrice.price, currency: vm.service.fullPrice.currency } | price"
-									></h3>
-									<p>
-										{{ 'web.extraServices.insurance.fullPriceUnit' |
-										aliasStatic}}
-									</p>
-								</div>
-							</div>
-						</td>
-						<td>
-							<a
-								href
-								ng-click="vm.switchService()"
-								ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
-								class="btn showDrop_js "
-							>
-								<span class="show">
-									{{ 'web.extraServices.insurance.select' | aliasStatic}}
-								</span>
-								<span class="hide">
-									{{ 'web.extraServices.insurance.deselect' | aliasStatic}}
-								</span>
-							</a>
-						</td>
 					</tr>
 				</tbody>
 			</table>
