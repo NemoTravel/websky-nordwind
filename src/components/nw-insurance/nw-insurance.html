@@ -3,72 +3,81 @@
 		<div class="top__i">
 			<table>
 				<tbody>
-				<tr>
-					<td>
-						<div class="text">
-							<div class="iconBox">
-								<i class="icon_umbrella"></i>
+					<tr>
+						<td>
+							<div class="text">
+								<div class="iconBox"><i class="icon_umbrella"></i></div>
+								<div class="name">
+									<h2>
+										{{ 'web.extraServices.insurance.header' | aliasStatic}}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.insurance"
+										>
+											<span class="infoBoxWrap">
+												<i class="icon_info"></i>
+												<span class="infoBox">
+													<span class="infoBox__i">
+														{{ 'web.extraServices.serviceDesc' | aliasStatic}}
+													</span>
+												</span>
+											</span>
+										</a>
+									</h2>
+									<p>{{ 'web.extraServices.insurance.desc' | aliasStatic}}</p>
+								</div>
 							</div>
-							<div class="name">
-								<h2>
-									{{ 'web.extraServices.insurance.header' | aliasStatic}}
-									<a href fancybox="popupAlias" data-popup-alias="web.extraServicesRules.insurance">
-                                            <span class="infoBoxWrap">
-                                                <i class="icon_info"></i>
-                                                <span class="infoBox">
-                                                    <span class="infoBox__i">
-                                                        {{ 'web.extraServices.serviceDesc' | aliasStatic}}
-                                                    </span>
-                                                </span>
-                                            </span>
-									</a>
-								</h2>
-								<p>
-									{{ 'web.extraServices.insurance.desc' | aliasStatic}}
-								</p>
+						</td>
+						<td>
+							<div ng-if="!vm.service.active" class="price">
+								<div class="price__i">
+									<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+									<h3
+										ng-bind-html="{ value: vm.service.fullPrice.price, currency: vm.service.fullPrice.currency } | price"
+									></h3>
+									<p>
+										{{ 'web.extraServices.insurance.fullPriceUnit' |
+										aliasStatic}}
+									</p>
+								</div>
 							</div>
-						</div>
-					</td>
-					<td>
-						<div ng-if="!vm.service.active" class="price">
-							<div class="price__i">
-								<p>
-									{{ 'web.extraServices.minPrice' | aliasStatic}}
-								</p>
-								<h3 ng-bind-html="{ value: vm.service.fullPrice.price, currency: vm.service.fullPrice.currency } | price"></h3>
-								<p>
-									{{ 'web.extraServices.insurance.fullPriceUnit' | aliasStatic}}
-								</p>
-							</div>
-						</div>
-					</td>
-				</tr>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-
 		</div>
 	</div>
-	<div class="drop" ng-if="vm.service.items.length > 1"
-		 ng-class="{ active: vm.service.active, show_js: vm.service.active }">
+	<div
+		class="drop"
+		ng-if="vm.service.items.length > 1"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
 		<div class="drop__i">
-
 			<div class="insuranceSelect">
-				<div class="insuranceSelect__i customScroll_height customScroll_js" custom-scroll>
-
-					<insurance-fares ng-if="!vm.service.itemsByPassengers"
-									 items="vm.service.items"
-									 pax-key=" 'common' "
-									 switch="vm.switchServiceItem">
+				<div
+					class="insuranceSelect__i customScroll_height customScroll_js"
+					custom-scroll
+				>
+					<insurance-fares
+						ng-if="!vm.service.itemsByPassengers"
+						items="vm.service.items"
+						pax-key=" 'common' "
+						switch="vm.switchServiceItem"
+					>
 					</insurance-fares>
 
-					<wrap ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-						  ng-if="vm.service.itemsByPassengers[passengerNum].length">
-
+					<wrap
+						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+						ng-if="vm.service.itemsByPassengers[passengerNum].length"
+					>
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<i class="passenger__link__icon icon-passenger"
-									   ng-class="{'icon-passenger--active': vm.service.itemsByPassengers[passengerNum][0].selected}"></i>
+									<i
+										class="passenger__link__icon icon-passenger"
+										ng-class="{'icon-passenger--active': vm.service.itemsByPassengers[passengerNum][0].selected}"
+									></i>
 									<strong>
 										{{ passenger.lastName }} {{ passenger.firstName }}
 									</strong>
@@ -77,35 +86,40 @@
 							<insurance-fares
 								items="vm.service.itemsByPassengers[passengerNum]"
 								pax-key="passengerNum"
-								switch="vm.switchServiceItem">
+								switch="vm.switchServiceItem"
+							>
 							</insurance-fares>
 						</div>
-
 					</wrap>
-
-
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="passengersTable__bottom-row">
 		<div class="passengersTable__cancel">
-			<a href ng-click="vm.switchService()" class="passengersTable__link passengersTable__link_cancel">
+			<a
+				href
+				ng-click="vm.switchService()"
+				class="passengersTable__link passengersTable__link_cancel"
+			>
 				{{ 'web.extraServices.seat.cancel' | aliasStatic}}
 			</a>
 		</div>
 
 		<div class="passengersTable__totalPrice-wrp">
-
-			<wrap ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]">
-                  <span class="passengersTable__totalPrice-descr-text">
-                    {{ 'web.extraService.' + vm.service.code + '.totalPrice' | aliasDynamic}}
-                  </span>
-				<span class="passengersTable__totalPrice"
-					  ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price">
-                                              </span>
+			<wrap
+				ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+			>
+				<span class="passengersTable__totalPrice-descr-text">
+					{{ 'web.extraService.' + vm.service.code + '.totalPrice' |
+					aliasDynamic}}
+				</span>
+				<span
+					class="passengersTable__totalPrice"
+					ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
+				>
+				</span>
 			</wrap>
-
 		</div>
 	</div>
 </div>
@@ -117,17 +131,21 @@
 				<div class="row">
 					<table>
 						<tbody>
-						<tr>
-							<td><i class="icon_umbrella"></i></td>
-							<td>
-								<div class="name">
-									{{ 'web.extraServices.insurance.header' | aliasStatic}}
-									<a href fancybox="popupAlias" data-popup-alias="web.extraServicesRules.insurance">
-										<i class="icon_info"></i>
-									</a>
-								</div>
-							</td>
-						</tr>
+							<tr>
+								<td><i class="icon_umbrella"></i></td>
+								<td>
+									<div class="name">
+										{{ 'web.extraServices.insurance.header' | aliasStatic}}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.insurance"
+										>
+											<i class="icon_info"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -136,43 +154,52 @@
 				<a href>
 					<div class="price">
 						<div class="price__i">
-							<p>
-								{{ 'web.extraServices.minPrice' | aliasStatic}}
-							</p>
-							<h3 ng-bind-html="{ value: vm.service.fullPrice.price, currency: vm.service.fullPrice.currency } | price"></h3>
+							<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+							<h3
+								ng-bind-html="{ value: vm.service.fullPrice.price, currency: vm.service.fullPrice.currency } | price"
+							></h3>
 							<p>
 								{{ 'web.extraServices.insurance.fullPriceUnit' | aliasStatic}}
 							</p>
 						</div>
 					</div>
 				</a>
-				<a href ng-click="vm.switchService()" ng-class="{ active: vm.service.active }" class="btn showDrop_js ">
-                    <span class="show">
-                        {{ 'web.extraServices.insurance.select' | aliasStatic}}
-                    </span>
+				<a
+					href
+					ng-click="vm.switchService()"
+					ng-class="{ active: vm.service.active }"
+					class="btn showDrop_js "
+				>
+					<span class="show">
+						{{ 'web.extraServices.insurance.select' | aliasStatic}}
+					</span>
 					<span class="hide">
-                        {{ 'web.extraServices.insurance.deselect' | aliasStatic}}
-                    </span>
+						{{ 'web.extraServices.insurance.deselect' | aliasStatic}}
+					</span>
 				</a>
 			</div>
 		</div>
 	</div>
-	<div class="drop" ng-if="vm.service.items.length > 1"
-		 ng-class="{ active: vm.service.active, show_js: vm.service.active }">
+	<div
+		class="drop"
+		ng-if="vm.service.items.length > 1"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
 		<div class="drop__i">
-
 			<div class="insuranceSelect">
 				<div class="insuranceSelect__i">
-
-					<insurance-fares ng-if="!vm.service.itemsByPassengers"
-									 items="vm.service.items"
-									 pax-key=" 'common' "
-									 switch="vm.switchServiceItem">
+					<insurance-fares
+						ng-if="!vm.service.itemsByPassengers"
+						items="vm.service.items"
+						pax-key=" 'common' "
+						switch="vm.switchServiceItem"
+					>
 					</insurance-fares>
 
-					<wrap ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-						  ng-if="vm.service.itemsByPassengers[passengerNum].length">
-
+					<wrap
+						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+						ng-if="vm.service.itemsByPassengers[passengerNum].length"
+					>
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
@@ -186,14 +213,12 @@
 						<insurance-fares
 							items="vm.service.itemsByPassengers[passengerNum]"
 							pax-key="passengerNum"
-							switch="vm.switchServiceItem">
+							switch="vm.switchServiceItem"
+						>
 						</insurance-fares>
-
 					</wrap>
-
 				</div>
 			</div>
-
 		</div>
 	</div>
 </div>
