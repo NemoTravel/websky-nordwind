@@ -1,177 +1,258 @@
-<app-loader ng-if="vm.loading || vm.doBookingAndRegisterOrderLoading || vm.modifyServicesLoading || vm.orderServicesLoading"></app-loader>
+<app-loader
+	ng-if="vm.loading || vm.doBookingAndRegisterOrderLoading || vm.modifyServicesLoading || vm.orderServicesLoading"
+></app-loader>
 
 <section class="out" ng-if="!vm.loading">
+	<app-header></app-header>
 
-    <app-header></app-header>
+	<div class="searchSteps">
+		<div class="wrap">
+			<div class="searchSteps__i">
+				<ol>
+					<li class="prev">
+						<a href="{{ 'site.mainPageUrl' | param }}"
+							>{{ 'web.steps.search' | aliasStatic}}</a
+						>
+					</li>
+					<li class="prev">
+						<a href="#{{$root.ROUTES.SEARCH}}"
+							>{{ 'web.steps.selectVariant' | aliasStatic}}</a
+						>
+					</li>
+					<li class="prev">
+						<a href="#{{$root.ROUTES.PASSENGERS}}">
+							{{ (vm.orderInfo.passengers.length == 1) ? ( 'web.steps.passenger'
+							| aliasStatic) : ( 'web.steps.passengers' | aliasStatic) }}
+						</a>
+					</li>
+					<li class="active">{{ 'web.steps.extraServices' | aliasStatic}}</li>
+					<li>{{ 'web.steps.payment' | aliasStatic}}</li>
+					<li>{{ 'web.steps.order' | aliasStatic}}</li>
+				</ol>
+			</div>
+		</div>
+	</div>
 
-    <div class="searchSteps">
-        <div class="wrap">
-            <div class="searchSteps__i">
-                <ol>
-                    <li class="prev"><a href="{{ 'site.mainPageUrl' | param }}">{{ 'web.steps.search' | aliasStatic}}</a></li>
-                    <li class="prev"><a href="#{{$root.ROUTES.SEARCH}}">{{ 'web.steps.selectVariant' | aliasStatic}}</a></li>
-                    <li class="prev">
-                        <a href="#{{$root.ROUTES.PASSENGERS}}">
-                            {{ (vm.orderInfo.passengers.length == 1) ? ( 'web.steps.passenger' | aliasStatic) : ( 'web.steps.passengers' | aliasStatic) }}
-                        </a>
-                    </li>
-                    <li class="active">{{ 'web.steps.extraServices' | aliasStatic}}</li>
-                    <li>{{ 'web.steps.payment' | aliasStatic}}</li>
-                    <li>{{ 'web.steps.order' | aliasStatic}}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="content content-booking">
+	<div class="content content-booking">
 		<div class="wrap wrap_pt32">
 			<div class="content__i">
-
 				<div class="checkoutServices">
 					<div class="checkoutServices__i">
-            <div class="checkoutServices__i-container">
-						    <h2 class="title">{{ 'web.extraServices.header' | aliasStatic}}</h2>
-                <span class="ancor-scroll-js">{{ 'web.extraServices.ancorScrollText' | aliasStatic}}</span>
-            </div>
+						<div class="checkoutServices__i-container">
+							<h2 class="title">
+								{{ 'web.extraServices.header' | aliasStatic}}
+							</h2>
+							<span class="ancor-scroll-js"
+								>{{ 'web.extraServices.ancorScrollText' | aliasStatic}}</span
+							>
+						</div>
 						<div ng-if="!vm.es" class="emptyServices">
-                            {{ 'web.extraServices.emptyServices' | aliasStatic}}
-							<br/><br/><br/>
+							{{ 'web.extraServices.emptyServices' | aliasStatic}}
+							<br /><br /><br />
 						</div>
 
-                        <div ng-if="vm.modifyServicesError" class="infoMessage infoMessage_error">
-                            <div class="infoMessage__i">
-                                <p ng-bind-html=" vm.modifyServicesError | aliasDynamic "></p>
-                            </div>
-                        </div>
+						<div
+							ng-if="vm.modifyServicesError"
+							class="infoMessage infoMessage_error"
+						>
+							<div class="infoMessage__i">
+								<p ng-bind-html=" vm.modifyServicesError | aliasDynamic "></p>
+							</div>
+						</div>
 
-                        <nw-extra-services-list ng-if="vm.es" es="vm.es" list="vm.esList" locked="vm.modifyServicesLoading || vm.orderServicesLoading"></nw-extra-services-list>
-
+						<nw-extra-services-list
+							ng-if="vm.es"
+							es="vm.es"
+							list="vm.esList"
+							locked="vm.modifyServicesLoading || vm.orderServicesLoading"
+						></nw-extra-services-list>
 					</div>
 				</div>
 
-
 				<div class="choosenFlight choosenFlight_checkout ancor-block-js">
 					<div class="choosenFlight__i">
-
-						<h2 class="title">
-                            {{ 'web.choosenFlight.header' | aliasStatic}}
-                        </h2>
+						<h2 class="title">{{ 'web.choosenFlight.header' | aliasStatic}}</h2>
 
 						<div class="chooseResult">
 							<div class="chooseResult__i">
-
-
 								<div class="col">
 									<div class="col__item">
+										<div
+											ng-repeat="(segNum, segment) in vm.orderInfo.flights"
+											class="flight"
+										>
+											<div
+												class="route_item_container"
+												ng-repeat="(flightNum, flight) in segment.flights"
+											>
+												<div class="route_item">
+													<div class="route__i route_container">
+														<div class="route_table">
+															<div class="dep">
+																<div
+																	class="dep__date"
+																	ng-class="{ nextDay: flight.departuredayshift, attention: flight.departuredayshift}"
+																>
+																	{{ flight.departuredate | formatDate: 'D MMM,
+																	dd' }}
+																</div>
+																<div class="dep__time">
+																	{{ flight.departuretime }}
+																</div>
+																<geo-marker
+																	prefix="dep__point"
+																	key="booking"
+																	city="flight.origincity"
+																	cityname="flight.origincityName"
+																	port="flight.originport"
+																	portname="flight.originportName"
+																></geo-marker>
+															</div>
+															<div class="info">
+																<i class="icon_plane"></i>
+																<div class="info__number">
+																	{{ flight.company.code_en }}-{{
+																	flight.racenumber }}
+																</div>
+																<div class="info__timeEnRoute">
+																	{{ flight.flighttime | timeAsWords }}
+																</div>
+															</div>
+															<div class="arr">
+																<div
+																	class="arr__date"
+																	ng-class="{ nextDay: flight.arrivaldayshift, attention: flight.arrivaldayshift}"
+																>
+																	{{ flight.arrivaldate | formatDate: 'D MMM,
+																	dd' }}
+																</div>
+																<div class="arr__time">
+																	{{ flight.arrivaltime }}
+																</div>
+																<geo-marker
+																	prefix="arr__point"
+																	key="booking"
+																	city="flight.destinationcity"
+																	cityname="flight.destinationcityName"
+																	port="flight.destinationport"
+																	portname="flight.destinationportName"
+																></geo-marker>
+															</div>
+														</div>
+													</div>
+													<div class="route__i additional">
+														<span class="additional__company"
+															>{{ 'web.choosenFlight.company' | aliasStatic}} {{
+															flight.company.name }}</span
+														>
+														<span
+															class="additional__company"
+															ng-if="flight.operatingCompany"
+															>{{ 'web.search.results.operatingCompany' |
+															aliasStatic}} {{ flight.operatingCompany.name
+															}}</span
+														>
+														<span class="additional__plane"
+															>{{ flight.airplaneName }}</span
+														>
+													</div>
+												</div>
 
+												<div
+													ng-if="segment.connections[flightNum]"
+													ng-init="connection=segment.connections[flightNum]"
+													class="transfer"
+												>
+													<span class="transfer__text">
+														<strong
+															>{{ 'web.choosenFlight.connection' | aliasStatic}}
+															{{ connection.time | timeAsWords }}</strong
+														>
+													</span>
 
-                                        <div ng-repeat="(segNum, segment) in vm.orderInfo.flights" class="flight">
-
-                                            <div class="route_item_container" ng-repeat="(flightNum, flight) in segment.flights">
-
-                                                <div class="route_item">
-
-                                                    <div class="route__i route_container">
-                                                		<div class="route_table">
-                                                			<div class="dep">
-                                                				<div class="dep__date"  ng-class="{ nextDay: flight.departuredayshift, attention: flight.departuredayshift}">
-                                                					{{ flight.departuredate | formatDate: 'D MMM, dd' }}
-                                                				</div>
-                                                				<div class="dep__time">
-                                                					{{ flight.departuretime }}
-                                                				</div>
-                                                                <geo-marker prefix="dep__point" key="booking" city="flight.origincity"  cityname="flight.origincityName" port="flight.originport"  portname="flight.originportName"></geo-marker>
-                                                			</div>
-                                                			<div class="info">
-                                                				<i class="icon_plane"></i>
-                                                				<div class="info__number">{{ flight.company.code_en }}-{{ flight.racenumber }}</div>
-                                                				<div class="info__timeEnRoute">{{ flight.flighttime | timeAsWords }}</div>
-                                                			</div>
-                                                			<div class="arr">
-                                                				<div class="arr__date" ng-class="{ nextDay: flight.arrivaldayshift, attention: flight.arrivaldayshift}">
-                                                					{{ flight.arrivaldate | formatDate: 'D MMM, dd' }}
-                                                				</div>
-                                                				<div class="arr__time">
-                                                					{{ flight.arrivaltime }}
-                                                				</div>
-                                                				<geo-marker prefix="arr__point" key="booking" city="flight.destinationcity"  cityname="flight.destinationcityName" port="flight.destinationport"  portname="flight.destinationportName"></geo-marker>
-                                                			</div>
-                                                		</div>
-                                                	</div>
-                                                	<div class="route__i additional">
-                                                		<span class="additional__company">{{ 'web.choosenFlight.company' | aliasStatic}} {{ flight.company.name }}</span>
-                                                		<span class="additional__company" ng-if="flight.operatingCompany">{{ 'web.search.results.operatingCompany' | aliasStatic}} {{ flight.operatingCompany.name }}</span>
-                                                		<span class="additional__plane">{{ flight.airplaneName }}</span>
-                                                	</div>
-
-                                                </div>
-
-                                                <div ng-if="segment.connections[flightNum]" ng-init="connection=segment.connections[flightNum]" class="transfer">
-
-                    								<span class="transfer__text">
-                    									<strong>{{ 'web.choosenFlight.connection' | aliasStatic}} {{ connection.time | timeAsWords }}</strong>
-                    								</span>
-
-                                                    <span ng-if="
+													<span
+														ng-if="
                                                         connection.previousAirport && connection.nextAirport &&
                                                         connection.previousAirport != connection.nextAirport
-                                                        " class="terminalChange">
-                                                        {{ 'web.choosenFlight.airportChange' | aliasStatic}} (<span class="terminalName">{{ connection.previousAirport }}</span>   <span class="terminalName">{{ connection.nextAirport }}</span>)
-                                                    </span>
+                                                        "
+														class="terminalChange"
+													>
+														{{ 'web.choosenFlight.airportChange' | aliasStatic}}
+														(<span class="terminalName"
+															>{{ connection.previousAirport }}</span
+														>
+														<span class="terminalName"
+															>{{ connection.nextAirport }}</span
+														>)
+													</span>
 
-                                                    <span ng-if="
+													<span
+														ng-if="
                                                         connection.previousAirport == connection.nextAirport &&
                                                         connection.previousTerminal && connection.nextTerminal &&
                                                         connection.previousTerminal != connection.nextTerminal
-                                                        " class="terminalChange">
-                                                        {{ 'web.choosenFlight.terminalChange' | aliasStatic}} (<span class="terminalName">{{ connection.previousTerminal }}</span>   <span class="terminalName">{{ connection.nextTerminal }}</span>)
-                                                    </span>
+                                                        "
+														class="terminalChange"
+													>
+														{{ 'web.choosenFlight.terminalChange' |
+														aliasStatic}} (<span class="terminalName"
+															>{{ connection.previousTerminal }}</span
+														>
+														<span class="terminalName"
+															>{{ connection.nextTerminal }}</span
+														>)
+													</span>
+												</div>
 
-                    							</div>
+												<div
+													ng-repeat="landing in flight.landings"
+													class="landing"
+												>
+													<span class="landing__text">
+														<strong
+															>{{ 'web.searchScheduleResult.landing' |
+															aliasStatic}}</strong
+														>
+													</span>
+													<p class="landing__airport">
+														{{ landing.landingCityName }} ({{
+														landing.landingTime | timeAsWords }})
+													</p>
+												</div>
+											</div>
 
-                                                <div ng-repeat="landing in flight.landings" class="landing">
-                        							<span class="landing__text">
-                        								<strong>{{ 'web.searchScheduleResult.landing' | aliasStatic}}</strong>
-                        							</span>
-                        							<p class="landing__airport">
-                        								{{ landing.landingCityName }} ({{ landing.landingTime | timeAsWords }})
-                        							</p>
-                        						</div>
+											<div
+												ng-if="segment.flights.length > 1"
+												class="timeEnRoute"
+											>
+												{{ 'web.choosenFlight.flighttime' | aliasStatic}} {{
+												segment.flightTime | timeAsWords }}
+											</div>
 
-                                            </div>
-
-                                            <div ng-if="segment.flights.length > 1" class="timeEnRoute">
-                                            	{{ 'web.choosenFlight.flighttime' | aliasStatic}} {{ segment.flightTime | timeAsWords }}
-                                            </div>
-
-                                            <div ng-if="segment.flights[0].brand && ( 'search.useMonoBrandCartesian' | param )" class="tariff">
-                                                <div class="tariff__include">
-                                                    {{ 'web.choosenFlight.tariffIncludeStart' | aliasStatic}} {{ segment.flights[0].brandName }} {{ 'web.choosenFlight.tariffIncludeEnd' | aliasStatic}}
-                                                </div>
-                                                <div class="tariff__content">
-
-                                                    <span ng-repeat="prop in segment.flights[0].brandAvailableProps" class="tariff__content__item" ng-bind-html="prop"></span>
-
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-
-
+											<div
+												ng-if="segment.flights[0].brand && ( 'search.useMonoBrandCartesian' | param )"
+												class="tariff"
+											>
+												<div class="tariff__include">
+													{{ 'web.choosenFlight.tariffIncludeStart' |
+													aliasStatic}} {{ segment.flights[0].brandName }} {{
+													'web.choosenFlight.tariffIncludeEnd' | aliasStatic}}
+												</div>
+												<div class="tariff__content">
+													<span
+														ng-repeat="prop in segment.flights[0].brandAvailableProps"
+														class="tariff__content__item"
+														ng-bind-html="prop"
+													></span>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 
-
 								<div class="col">
 									<div class="col__item">
-
 										<div class="col__i">
-
-
 											<div class="passengers">
 												<div class="item">
 													<div class="item__i dropWrapper">
@@ -179,10 +260,17 @@
 															<tbody>
 																<tr>
 																	<td>
-																		<p><strong>{{ vm.orderInfo.descPassCountStr }}</strong></p>
+																		<p>
+																			<strong
+																				>{{ vm.orderInfo.descPassCountStr
+																				}}</strong
+																			>
+																		</p>
 																	</td>
 																	<td>
-																		<strong ng-bind-html="{ value: vm.orderInfo.prices.totalTicket, currency: vm.orderInfo.prices.currency } | price"></strong>
+																		<strong
+																			ng-bind-html="{ value: vm.orderInfo.prices.totalTicket, currency: vm.orderInfo.prices.currency } | price"
+																		></strong>
 																	</td>
 																</tr>
 															</tbody>
@@ -193,82 +281,139 @@
 																	<tbody>
 																		<tr>
 																			<td>
-																				{{ 'web.choosenFlight.fare' | aliasStatic}}
+																				{{ 'web.choosenFlight.fare' |
+																				aliasStatic}}
 																			</td>
-																			<td ng-bind-html="{ value: vm.orderInfo.prices.totalFare, currency: vm.orderInfo.prices.currency } | price"></td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.prices.totalFare, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
 																		</tr>
-                                                                        <tr ng-if="vm.orderInfo.prices.totalTax && !vm.orderInfo.prices.groupedTaxes" class="tax tax-all">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.tax' | aliasStatic}}
-                                                                            </td>
-                                                                            <td ng-bind-html="{ value: vm.orderInfo.prices.totalTax, currency: vm.orderInfo.prices.currency } | price"></td>
-                                                                        </tr>
+																		<tr
+																			ng-if="vm.orderInfo.prices.totalTax && !vm.orderInfo.prices.groupedTaxes"
+																			class="tax tax-all"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.tax' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.prices.totalTax, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
 
-                                                                        <tr ng-if="vm.orderInfo.prices.totalTax && vm.orderInfo.prices.groupedTaxes" ng-repeat="taxGroup in vm.orderInfo.prices.groupedTaxes" class="tax tax-grouped">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.taxGroup.' | aliasWithPrefix:taxGroup.code }}
-                                                                            </td>
-                                                                            <td ng-bind-html="{ value: taxGroup.value, currency: vm.orderInfo.prices.currency } | price"></td>
-                                                                        </tr>
-                                                                        <tr ng-if="vm.orderInfo.prices.totalTax && vm.orderInfo.prices.otherTaxes" class="tax tax-other">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.otherTaxes' | aliasStatic}}
-                                                                            </td>
-                                                                            <td ng-bind-html="{ value: vm.orderInfo.prices.otherTaxes, currency: vm.orderInfo.prices.currency } | price"></td>
-                                                                        </tr>
-																		<tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServices">
-										                                    <td>
-                                                                                <strong>
-                                                                                    {{ 'web.choosenFlight.extraServices' | aliasStatic}}
-                                                                                </strong>
-                                                                            </td>
-										                                    <td>
-										                                        <strong ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServices, currency: vm.orderInfo.prices.currency } | price"></strong>
-										                                    </td>
-										                                </tr>
-                                                                        <tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.seat">
-                                    										<td>
-                                                                                {{ 'web.choosenFlight.totalSeat' | aliasStatic}}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.seat, currency: vm.orderInfo.prices.currency } | price"></td>
-                                    									</tr>
-                                                                        <tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.insurance">
-                                    										<td>
-                                                                                {{ 'web.choosenFlight.totalInsurance' | aliasStatic}}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.insurance, currency: vm.orderInfo.prices.currency } | price"></td>
-                                    									</tr>
-                                                                        <tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.meal">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.totalMeal' | aliasStatic}}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.meal, currency: vm.orderInfo.prices.currency } | price"></td>
-                                    									</tr>
-                                                                        <tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.baggage">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.totalBaggage' | aliasStatic}}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.baggage, currency: vm.orderInfo.prices.currency } | price"></td>
-                                    									</tr>
-                                                                        <tr ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.aeroexpress">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.totalAezh' | aliasStatic}}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.aeroexpress, currency: vm.orderInfo.prices.currency } | price"></td>
-                                    									</tr>
-                                                                        <tr ng-repeat="serviceItem in vm.orderInfo.pricesNotIssued.totalCommonServicesList">
-                                                                            <td>
-                                                                                {{ 'web.choosenFlight.total' | aliasWithPrefix:(serviceItem.code | capitalizeFirstLetter) }}
-                                                                            </td>
-                                    										<td ng-bind-html="{ value: serviceItem.value, currency: vm.orderInfo.prices.currency } | price"></td>
-                                                        				</tr>
+																		<tr
+																			ng-if="vm.orderInfo.prices.totalTax && vm.orderInfo.prices.groupedTaxes"
+																			ng-repeat="taxGroup in vm.orderInfo.prices.groupedTaxes"
+																			class="tax tax-grouped"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.taxGroup.' |
+																				aliasWithPrefix:taxGroup.code }}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: taxGroup.value, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.prices.totalTax && vm.orderInfo.prices.otherTaxes"
+																			class="tax tax-other"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.otherTaxes' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.prices.otherTaxes, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServices"
+																		>
+																			<td>
+																				<strong>
+																					{{ 'web.choosenFlight.extraServices' |
+																					aliasStatic}}
+																				</strong>
+																			</td>
+																			<td>
+																				<strong
+																					ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServices, currency: vm.orderInfo.prices.currency } | price"
+																				></strong>
+																			</td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.seat"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.totalSeat' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.seat, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.insurance"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.totalInsurance' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.insurance, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.meal"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.totalMeal' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.meal, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.baggage"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.totalBaggage' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.baggage, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-if="vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.aeroexpress"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.totalAezh' |
+																				aliasStatic}}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: vm.orderInfo.pricesNotIssued.totalExtraServiceByGroup.aeroexpress, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
+																		<tr
+																			ng-repeat="serviceItem in vm.orderInfo.pricesNotIssued.totalCommonServicesList"
+																		>
+																			<td>
+																				{{ 'web.choosenFlight.total' |
+																				aliasWithPrefix:(serviceItem.code |
+																				capitalizeFirstLetter) }}
+																			</td>
+																			<td
+																				ng-bind-html="{ value: serviceItem.value, currency: vm.orderInfo.prices.currency } | price"
+																			></td>
+																		</tr>
 																	</tbody>
 																</table>
 															</div>
 														</div>
 													</div>
 												</div>
-
 											</div>
 											<div class="bottom">
 												<div class="total">
@@ -276,158 +421,177 @@
 														<tbody>
 															<tr>
 																<td>
-                                                                    {{ 'web.choosenFlight.totalPrice' | aliasStatic}}
-                                                                </td>
+																	{{ 'web.choosenFlight.totalPrice' |
+																	aliasStatic}}
+																</td>
 																<td>
-																	<span ng-bind-html="{ value: vm.orderInfo.prices.totalPrice, currency: vm.orderInfo.prices.currency } | price"></span>
+																	<span
+																		ng-bind-html="{ value: vm.orderInfo.prices.totalPrice, currency: vm.orderInfo.prices.currency } | price"
+																	></span>
 																</td>
 															</tr>
 														</tbody>
 													</table>
 												</div>
-                                                <div class="bonus" ng-if="vm.orderInfo.ffpSumm">
-                                                    <table>
-                                                        <tbody>
-                											<tr>
-                	                                            <td>
-                	                                                <div class="accruedMiles">
-                														<i class="icon_milesPay"></i>{{ 'web.choosenFlight.ffpSumm' | aliasStatic}}
-                	                                                </div>
-                	                                            </td>
-                	                                            <td ng-bind-html="{ value: vm.orderInfo.ffpSumm, currency: 'miles' } | price"></td>
-                	                                        </tr>
-                                                    	</tbody>
-                									</table>
-                                                </div>
-                                                <div class="bonus" ng-if="vm.ffpBonus">
-                                                    <table>
-                                                        <tbody>
-                											<tr>
-                	                                            <td>
-                	                                                <div class="accruedMiles">
-                														<i class="icon_milesPay"></i>{{ 'web.choosenFlight.ffpBonus' | aliasStatic}}
-                	                                                </div>
-                	                                            </td>
-                	                                            <td ng-bind-html="{ value: vm.ffpBonus, currency: 'miles' } | price"></td>
-                	                                        </tr>
-                                                    	</tbody>
-                									</table>
-                                                </div>
+												<div class="bonus" ng-if="vm.orderInfo.ffpSumm">
+													<table>
+														<tbody>
+															<tr>
+																<td>
+																	<div class="accruedMiles">
+																		<i class="icon_milesPay"></i>{{
+																		'web.choosenFlight.ffpSumm' | aliasStatic}}
+																	</div>
+																</td>
+																<td
+																	ng-bind-html="{ value: vm.orderInfo.ffpSumm, currency: 'miles' } | price"
+																></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="bonus" ng-if="vm.ffpBonus">
+													<table>
+														<tbody>
+															<tr>
+																<td>
+																	<div class="accruedMiles">
+																		<i class="icon_milesPay"></i>{{
+																		'web.choosenFlight.ffpBonus' | aliasStatic}}
+																	</div>
+																</td>
+																<td
+																	ng-bind-html="{ value: vm.ffpBonus, currency: 'miles' } | price"
+																></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
 											</div>
-
-
-                                        </div>
-
+										</div>
 									</div>
 								</div>
-
 							</div>
 						</div>
-
 					</div>
 				</div>
 
 				<div class="payMethods">
 					<div class="payMethods__i">
-
-                        <wrap ng-show="!vm.isFreePricevariant">
-                            <h2 class="title">
-                                {{ 'web.paymentTypeSelect.header' | aliasStatic}}
-                            </h2>
-                            <payment-type-select ng-if="vm.priceVariant" price-variant="vm.priceVariant"
-                                change-handler="vm.paymentFormChangeHandler"
-                                selected-payment-type="vm.selectedPaymentType"
-                                selected-payment-form="vm.selectedPaymentForm">
-                            </payment-type-select>
-                        </wrap>
+						<wrap ng-show="!vm.isFreePricevariant">
+							<h2 class="title">
+								{{ 'web.paymentTypeSelect.header' | aliasStatic}}
+							</h2>
+							<payment-type-select
+								ng-if="vm.priceVariant"
+								price-variant="vm.priceVariant"
+								change-handler="vm.paymentFormChangeHandler"
+								selected-payment-type="vm.selectedPaymentType"
+								selected-payment-form="vm.selectedPaymentForm"
+							>
+							</payment-type-select>
+						</wrap>
 
 						<div class="iconfirm">
 							<div class="iconfirm__i">
 								<div class="customCheckbox">
-									<label><input type="checkbox" id="iconfirm" ng-model="vm.agree"/><span></span></label>
+									<label
+										><input
+											type="checkbox"
+											id="iconfirm"
+											ng-model="vm.agree"/><span></span
+									></label>
 								</div>
 								<p>
 									<label for="iconfirm">
-										<wrap ng-bind-html=" 'web.paymentTypeSelect.agree_1' | aliasStatic "></wrap>
-                                        {{ ' ' }}
-                                        <a href fancybox="popupRemark">
-                                            {{ 'web.paymentTypeSelect.remarkLink' | aliasStatic}}
-                                        </a>
-                                        {{ ' ' }}
-                                        <wrap ng-bind-html=" 'web.paymentTypeSelect.agree_2' | aliasStatic "></wrap>
-                                        {{ ' ' }}
-                                        <a href="{{ vm.orderInfo.conditionsPath }}" target="_blank">
-                                            {{ 'web.paymentTypeSelect.conditions' | aliasStatic}}
-                                        </a>
-                                        {{ ' ' }}
-                                        <wrap ng-bind-html=" 'web.paymentTypeSelect.agree_3' | aliasStatic"></wrap>
+										<wrap
+											ng-bind-html=" 'web.paymentTypeSelect.agree_1' | aliasStatic "
+										></wrap>
+										{{ ' ' }}
+										<a href fancybox="popupRemark">
+											{{ 'web.paymentTypeSelect.remarkLink' | aliasStatic}}
+										</a>
+										{{ ' ' }}
+										<wrap
+											ng-bind-html=" 'web.paymentTypeSelect.agree_2' | aliasStatic "
+										></wrap>
+										{{ ' ' }}
+										<a href="{{ vm.orderInfo.conditionsPath }}" target="_blank">
+											{{ 'web.paymentTypeSelect.conditions' | aliasStatic}}
+										</a>
+										{{ ' ' }}
+										<wrap
+											ng-bind-html=" 'web.paymentTypeSelect.agree_3' | aliasStatic"
+										></wrap>
 									</label>
 								</p>
 							</div>
 						</div>
-
 					</div>
 				</div>
 
 				<div class="searchResultsControl">
 					<div class="searchResultsControl__i">
-
 						<a href="#{{$root.ROUTES.PASSENGERS}}" class="btn btn_back">
-                            {{ 'web.buttons.back' | aliasStatic}}
-                        </a>
-
-						<a href ng-if="!vm.doBookingAndRegisterOrderLoading" ng-click="vm.submitPayment()" ng-class="{ disabled: (!vm.agree || !vm.selectedPaymentForm || !vm.selectedPaymentType  || vm.modifyServicesLoading || vm.orderServicesLoading) }" class="btn btn_next">
-							<span class="mobileHide">
-                                {{  vm.isFreePricevariant ? 'web.buttons.confirmRegisterOrder' : 'web.buttons.gotoPayment' | aliasStatic}}
-                            </span>
-                            <span class="mobileShow">
-                                {{ 'web.buttons.next' | aliasStatic}}
-                            </span>
+							{{ 'web.buttons.back' | aliasStatic}}
 						</a>
 
+						<a
+							href
+							ng-if="!vm.doBookingAndRegisterOrderLoading"
+							ng-click="vm.submitPayment()"
+							ng-class="{ disabled: (!vm.agree || !vm.selectedPaymentForm || !vm.selectedPaymentType  || vm.modifyServicesLoading || vm.orderServicesLoading) }"
+							class="btn btn_next"
+						>
+							<span class="mobileHide">
+								{{ vm.isFreePricevariant ? 'web.buttons.confirmRegisterOrder' :
+								'web.buttons.gotoPayment' | aliasStatic}}
+							</span>
+							<span class="mobileShow">
+								{{ 'web.buttons.next' | aliasStatic}}
+							</span>
+						</a>
 					</div>
 				</div>
 
-                <div ng-if="vm.showNeedSelectPaymentFormMesage" class="infoMessage infoMessage_error">
+				<div
+					ng-if="vm.showNeedSelectPaymentFormMesage"
+					class="infoMessage infoMessage_error"
+				>
 					<div class="infoMessage__i">
-						<p>
-                            {{ 'web.messages.needSelectPaymentForm' | aliasStatic}}
-                        </p>
+						<p>{{ 'web.messages.needSelectPaymentForm' | aliasStatic}}</p>
 					</div>
 				</div>
 
 				<div ng-if="vm.bookingError" class="infoMessage infoMessage_error">
 					<div class="infoMessage__i">
 						<p ng-if=" vm.bookingError === true ">
-                            {{ 'web.messages.bookingError' | aliasStatic}}
-                        </p>
+							{{ 'web.messages.bookingError' | aliasStatic}}
+						</p>
 						<p ng-if=" vm.bookingError !== true ">
-                            {{ vm.bookingError | aliasDynamic }}
-                        </p>
+							{{ vm.bookingError | aliasDynamic }}
+						</p>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 	</div>
 
-    <div class="content" ng-if="vm.errorMessage">
-        <div class="wrap wrap_pt32">
-            <div class="content__i">
-                <div>
-                    <div class="popup__i__caption">
-                        <div class="message_error">
-                            {{ vm.errorMessage | aliasDynamic }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="content" ng-if="vm.errorMessage">
+		<div class="wrap wrap_pt32">
+			<div class="content__i">
+				<div>
+					<div class="popup__i__caption">
+						<div class="message_error">
+							{{ vm.errorMessage | aliasDynamic }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="push"></div>
-
+	<div class="push"></div>
 </section>
 
 <app-footer ng-if="!vm.loading"></app-footer>
@@ -435,6 +599,6 @@
 <wrap ng-if="!vm.loading">
 	<popup-remark></popup-remark>
 	<popup-alias></popup-alias>
-    <popup-cancel-conflict-services></popup-cancel-conflict-services>
-    <popup-change-currency-error></popup-change-currency-error>
+	<popup-cancel-conflict-services></popup-cancel-conflict-services>
+	<popup-change-currency-error></popup-change-currency-error>
 </wrap>
