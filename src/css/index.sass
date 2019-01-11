@@ -419,11 +419,14 @@ order-prices[mode="pricesNotIssued"]
 		&.active
 			background: $passengerActiveIcon
 
+
 	&__link
 		&__i
 			display: flex
 			justify-content: space-between
 			align-items: center
+			flex: 5
+			justify-content: flex-start
 
 			&__name
 				display: inline-flex
@@ -432,10 +435,17 @@ order-prices[mode="pricesNotIssued"]
 		&__icon
 			margin-right: 20px
 
+insurance-fares
+	flex: 1
+
 .insurance-fares
 	&__item
 		display: flex
+		justify-content: space-between
 		align-items: center
+
+	.icon_close
+		margin-right: 36px
 
 	&__price
 		@extend %text--bold
