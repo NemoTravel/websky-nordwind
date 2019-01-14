@@ -9,7 +9,11 @@
 			ng-repeat="esCode in vm.list track by $index"
 			ng-if="vm.es[esCode]"
 			class="extra-services__item dropWrapper item-{{esCode}}"
-			ng-class="{ active: vm.es[esCode].active, 'es-insurance': esCode === 'insurance' }"
+			ng-class="{
+          'active': vm.es[esCode].active,
+          'es-insurance': esCode === 'insurance',
+          'es-aeroexpress': esCode === 'aeroexpress'
+        }"
 		>
 			<div class="extra-services__item-image-wrp">
 				<img
