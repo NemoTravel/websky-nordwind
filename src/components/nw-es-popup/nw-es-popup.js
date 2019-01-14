@@ -52,7 +52,4 @@ function nwMealPopupController($scope, backend, fancyboxTools) {
 		}
 	}
 
-	function close() {
-		jQuery.fancybox.close();
-	}
 }
