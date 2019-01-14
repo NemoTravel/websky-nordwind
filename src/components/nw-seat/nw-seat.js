@@ -58,6 +58,7 @@ function SeatController($scope, $element, $timeout, redirect, backend, utils) {
 
 	passengersTableContainer.on("scroll", mobileTableScrollHandler);
 
+	vm.service.active = true;
 	if (vm.service.active) {
 		selectFirstAvailablePassengerFlight();
 	}
@@ -109,8 +110,12 @@ function SeatController($scope, $element, $timeout, redirect, backend, utils) {
 	}
 
 	function selectFirstAvailablePassengerFlight() {
-		vm.selectedFlight = getFirstAvailableFlightNum();
-		vm.selectedPassenger = getFirstAvailablePassengerNum(vm.selectedFlight);
+		// vm.selectedFlight = getFirstAvailableFlightNum();
+		// vm.selectedPassenger = getFirstAvailablePassengerNum(vm.selectedFlight);
+
+		// by default select first flight and first passenger
+		vm.selectedFlight = 0;
+		vm.selectedPassenger = 0;
 		updateSeatMap();
 	}
 
