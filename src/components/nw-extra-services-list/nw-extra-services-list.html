@@ -1,114 +1,207 @@
-<div class="list">
-	<div
-		ng-repeat="esCode in vm.list track by $index"
-		ng-if="vm.es[esCode]"
-		class="item dropWrapper item-{{esCode}}"
-		ng-class="{ active: vm.es[esCode].active }"
-	>
-		<!-- Скрыть кнопку вызова попапа если в страховке только один человек -->
-		<a
-			href
-			fancybox="nw-{{ esCode }}-popup"
-			ng-if="esCode === 'insurance' && !vm.isSingleItemInInsurance"
-			>{{ esCode }}</a
-		>
+<div class="list extra-services">
+	<h3 class="extra-services__heading">
+		{{ 'web.extraServices.heading' | aliasStatic }}
+	</h3>
+	<!-- /.extra-services__heading -->
 
-		<!--Показать кнопку страховки с колбэком добавляющем ее в заказ, без вызова попапа-->
-		<a
-			href
-			ng-if="esCode === 'insurance' && vm.isSingleItemInInsurance"
-			ng-click="vm.switchInsurance()"
+	<div class="extra-services__list">
+		<div
+			ng-repeat="esCode in vm.list track by $index"
+			ng-if="vm.es[esCode]"
+			class="extra-services__item dropWrapper item-{{esCode}}"
+			ng-class="{ active: vm.es[esCode].active, 'es-insurance': esCode === 'insurance' }"
 		>
-			{{ esCode }}</a
-		>
+			<div class="extra-services__item-image-wrp">
+				<img
+					class="extra-services__item-image"
+					ng-src="/resources/websky-test/custom/img/es-{{ esCode }}.png"
+					alt="{{ esCode }}"
+				/>
+				<!-- /.extra-services__item-image -->
+				<i
+					class="extra-services__item-icon extra-services__item-icon--{{ esCode }}"
+				></i>
+				<!-- /.extra-services__item-icon extra-services__item-icon-- -->
+				<div class="item-icon"></div>
+				<!-- /.item-icon -->
+			</div>
+			<!-- /.extra-services__item-image-wrp -->
 
-		<a href fancybox="nw-{{ esCode }}-popup" ng-if="esCode !== 'insurance'"
-			>{{ esCode }}</a
-		>
+			<div class="extra-services__item-descr-block">
+				<div class="extra-services__item-descr-wrp">
+					<h3 class="extra-services__item-service-name">
+						{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}
 
-		<nw-es-popup
-			ng-if="esCode == 'meal'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<nw-meal
-					ng-if="esCode == 'meal'"
-					service="vm.es.meal"
-					locked="vm.locked"
-				></nw-meal>
-			</wrap>
-		</nw-es-popup>
-		<nw-es-popup
-			ng-if="esCode == 'seat'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<nw-seat
-					ng-if="esCode == 'seat'"
-					service="vm.es.seat"
-					locked="vm.locked"
-				></nw-seat>
-			</wrap>
-		</nw-es-popup>
-		<nw-es-popup
-			ng-if="esCode == 'baggage'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<es-baggage
-					ng-if="esCode == 'baggage'"
-					service="vm.es.baggage"
-					locked="vm.locked"
-				></es-baggage>
-			</wrap>
-		</nw-es-popup>
-		<nw-es-popup
-			ng-if="esCode == 'insurance'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<nw-insurance
-					ng-if="esCode == 'insurance'"
-					service="vm.es.insurance"
-					locked="vm.locked"
-				></nw-insurance>
-			</wrap>
-		</nw-es-popup>
-		<nw-es-popup
-			ng-if="esCode == 'aeroexpress'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<es-aeroexpress
-					ng-if="esCode == 'aeroexpress'"
-					service="vm.es.aeroexpress"
-					locked="vm.locked"
-				></es-aeroexpress>
-			</wrap>
-		</nw-es-popup>
-		<nw-es-popup
-			ng-if="esCode == 'common'"
-			es-code="esCode"
-			locked="vm.locked"
-			es="vm.es"
-		>
-			<wrap>
-				<es-common
-					ng-if="vm.isCommonService(esCode)"
-					service="vm.es[esCode]"
-					code="esCode"
-				></es-common>
-			</wrap>
-		</nw-es-popup>
+						<span
+							class="extra-services__item-min-price text text--highlight"
+						></span>
+						<!-- /.extra-services__item-min-price text text--highlight -->
+					</h3>
+
+					<!-- /.extra-services__item-service-name -->
+
+					<p class="extra-services__item-desc">
+						{{ 'web.extraServices.' + esCode + '.desc' | aliasStatic }}
+					</p>
+					<!-- /.extra-services__item-desc -->
+				</div>
+				<!-- /.extra-services__item-descr-wrp -->
+
+				<a
+					href
+					class="btn extra-services__item-button"
+					fancybox="nw-{{ esCode }}-popup"
+					ng-if="esCode === 'insurance' && !vm.isSingleItemInInsurance"
+					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
+				>
+				<!-- /.extra-services__item-button -->
+
+				<!--Показать кнопку страховки с колбэком добавляющем ее в заказ, без вызова попапа-->
+				<a
+					href
+					class="btn extra-services__item-button"
+					ng-if="esCode === 'insurance' && vm.isSingleItemInInsurance"
+					ng-click="vm.switchInsurance()"
+					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
+				>
+
+				<a
+					href
+					class="btn extra-services__item-button"
+					fancybox="nw-{{ esCode }}-popup"
+					ng-if="esCode !== 'insurance'"
+					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
+				>
+			</div>
+			<!-- /.extra-services__item-descr-block -->
+
+			<!--<div class="extra-services__item" ng-class="{'extra-services__item&#45;&#45;is-insurance': esCode === 'insurance'}">-->
+			<!--&lt;!&ndash; Скрыть кнопку вызова попапа если в страховке только один человек &ndash;&gt;-->
+			<!--<div class="extra-services__item-image-wrp">-->
+			<!--&lt;!&ndash; /.extra-services &ndash;&gt;-->
+			<!--</div>-->
+			<!--&lt;!&ndash; /.extra-services__item-image-wrp &ndash;&gt;-->
+			<!--<h4 class="heading extra-services__item-service-name">-->
+			<!--{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}-->
+			<!--</h4>-->
+			<!--&lt;!&ndash; /.extra-services__heading &ndash;&gt;-->
+			<!--<p class="extra-services__descr">-->
+			<!--{{ 'web.extraServices.' + esCode + '.desc' | aliasStatic }}-->
+			<!--</p>-->
+			<!--&lt;!&ndash; /.extra-services__descr &ndash;&gt;-->
+			<!--<a-->
+			<!--href-->
+			<!--class="btn extra-services__item-button"-->
+			<!--fancybox="nw-{{ esCode }}-popup"-->
+			<!--ng-if="esCode === 'insurance' && !vm.isSingleItemInInsurance"-->
+			<!--&gt;{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a-->
+			<!--&gt;-->
+			<!--&lt;!&ndash; /.extra-services__item-button &ndash;&gt;-->
+
+			<!--&lt;!&ndash;Показать кнопку страховки с колбэком добавляющем ее в заказ, без вызова попапа&ndash;&gt;-->
+			<!--<a-->
+			<!--href-->
+			<!--class="btn extra-services__item-button"-->
+			<!--ng-if="esCode === 'insurance' && vm.isSingleItemInInsurance"-->
+			<!--ng-click="vm.switchInsurance()"-->
+			<!--&gt;{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a-->
+			<!--&gt;-->
+
+			<!--<a-->
+			<!--href-->
+			<!--class="btn extra-services__item-button"-->
+			<!--fancybox="nw-{{ esCode }}-popup"-->
+			<!--ng-if="esCode !== 'insurance'"-->
+			<!--&gt;{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a-->
+			<!--&gt;-->
+			<!--</div>-->
+			<!-- /.extra-services__item -->
+
+			<nw-es-popup
+				ng-if="esCode == 'meal'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<nw-meal
+						ng-if="esCode == 'meal'"
+						service="vm.es.meal"
+						locked="vm.locked"
+					></nw-meal>
+				</wrap>
+			</nw-es-popup>
+			<nw-es-popup
+				ng-if="esCode == 'seat'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<nw-seat
+						ng-if="esCode == 'seat'"
+						service="vm.es.seat"
+						locked="vm.locked"
+					></nw-seat>
+				</wrap>
+			</nw-es-popup>
+			<nw-es-popup
+				ng-if="esCode == 'baggage'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<es-baggage
+						ng-if="esCode == 'baggage'"
+						service="vm.es.baggage"
+						locked="vm.locked"
+					></es-baggage>
+				</wrap>
+			</nw-es-popup>
+			<nw-es-popup
+				ng-if="esCode == 'insurance'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<nw-insurance
+						ng-if="esCode == 'insurance'"
+						service="vm.es.insurance"
+						locked="vm.locked"
+					></nw-insurance>
+				</wrap>
+			</nw-es-popup>
+			<nw-es-popup
+				ng-if="esCode == 'aeroexpress'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<es-aeroexpress
+						ng-if="esCode == 'aeroexpress'"
+						service="vm.es.aeroexpress"
+						locked="vm.locked"
+					></es-aeroexpress>
+				</wrap>
+			</nw-es-popup>
+			<nw-es-popup
+				ng-if="esCode == 'common'"
+				es-code="esCode"
+				locked="vm.locked"
+				es="vm.es"
+			>
+				<wrap>
+					<es-common
+						ng-if="vm.isCommonService(esCode)"
+						service="vm.es[esCode]"
+						code="esCode"
+					></es-common>
+				</wrap>
+			</nw-es-popup>
+		</div>
 	</div>
+	<!-- /.extra-services__list -->
 </div>
