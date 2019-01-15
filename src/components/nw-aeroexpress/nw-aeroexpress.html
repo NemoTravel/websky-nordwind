@@ -93,6 +93,11 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
+									<i
+										class="icon icon-passenger"
+										ng-class="{'icon-passenger--active': vm.isIssued(passenger)}"
+									></i>
+									<!-- /.icon icon_passenger -->
 									<strong>
 										{{ passenger.lastName }} {{ passenger.firstName }}
 									</strong>
@@ -118,6 +123,13 @@
 														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
 													>
 													</error-message>
+													<label class="aeroexpress__input-label">
+														{{
+														'web.extraServices.aeroexpress.documentType.label' |
+														aliasStatic }}
+													</label>
+													<!-- /.aeroexpress__input-label -->
+
 													<ui-select
 														ng-model="passenger.aeroexpressDocumentType"
 														name="documentType"
@@ -149,21 +161,27 @@
 											</td>
 											<td>
 												<div class="inp">
-													<error-message
-														control="vm.passengerDocForms[passengerNum].documentNumber"
-														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
-													>
-													</error-message>
-													<input
-														type="text"
-														name="documentNumber"
-														ng-model="passenger.aeroexpressDocumentNumber"
-														required
-														multipattern="vm.documentPatternsListByPassengers[passengerNum]"
-														class="textInp"
-														error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
-														placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
-													/>
+													<label class="aeroexpress__input-label">
+														{{
+														'web.extraServices.aeroexpress.documentNumber.label'
+														| aliasStatic }}
+														<error-message
+															control="vm.passengerDocForms[passengerNum].documentNumber"
+															touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+														>
+														</error-message>
+														<input
+															type="text"
+															name="documentNumber"
+															ng-model="passenger.aeroexpressDocumentNumber"
+															required
+															multipattern="vm.documentPatternsListByPassengers[passengerNum]"
+															class="textInp"
+															error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
+															placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
+														/>
+													</label>
+													<!-- /.aeroexpress__input-label -->
 												</div>
 											</td>
 											<td></td>
@@ -722,4 +740,4 @@
 	</div>
 </div>
 
-<popup-aeroexpress-schedule></popup-aeroexpress-schedule>
+<nw-popup-aeroexpress-schedule></nw-popup-aeroexpress-schedule>
