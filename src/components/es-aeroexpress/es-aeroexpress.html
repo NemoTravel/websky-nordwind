@@ -187,13 +187,13 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<strong ng-if="passenger.lastName || passenger.firstName">
+									<span ng-if="passenger.lastName || passenger.firstName">
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
-									<strong ng-if="!passenger.lastName && !passenger.firstName">
+									</span>
+									<span ng-if="!passenger.lastName && !passenger.firstName">
 										{{ 'web.extraServices.aeroexpress.newPassenger' |
 										aliasStatic}}
-									</strong>
+									</span>
 									<a
 										href
 										ng-click="vm.removeExtraPassenger(passengerNum)"
@@ -446,9 +446,9 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<strong>
+									<span>
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -542,13 +542,13 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<strong ng-if="passenger.lastName || passenger.firstName">
+									<span ng-if="passenger.lastName || passenger.firstName">
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
-									<strong ng-if="!passenger.lastName && !passenger.firstName">
+									</span>
+									<span ng-if="!passenger.lastName && !passenger.firstName">
 										{{ 'web.extraServices.aeroexpress.newPassenger' |
 										aliasStatic}}
-									</strong>
+									</span>
 									<a
 										href
 										ng-click="vm.removeExtraPassenger(passengerNum)"
