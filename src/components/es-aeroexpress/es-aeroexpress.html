@@ -93,7 +93,9 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									{{ passenger.lastName }} {{ passenger.firstName }}
+									<strong>
+										{{ passenger.lastName }} {{ passenger.firstName }}
+									</strong>
 								</div>
 							</div>
 						</div>
@@ -187,13 +189,13 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<span ng-if="passenger.lastName || passenger.firstName">
+									<strong ng-if="passenger.lastName || passenger.firstName">
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</span>
-									<span ng-if="!passenger.lastName && !passenger.firstName">
+									</strong>
+									<strong ng-if="!passenger.lastName && !passenger.firstName">
 										{{ 'web.extraServices.aeroexpress.newPassenger' |
 										aliasStatic}}
-									</span>
+									</strong>
 									<a
 										href
 										ng-click="vm.removeExtraPassenger(passengerNum)"
@@ -446,9 +448,9 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<span>
+									<strong>
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</span>
+									</strong>
 								</div>
 							</div>
 						</div>
@@ -542,13 +544,13 @@
 						<div class="passenger">
 							<div class="passenger__link__i">
 								<div class="passenger__link__i__name">
-									<span ng-if="passenger.lastName || passenger.firstName">
+									<strong ng-if="passenger.lastName || passenger.firstName">
 										{{ passenger.lastName }} {{ passenger.firstName }}
-									</span>
-									<span ng-if="!passenger.lastName && !passenger.firstName">
+									</strong>
+									<strong ng-if="!passenger.lastName && !passenger.firstName">
 										{{ 'web.extraServices.aeroexpress.newPassenger' |
 										aliasStatic}}
-									</span>
+									</strong>
 									<a
 										href
 										ng-click="vm.removeExtraPassenger(passengerNum)"
