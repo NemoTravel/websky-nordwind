@@ -3,6 +3,17 @@
 @import "blocks"
 
 
+/* ==== common ==== */
+
+.text
+	&--highlight
+		@extend %text--highlight
+
+	&--small
+		@extend %text--small
+
+/* ==== END common ==== */
+
 /* ==== extra services popup width ==== */
 
 .extra-service__popup
@@ -73,12 +84,18 @@
 				display: flex
 				flex-wrap: wrap
 
+			&-service-name
+				padding: 0
+				margin: 0
+
 			&-min-price
 				flex: 20%
 				align-self: center
+				color: $textBlackColor
 
 			&-button
 				flex: 20% 0 0
+				margin-top: 0
 
 
 	&__item-service-name
