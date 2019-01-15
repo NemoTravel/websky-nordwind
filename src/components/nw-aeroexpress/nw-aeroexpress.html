@@ -219,7 +219,7 @@
 										ng-click="vm.removeExtraPassenger(passengerNum)"
 										class="remove-ae-passenger"
 									>
-										<i class="icon_remove"></i>
+										<i class="icon_close"></i>
 									</a>
 								</div>
 							</div>
@@ -376,9 +376,25 @@
 						</aeroexpress-list>
 					</wrap>
 
-					<a href ng-click="vm.addExtraPassenger()" class="link">
-						{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
-					</a>
+					<div class="aeroexpress__add-passneger">
+						<div
+							class="aeroexpress__add-passenger-head"
+							ng-click="vm.addExtraPassenger()"
+						>
+							<i class="aeroexpress__add-passenger-icon icon icon_plus"></i>
+							<!-- /.aeroexpress__add-passenger-icon -->
+							<span class="aeroexpress__add-passenger-text">
+								{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
+							</span>
+							<!-- /.aeroexpress__add-passenger-text -->
+						</div>
+						<!-- /.aeroexpress__add-passenger-head -->
+						<div class="aeroexpress__add-passenger-comment">
+
+						</div>
+						<!-- /.aeroexpress__add-passenger-comment -->
+					</div>
+					<!-- /.aeroexpress__add-passneger -->
 				</div>
 			</div>
 		</div>

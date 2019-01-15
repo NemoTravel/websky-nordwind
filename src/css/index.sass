@@ -241,6 +241,48 @@
 		border-color: inherit
 		font-weight: $lightFontWeight
 
+	.ui-select-passengers .selectize-input
+		&:after
+			font-family: "OpenSkyIcons", sans-serif
+			border: none
+			content: '\e90e'
+			font-size: 13px
+			width: 13px
+			height: 13px
+			text-align: center
+			transform: rotate(90deg) translateX(-50%)
+			color: $brandRedColor
+
+		&.focus
+			&:after
+				transform: rotate(270deg) translateX(50%) !important
+
+	.selectize-control .selectize-input.disabled
+		background: #e6eef9
+
+
+	.passengersInfo input[type="text"],
+	.passengersInfo input[type="password"],
+	.passengersInfo input[type="tel"],
+	.passengersInfo input[type="email"],
+	.selectize-input
+		box-sizing: border-box
+		height: 40px
+		border-radius: 4px
+
+
+	&-table
+		display: block
+
+		tbody
+			display: block
+
+		tr
+			display: flex
+			flex-direction: column
+
+			td:last-of-type
+				width: 40%
 
 	.passenger
 		background: #e9e9e6
@@ -267,7 +309,6 @@
 
 				&:after
 					color: #ffffff
-
 
 .foodSelect,
 .seatSelect,
