@@ -1,0 +1,725 @@
+<div class="item__i mobileHide">
+	<div class="top">
+		<div class="top__i">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<div class="text">
+								<div class="iconBox" ng-click="vm.switchService()">
+									<i class="icon_aeroexpress"></i>
+								</div>
+								<div class="name">
+									<h2>
+										{{ 'web.extraServices.aeroexpress.header' | aliasStatic }}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.aeroexpress"
+										>
+											<span class="infoBoxWrap">
+												<i class="icon_info"></i>
+												<span class="infoBox">
+													<span class="infoBox__i">
+														{{ 'web.extraServices.serviceDesc' | aliasStatic }}
+													</span>
+												</span>
+											</span>
+										</a>
+									</h2>
+									<p>
+										{{ 'web.extraServices.aeroexpress.desc' | aliasStatic }}
+									</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div
+								ng-if="vm.service.active && vm.service.editablePrice"
+								class="price"
+							>
+								<div class="price__i">
+									<h3
+										ng-bind-html="{ value: vm.service.editablePrice.price,
+                currency: vm.service.editablePrice.currency } | price"
+									></h3>
+								</div>
+							</div>
+							<div ng-if="!vm.service.active" class="price">
+								<div class="price__i">
+									<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
+									<h3
+										ng-bind-html="{ value: vm.service.minPrice.price,
+                currency: vm.service.minPrice.currency } | price"
+									></h3>
+									<p>
+										{{ 'web.extraServices.aeroexpress.minPriceUnit' |
+										aliasStatic }}
+									</p>
+								</div>
+							</div>
+						</td>
+						<td>
+							<a
+								href
+								ng-click="vm.switchService()"
+								ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
+								class="btn showDrop_js"
+							>
+								<span class="show">
+									{{ 'web.extraServices.aeroexpress.select' | aliasStatic }}
+								</span>
+								<span class="hide">
+									{{ 'web.extraServices.aeroexpress.deselect' | aliasStatic }}
+								</span>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div
+		class="drop"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
+		<div class="drop__i">
+			<div class="aeroexpress mobileHide">
+				<div class="aeroexpress__i">
+					<wrap
+						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+					>
+						<div class="passenger">
+							<div class="passenger__link__i">
+								<div class="passenger__link__i__name">
+									<strong>
+										{{ passenger.lastName }} {{ passenger.firstName }}
+									</strong>
+								</div>
+							</div>
+						</div>
+
+						<div class="passengersInfo">
+							<br />
+							<form
+								class="passengerForm__js"
+								name="vm.passengerDocForms[{{passengerNum}}]"
+								form-submit-error-highlight
+								novalidate
+							>
+								<table class="passengerInfo">
+									<tbody>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.passengerDocForms[passengerNum].documentType"
+														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+													>
+													</error-message>
+													<ui-select
+														ng-model="passenger.aeroexpressDocumentType"
+														name="documentType"
+														theme="selectize"
+														search-enabled="false"
+														ng-disabled="!vm.availableDocumentsByOrderPassengers[passengerNum]"
+														ng-change="vm.documentTypeChangeHandler(passengerNum)"
+														class="ui-select-custom ui-select-passengers"
+														ui-select-custom
+														error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
+														required
+													>
+														<ui-select-match
+															placeholder="{{$select.selected.name ||
+                          ( 'web.passengersInfo.documentType' | aliasStatic) }}"
+														>
+															{{$select.selected.name}}
+														</ui-select-match>
+														<ui-select-choices
+															repeat="doc.code as doc in vm.availableDocumentsByOrderPassengers[passengerNum]"
+														>
+															<div
+																class="{{ 'documentTypeOption_' + doc.code }}"
+																ng-bind-html="doc.name"
+															></div>
+														</ui-select-choices>
+													</ui-select>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.passengerDocForms[passengerNum].documentNumber"
+														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="documentNumber"
+														ng-model="passenger.aeroexpressDocumentNumber"
+														required
+														multipattern="vm.documentPatternsListByPassengers[passengerNum]"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+
+						<aeroexpress-list
+							items="vm.optionsByPassengers[passengerNum]"
+							passenger="passenger"
+							free="vm.service.passengersFreeForAllDates[passengerNum]"
+							child="vm.service.passengersChild[passengerNum]"
+							locked="vm.locked"
+							touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+							valid="vm.passengerDocForms[passengerNum].$valid"
+						>
+						</aeroexpress-list>
+					</wrap>
+
+					<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
+						<div class="passenger">
+							<div class="passenger__link__i">
+								<div class="passenger__link__i__name">
+									<strong ng-if="passenger.lastName || passenger.firstName">
+										{{ passenger.lastName }} {{ passenger.firstName }}
+									</strong>
+									<strong ng-if="!passenger.lastName && !passenger.firstName">
+										{{ 'web.extraServices.aeroexpress.newPassenger' |
+										aliasStatic}}
+									</strong>
+									<a
+										href
+										ng-click="vm.removeExtraPassenger(passengerNum)"
+										class="remove-ae-passenger"
+									>
+										<i class="icon_remove"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="passengersInfo">
+							<br />
+							<form
+								class="passengerForm__js"
+								name="vm.extraPassengerForms[{{passengerNum}}]"
+								form-submit-error-highlight
+								novalidate
+							>
+								<table class="passengerInfo">
+									<tbody>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].lastName"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="lastName"
+														ng-model="passenger.lastName"
+														uppercase
+														required
+														ng-pattern="vm.service.passengerLastNameRegexp"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.lastName' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].firstName"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="firstName"
+														ng-model="passenger.firstName"
+														uppercase
+														required
+														ng-pattern="vm.service.passengerFirstNameRegexp"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.firstName' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].dateOfBirth"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="dateOfBirth"
+														ng-model="passenger.dateOfBirth"
+														ng-change="vm.extraPassengerDateOfBirthChangeHandler(passengerNum)"
+														required
+														check-date-format
+														check-date-range
+														data-max-date="{{ vm.todayDate }}"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														ui-mask="99.99.9999"
+														model-view-value="true"
+														placeholder="{{ 'web.passengersInfo.dateOfBirth' | aliasStatic }}"
+														ui-mask-placeholder="{{ 'web.datePattern' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].documentType"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<ui-select
+														ng-model="passenger.aeroexpressDocumentType"
+														name="documentType"
+														theme="selectize"
+														search-enabled="false"
+														ng-disabled="!vm.availableDocumentsByExtraPassengers[passengerNum].length"
+														ng-change="vm.documentTypeChangeHandler(passengerNum, true)"
+														class="ui-select-custom ui-select-passengers"
+														ui-select-custom
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														required
+													>
+														<ui-select-match
+															placeholder="{{$select.selected.name ||
+                          ( 'web.passengersInfo.documentType' | aliasStatic) }}"
+														>
+															{{$select.selected.name}}
+														</ui-select-match>
+														<ui-select-choices
+															repeat="doc.code as doc in vm.availableDocumentsByExtraPassengers[passengerNum]"
+														>
+															<div
+																class="{{ 'documentTypeOption_' + doc.code }}"
+																ng-bind-html="doc.name"
+															></div>
+														</ui-select-choices>
+													</ui-select>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].documentNumber"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="documentNumber"
+														ng-model="passenger.aeroexpressDocumentNumber"
+														required
+														multipattern="vm.documentPatternsListByExtraPassengers[passengerNum]"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+
+						<aeroexpress-list
+							items="vm.optionsByExtraPassengers[passengerNum]"
+							passenger="passenger"
+							locked="vm.locked"
+							touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+							free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
+							valid="vm.extraPassengerForms[passengerNum].$valid"
+						>
+						</aeroexpress-list>
+					</wrap>
+
+					<a href ng-click="vm.addExtraPassenger()" class="link">
+						{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="item__i mobileShow">
+	<div class="top">
+		<div class="top__i">
+			<a href>
+				<div class="row">
+					<table>
+						<tbody>
+							<tr>
+								<td><i class="icon_aeroexpress"></i></td>
+								<td>
+									<div class="name">
+										{{ 'web.extraServices.aeroexpress.header' | aliasStatic }}
+										<a
+											href
+											fancybox="popupAlias"
+											data-popup-alias="web.extraServicesRules.aeroexpress"
+										>
+											<i class="icon_info"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</a>
+			<div class="row">
+				<a href>
+					<div
+						ng-if="vm.service.active && vm.service.editablePrice"
+						class="price"
+					>
+						<div class="price__i">
+							<h3
+								ng-bind-html="{ value: vm.service.editablePrice.price,
+              currency: vm.service.editablePrice.currency } | price"
+							></h3>
+						</div>
+					</div>
+					<div ng-if="!vm.service.active" class="price">
+						<div class="price__i">
+							<p>{{ 'web.extraServices.minPrice' | aliasStatic }}</p>
+							<h3
+								ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
+							></h3>
+							<p>
+								{{ 'web.extraServices.aeroexpress.minPriceUnit' | aliasStatic }}
+							</p>
+						</div>
+					</div>
+				</a>
+				<a
+					href
+					ng-click="vm.switchService()"
+					ng-class="{ active: vm.service.active }"
+					class="btn showDrop_js"
+				>
+					<span class="show">
+						{{ 'web.extraServices.aeroexpress.select' | aliasStatic }}
+					</span>
+					<span class="hide">
+						{{ 'web.extraServices.aeroexpress.deselect' | aliasStatic }}
+					</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="drop"
+		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+	>
+		<div class="drop__i">
+			<div class="aeroexpress">
+				<div class="aeroexpress__i">
+					<wrap
+						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+					>
+						<div class="passenger">
+							<div class="passenger__link__i">
+								<div class="passenger__link__i__name">
+									<strong>
+										{{ passenger.lastName }} {{ passenger.firstName }}
+									</strong>
+								</div>
+							</div>
+						</div>
+
+						<div class="passengersInfo">
+							<br />
+							<form
+								class="passengerForm__js"
+								name="vm.passengerDocForms[{{passengerNum}}]"
+								form-submit-error-highlight
+								novalidate
+							>
+								<table class="passengerInfo">
+									<tbody>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.passengerDocForms[passengerNum].documentType"
+														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+													>
+													</error-message>
+													<ui-select
+														ng-model="passenger.aeroexpressDocumentType"
+														name="documentType"
+														theme="selectize"
+														search-enabled="false"
+														ng-disabled="!vm.availableDocumentsByOrderPassengers[passengerNum]"
+														ng-change="vm.documentTypeChangeHandler(passengerNum)"
+														class="ui-select-custom ui-select-passengers"
+														ui-select-custom
+														error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
+														required
+													>
+														<ui-select-match
+															placeholder="{{$select.selected.name ||
+                          ( 'web.passengersInfo.documentType' | aliasStatic) }}"
+														>
+															{{$select.selected.name}}
+														</ui-select-match>
+														<ui-select-choices
+															repeat="doc.code as doc in vm.availableDocumentsByOrderPassengers[passengerNum]"
+														>
+															<div
+																class="{{ 'documentTypeOption_' + doc.code }}"
+																ng-bind-html="doc.name"
+															></div>
+														</ui-select-choices>
+													</ui-select>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.passengerDocForms[passengerNum].documentNumber"
+														touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="documentNumber"
+														ng-model="passenger.aeroexpressDocumentNumber"
+														required
+														multipattern="vm.documentPatternsListByPassengers[passengerNum]"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByOrderPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+
+						<aeroexpress-list
+							items="vm.optionsByPassengers[passengerNum]"
+							passenger="passenger"
+							free="vm.service.passengersFreeForAllDates[passengerNum]"
+							child="vm.service.passengersChild[passengerNum]"
+							locked="vm.locked"
+							touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+							valid="vm.passengerDocForms[passengerNum].$valid"
+						>
+						</aeroexpress-list>
+					</wrap>
+
+					<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
+						<div class="passenger">
+							<div class="passenger__link__i">
+								<div class="passenger__link__i__name">
+									<strong ng-if="passenger.lastName || passenger.firstName">
+										{{ passenger.lastName }} {{ passenger.firstName }}
+									</strong>
+									<strong ng-if="!passenger.lastName && !passenger.firstName">
+										{{ 'web.extraServices.aeroexpress.newPassenger' |
+										aliasStatic}}
+									</strong>
+									<a
+										href
+										ng-click="vm.removeExtraPassenger(passengerNum)"
+										class="remove-ae-passenger"
+									>
+										<i class="icon_remove"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="passengersInfo">
+							<br />
+							<form
+								class="passengerForm__js"
+								name="vm.extraPassengerForms[{{passengerNum}}]"
+								form-submit-error-highlight
+								novalidate
+							>
+								<table class="passengerInfo">
+									<tbody>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].lastName"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="lastName"
+														ng-model="passenger.lastName"
+														uppercase
+														required
+														ng-pattern="vm.service.passengerLastNameRegexp"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.lastName' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].firstName"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="firstName"
+														ng-model="passenger.firstName"
+														uppercase
+														required
+														ng-pattern="vm.service.passengerFirstNameRegexp"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.firstName' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].dateOfBirth"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="dateOfBirth"
+														ng-model="passenger.dateOfBirth"
+														ng-change="vm.extraPassengerDateOfBirthChangeHandler(passengerNum)"
+														required
+														check-date-format
+														check-date-range
+														data-max-date="{{ vm.todayDate }}"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														ui-mask="99.99.9999"
+														model-view-value="true"
+														placeholder="{{ 'web.passengersInfo.dateOfBirth' | aliasStatic }}"
+														ui-mask-placeholder="{{ 'web.datePattern' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].documentType"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<ui-select
+														ng-model="passenger.aeroexpressDocumentType"
+														name="documentType"
+														theme="selectize"
+														search-enabled="false"
+														ng-disabled="!vm.availableDocumentsByExtraPassengers[passengerNum].length"
+														ng-change="vm.documentTypeChangeHandler(passengerNum, true)"
+														class="ui-select-custom ui-select-passengers"
+														ui-select-custom
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														required
+													>
+														<ui-select-match
+															placeholder="{{$select.selected.name ||
+                                  ( 'web.passengersInfo.documentType' | aliasStatic) }}"
+														>
+															{{$select.selected.name}}
+														</ui-select-match>
+														<ui-select-choices
+															repeat="doc.code as doc in vm.availableDocumentsByExtraPassengers[passengerNum]"
+														>
+															<div
+																class="{{ 'documentTypeOption_' + doc.code }}"
+																ng-bind-html="doc.name"
+															></div>
+														</ui-select-choices>
+													</ui-select>
+												</div>
+											</td>
+											<td>
+												<div class="inp">
+													<error-message
+														control="vm.extraPassengerForms[passengerNum].documentNumber"
+														touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+													>
+													</error-message>
+													<input
+														type="text"
+														name="documentNumber"
+														ng-model="passenger.aeroexpressDocumentNumber"
+														required
+														multipattern="vm.documentPatternsListByExtraPassengers[passengerNum]"
+														class="textInp"
+														error-highlight="{{vm.submitTouchedByExtraPassengers[passengerNum]}}"
+														placeholder="{{ 'web.passengersInfo.documentNumber' | aliasStatic }}"
+													/>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+
+						<aeroexpress-list
+							items="vm.optionsByExtraPassengers[passengerNum]"
+							passenger="passenger"
+							locked="vm.locked"
+							touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+							free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
+							valid="vm.extraPassengerForms[passengerNum].$valid"
+						>
+						</aeroexpress-list>
+					</wrap>
+
+					<a href ng-click="vm.addExtraPassenger()" class="link">
+						{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<popup-aeroexpress-schedule></popup-aeroexpress-schedule>
