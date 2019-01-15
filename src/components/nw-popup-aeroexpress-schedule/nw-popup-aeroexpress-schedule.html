@@ -1,0 +1,34 @@
+<div class="popup popup_remark" id="popupAeroexpressSchedule" style="display: none;">
+
+	<div class="title">
+		<div class="title__i">
+			<p>
+				{{ 'web.popupAeroexpressSchedule.header' | aliasStatic}}
+			</p>
+			<a href ng-click="vm.close()" class="closePopup closePopup_js"></a>
+
+		</div>
+	</div>
+
+	<div class="popup__i">
+		<div class="popup_remarkInfo">
+
+			<modal-loader ng-if="vm.loading"></modal-loader>
+
+            <div ng-if="!vm.loading && vm.schedule" class="remark_cont">
+				<table class="aeroexpress-schedule-table">
+					<tr>
+						<th>{{ vm.departure }}</th>
+						<th>{{ vm.arrival }}</th>
+					</tr>
+					<tr ng-repeat="item in vm.schedule">
+						<td>{{ item.departure }}</td>
+						<td>{{ item.arrival }}</td>
+					</tr>
+				</table>
+            </div>
+
+		</div>
+	</div>
+
+</div>
