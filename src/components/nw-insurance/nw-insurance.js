@@ -13,7 +13,9 @@ function InsuranceController(backend) {
 
 	vm.switchService = switchService;
 	vm.switchServiceItem = switchServiceItem;
+	vm.selectFirstAvailablePassengerFlight = selectFirstAvailablePassengerFlight;
 
+	vm.selectedFlight = null;
 	vm.orderInfo = backend.getOrderInfo();
 
 	function switchService() {
@@ -70,5 +72,35 @@ function InsuranceController(backend) {
 			params.productCode = item.productCode;
 		}
 		return params;
+	}
+
+	//	select first available flight functionality
+	function selectFirstAvailablePassengerFlight() {
+		vm.selectedFlight = getFirstAvailableFlightNum();
+		console.log(vm.selectedFlight);
+	}
+
+	function getFirstAvailableFlightNum() {
+		var i;
+		for (i = 0; i < vm.orderInfo.plainFlights.length; i++) {
+			// vm.service.availableBySegments[i]
+			console.log(vm.service);
+			if (vm.service.availableBySegments[i]) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	function getFirstAvailablePassengerNum(flightNum) {
+		var i;
+		if (vm.service.availableByPassengerSegments) {
+			for (i = 0; i < vm.orderInfo.passengers.length; i++) {
+				if (vm.service.availableByPassengerSegments[i][flightNum]) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 }
