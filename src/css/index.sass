@@ -63,14 +63,47 @@
 		background: #ffffff
 		border-radius: 5px
 
+	&__item--full-width
+		flex: 100%
+
+		.extra-services__item
+
+			&-descr-wrp
+				flex: 60%
+				display: flex
+				flex-wrap: wrap
+
+			&-min-price
+				flex: 20%
+				align-self: center
+
+			&-button
+				flex: 20% 0 0
+
+
 	&__item-service-name
 		@extend %heading--subheading
-		margin-top: 20px
-		margin-bottom: 40px
+
+	&__item-min-price
+		@extend %text--small
+
+	&__item-service-name,
+	&__item-service-price
+		padding-top: 20px
+		padding-bottom: 25px
 
 	&__item-descr
 		@extend %text--small
 		margin-bottom: 20px
+
+	&__item-descr-wrp
+		display: flex
+		flex-wrap: wrap
+		align-items: center
+		justify-content: space-between
+
+	&__item-desc
+		flex: 100%
 
 	&__item-descr-block
 		display: flex
@@ -124,6 +157,7 @@
 
 	&__item-button
 		@extend %btn
+		margin-top: 30px
 		width: percent(177, 360)
 
 		&:hover
@@ -132,16 +166,14 @@
 .nw-insurance
 	&.locked
 		opacity: .7
+
 		* > *
-      cursor: not-allowed
+			cursor: not-allowed
 
 .es-insurance,
 .es-aeroexpress
-	display: flex
 	order: 2
-	flex: 1 0 100%
 	max-width: initial
-	background: #ffffff
 	border-radius: 5px
 	margin-top: 20px
 	flex-direction: row
