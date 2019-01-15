@@ -17,6 +17,7 @@ function AeroexpressController($q, backend) {
 	vm.documentTypeChangeHandler = documentTypeChangeHandler;
 	vm.extraPassengerDateOfBirthChangeHandler = extraPassengerDateOfBirthChangeHandler;
 	vm.isExtraPassengerFreeForAllDates = isExtraPassengerFreeForAllDates;
+	vm.isIssued = isIssued;
 
 	vm.availableDocumentsByExtraPassengers = [];
 
@@ -271,6 +272,16 @@ function AeroexpressController($q, backend) {
 		return false;
 	}
 
+	function isIssued(passengerItem) {
+		var orderAeroexpressService = _.findWhere(vm.orderInfo.all_extra_services, {
+			code: "aeroexpress"
+		});
+		var passenger = _.findWhere(orderAeroexpressService.items, {
+			firstName: passengerItem.firstName,
+			lastName: passengerItem.lastName
+		});
+		return !!passenger;
+	}
 
 	function getPassengerItemIssuedDate(passengerItem, orderInfo) {
 		var orderAeroexpressService = _.findWhere(orderInfo.all_extra_services, {
