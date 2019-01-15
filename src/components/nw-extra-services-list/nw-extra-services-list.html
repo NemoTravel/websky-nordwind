@@ -12,7 +12,8 @@
 			ng-class="{
           'active': vm.es[esCode].active,
           'es-insurance': esCode === 'insurance',
-          'es-aeroexpress': esCode === 'aeroexpress'
+          'es-aeroexpress': esCode === 'aeroexpress',
+          'extra-services__item--full-width': esCode === 'insurance' || esCode ==='aeroexpress'
         }"
 		>
 			<div class="extra-services__item-image-wrp">
@@ -35,14 +36,22 @@
 				<div class="extra-services__item-descr-wrp">
 					<h3 class="extra-services__item-service-name">
 						{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}
-
-						<span
-							class="extra-services__item-min-price text text--highlight"
-						></span>
-						<!-- /.extra-services__item-min-price text text--highlight -->
 					</h3>
-
 					<!-- /.extra-services__item-service-name -->
+
+					<span
+						ng-if="
+              (!vm.es[esCode].active && vm.es[esCode].minPrice.price)
+              &&
+              !(esCode === 'insurance' || esCode === 'aeroexpress')
+            "
+						class="extra-services__item-min-price text text--highlight"
+					>
+						{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
+						vm.es[esCode].minPrice.price }} {{ vm.es[esCode].minPrice.currency
+						}}
+					</span>
+					<!-- /.extra-services__item-min-price text text--highlight -->
 
 					<p class="extra-services__item-desc">
 						{{ 'web.extraServices.' + esCode + '.desc' | aliasStatic }}
@@ -50,6 +59,19 @@
 					<!-- /.extra-services__item-desc -->
 				</div>
 				<!-- /.extra-services__item-descr-wrp -->
+
+				<span
+					ng-if="
+              (!vm.es[esCode].active && vm.es[esCode].minPrice.price)
+              &&
+              (esCode === 'insurance' || esCode === 'aeroexpress')
+            "
+					class="extra-services__item-min-price text text--highlight"
+				>
+					{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
+					vm.es[esCode].minPrice.price }} {{ vm.es[esCode].minPrice.currency }}
+				</span>
+				<!-- /.extra-services__item-min-price text text--highlight -->
 
 				<a
 					href
