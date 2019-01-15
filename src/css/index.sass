@@ -232,6 +232,16 @@
 		align-self: center
 
 .aeroexpress
+
+	&__passenger-icon
+		margin-right: 10px
+
+	.link.ng-binding.ng-isolate-scope
+		color: $linkBlueColor
+		border-color: inherit
+		font-weight: $lightFontWeight
+
+
 	.passenger
 		background: #e9e9e6
 
@@ -245,6 +255,19 @@
 
 					strong
 						font-weight: $normalFontWeight
+
+	.customCheckbox
+		input + span
+			border-radius: 3px
+
+		input:checked
+
+			+ span
+				background: $brandRedColor
+
+				&:after
+					color: #ffffff
+
 
 .foodSelect,
 .seatSelect,
