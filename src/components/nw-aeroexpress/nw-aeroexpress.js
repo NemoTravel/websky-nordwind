@@ -276,6 +276,11 @@ function AeroexpressController($q, backend) {
 		var orderAeroexpressService = _.findWhere(vm.orderInfo.all_extra_services, {
 			code: "aeroexpress"
 		});
+
+		if (!orderAeroexpressService) {
+			return;
+		}
+
 		var passenger = _.findWhere(orderAeroexpressService.items, {
 			firstName: passengerItem.firstName,
 			lastName: passengerItem.lastName
