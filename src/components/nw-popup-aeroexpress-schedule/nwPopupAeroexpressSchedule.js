@@ -6,12 +6,10 @@ angular.module("app").component("nwPopupAeroexpressSchedule", {
 
 function PopupAeroexpressScheduleController(backend, fancyboxTools) {
 	const vm = this;
-	console.log(vm);
 	vm.close = close;
 
 	// открываем попап аэроэкспресса
 	function close(){
-		console.log('close');
 		fancyboxTools.openHandler('nw-aeroexpress-popup')
 	}
 
