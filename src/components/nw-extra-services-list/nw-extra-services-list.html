@@ -177,7 +177,7 @@
 				</wrap>
 			</nw-es-popup>
 			<nw-es-popup
-				ng-if="esCode == 'common'"
+				ng-if="vm.isCommonService(esCode)"
 				es-code="esCode"
 				locked="vm.locked"
 				es="vm.es"
