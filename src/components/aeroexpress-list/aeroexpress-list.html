@@ -1,0 +1,75 @@
+<div class="aeroexpress-table-wrap">
+
+    <table ng-if="vm.free" class="aeroexpress-table">
+        <tbody>
+            <tr class="infoRow">
+                <td colspan="3">
+                    {{ 'web.extraServices.aeroexpress.comment' | aliasStatic}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table ng-if="!vm.free" class="aeroexpress-table">
+        <tbody ng-repeat="(num, item) in vm.items">
+            <tr ng-if="item.free" class="infoRow">
+                <td colspan="3">
+                    {{ 'web.extraServices.aeroexpress.comment' | aliasStatic}}
+                </td>
+            </tr>
+            <tr ng-if="!item.free && !item.issued">
+                <td>
+                    <div class="customCheckbox">
+                        <label><input type="checkbox" ng-model="item.selected" ng-change="vm.switchItem(num);" ng-disabled="vm.locked"/><span></span></label>
+                    </div>
+                    <a href fancybox="popupAeroexpressSchedule"
+                        class="link"
+                        data-date="{{ item.selectedDate }}"
+                        data-departure="{{ item.departure }}"
+                        data-departure-code="{{ item.departure_code }}"
+                        data-arrival="{{ item.arrival }}"
+                        data-arrival-code="{{ item.arrival_code }}">
+                            {{ item.departure }} – {{ item.arrival }}
+                    </a>
+                </td>
+                <td>
+                    <ui-select ng-if="item.dates.length > 1"
+                               ng-change="vm.changeDate(num)"
+                               ng-model="item.selectedDate"
+                               theme="selectize"
+                               ng-disabled="vm.locked || !item.selected"
+                               search-enabled="false"
+                               class="ui-select-aeroexpress"
+                               required>
+                        <ui-select-match placeholder="{{$select.selected}}">
+                            {{$select.selected}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="date in item.dates">
+                            <div ng-bind-html="date"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                    <p ng-if="item.dates.length == 1">
+                        {{ item.dates[0] }}
+                    </p>
+                </td>
+            </tr>
+            <tr ng-if="!item.free && item.issued">
+                <td>
+                    <a href fancybox="popupAeroexpressSchedule"
+                        class="link"
+                        data-date="{{ item.selectedDate }}"
+                        data-departure="{{ item.departure }}"
+                        data-departure-code="{{ item.departure_code }}"
+                        data-arrival="{{ item.arrival }}"
+                        data-arrival-code="{{ item.arrival_code }}">
+                            {{ item.departure }} – {{ item.arrival }}
+                    </a>
+                </td>
+                <td>
+                    {{ 'web.extraServices.aeroexpress.issuedMessage' | aliasStatic}} {{ item.issuedDate }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

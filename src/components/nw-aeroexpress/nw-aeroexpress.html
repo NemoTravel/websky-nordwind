@@ -6,7 +6,7 @@
 					<tr>
 						<td>
 							<div class="text">
-								<div class="iconBox" ng-click="vm.switchService()">
+								<div class="iconBox">
 									<i class="icon_aeroexpress"></i>
 								</div>
 								<div class="name">
@@ -32,47 +32,6 @@
 									</p>
 								</div>
 							</div>
-						</td>
-						<td>
-							<div
-								ng-if="vm.service.active && vm.service.editablePrice"
-								class="price"
-							>
-								<div class="price__i">
-									<h3
-										ng-bind-html="{ value: vm.service.editablePrice.price,
-                currency: vm.service.editablePrice.currency } | price"
-									></h3>
-								</div>
-							</div>
-							<div ng-if="!vm.service.active" class="price">
-								<div class="price__i">
-									<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
-									<h3
-										ng-bind-html="{ value: vm.service.minPrice.price,
-                currency: vm.service.minPrice.currency } | price"
-									></h3>
-									<p>
-										{{ 'web.extraServices.aeroexpress.minPriceUnit' |
-										aliasStatic }}
-									</p>
-								</div>
-							</div>
-						</td>
-						<td>
-							<a
-								href
-								ng-click="vm.switchService()"
-								ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
-								class="btn showDrop_js"
-							>
-								<span class="show">
-									{{ 'web.extraServices.aeroexpress.select' | aliasStatic }}
-								</span>
-								<span class="hide">
-									{{ 'web.extraServices.aeroexpress.deselect' | aliasStatic }}
-								</span>
-							</a>
 						</td>
 					</tr>
 				</tbody>
@@ -376,29 +335,62 @@
 						</aeroexpress-list>
 					</wrap>
 
-					<div class="aeroexpress__add-passneger">
+					<div class="aeroexpress__add-passenger">
 						<div
 							class="aeroexpress__add-passenger-head"
 							ng-click="vm.addExtraPassenger()"
 						>
 							<i class="aeroexpress__add-passenger-icon icon icon_plus"></i>
 							<!-- /.aeroexpress__add-passenger-icon -->
-							<span class="aeroexpress__add-passenger-text">
-								{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
-							</span>
+
+							<div class="aeroexpress__add-passenger-text">
+								<h4 class="aeroexpress__add-passenger-title">
+									{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic
+									}}
+								</h4>
+								<!-- /.aeroexpress__add-passenger-title -->
+								<p class="aeroexpress__add-passenger-comment">
+									{{ 'web.extraServices.aeroexpress.addPassenger.commment' |
+									aliasStatic }}
+								</p>
+								<!-- /.aeroexpress__add-passenger-comment -->
+							</div>
 							<!-- /.aeroexpress__add-passenger-text -->
 						</div>
 						<!-- /.aeroexpress__add-passenger-head -->
-						<div class="aeroexpress__add-passenger-comment">
-
-						</div>
-						<!-- /.aeroexpress__add-passenger-comment -->
 					</div>
 					<!-- /.aeroexpress__add-passneger -->
 				</div>
 			</div>
 		</div>
 	</div>
+	<div
+		class="passengersTable__bottom-row"
+		ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+	>
+		<div class="passengersTable__cancel">
+			<a
+				href
+				ng-click="vm.switchService()"
+				class="passengersTable__link passengersTable__link_cancel"
+			>
+				{{ 'web.extraServices.meal.cancel' | aliasStatic }}
+			</a>
+		</div>
+
+		<div class="passengersTable__totalPrice-wrp">
+								<span class="passengersTable__totalPrice-descr-text">
+									{{ 'web.extraService.' + vm.service.code + '.totalPrice' |
+									aliasStatic}}
+								</span>
+			<span
+				class="passengersTable__totalPrice"
+				ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
+			>
+								</span>
+		</div>
+	</div>
+
 </div>
 
 <div class="item__i mobileShow">

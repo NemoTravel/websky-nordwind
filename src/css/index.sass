@@ -172,6 +172,10 @@
 		&--seat
 			background-image: $seatIcon
 
+		&--aeroexpress
+			background-image: $aeroexpressIcon
+
+
 	&__item-button
 		@extend %btn
 		margin-top: 30px
@@ -235,6 +239,27 @@
 
 	&__passenger-icon
 		margin-right: 10px
+
+	&__add-passenger
+		cursor: pointer
+		margin-bottom: 30px
+
+		&-text
+			margin-left: 15px
+
+		&-head
+			display: flex
+
+		&-title
+			font-weight: 500
+
+		&-comment
+			color: $textGrayColor
+
+		&-icon
+			position: relative
+			top: -5px
+
 
 	.link.ng-binding.ng-isolate-scope
 		color: $linkBlueColor
@@ -603,6 +628,19 @@ insurance-fares
 		border-radius: 50%
 		background-color: #ffffff
 		cursor: pointer
+
+	&_plus
+		cursor: pointer
+		color: $brandRedColor
+		box-sizing: border-box
+		width: 25px
+		height: 25px
+		line-height: 25px
+		text-align: center
+		border: 1px solid
+		border-color: inherit
+		border-radius: 50%
+
 
 .icon-passenger
 	+icon($passengerIcon)
