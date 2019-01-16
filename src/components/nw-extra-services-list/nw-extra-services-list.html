@@ -62,7 +62,7 @@
 
 				<span
 					ng-if="
-              (!vm.es[esCode].active && vm.es[esCode].minPrice.price)
+              vm.es[esCode].minPrice.price
               &&
               (esCode === 'insurance' || esCode === 'aeroexpress')
             "
@@ -78,7 +78,7 @@
 					class="btn extra-services__item-button"
 					fancybox="nw-{{ esCode }}-popup"
 					ng-if="esCode === 'insurance' && !vm.isSingleItemInInsurance"
-					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
+					>{{ 'web.extraServices.select.' + esCode | aliasStatic }}</a
 				>
 				<!-- /.extra-services__item-button -->
 
@@ -88,15 +88,21 @@
 					class="btn extra-services__item-button"
 					ng-if="esCode === 'insurance' && vm.isSingleItemInInsurance"
 					ng-click="vm.switchInsurance()"
-					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
 				>
+					<span ng-if="vm.es[esCode].editablePrice.price"
+						>{{ 'web.extraServices.remove.' + esCode | aliasStatic }}</span
+					>
+					<span ng-if="!vm.es[esCode].editablePrice.price"
+						>{{ 'web.extraServices.select.' + esCode | aliasStatic }}</span
+					>
+				</a>
 
 				<a
 					href
 					class="btn extra-services__item-button"
 					fancybox="nw-{{ esCode }}-popup"
 					ng-if="esCode !== 'insurance'"
-					>{{ 'web.extraServices.' + esCode + '.header' | aliasStatic }}</a
+					>{{ 'web.extraServices.select.' + esCode | aliasStatic }}</a
 				>
 			</div>
 
