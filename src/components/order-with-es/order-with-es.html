@@ -155,7 +155,7 @@
                           {{ 'web.choosenFlight.flighttime' | aliasStatic}} {{ segment.flightTime | timeAsWords }}
                         </div>
 
-                        <brand-props-info ng-if="segment.flights[0].brand && ( 'search.useMonoBrandCartesian' | param )"
+                        <brand-props-info ng-if="segment.flights[0].brand"
                                           brand-name="segment.flights[0].brandName"
                                           brand-available-props="segment.flights[0].brandAvailableProps"
                                           brand-paid-props="segment.flights[0].brandPaidProps"
@@ -216,9 +216,9 @@
                             {{ 'web.orderInfo.passenger.phone' | aliasStatic}}
                             {{ passenger.phone }}
                           </p>
-                          <p ng-if="passenger.eMail">
+                          <p ng-if="passenger.email">
                             {{ 'web.orderInfo.passenger.eMail' | aliasStatic}}
-                            {{ passenger.eMail }}
+                            {{ passenger.email }}
                           </p>
                         </td>
 
@@ -256,7 +256,7 @@
                         <td colspan="3">
                           <div class="passenger-special-needs">
                             <a href class="link passenger-special-needs__switch"
-                               ng-click="vm.specialNeedShowState[num] = !vm.specialNeedShowState[num];">
+                              ng-click="vm.specialNeedShowState[num] = !vm.specialNeedShowState[num];">
                               {{ 'web.orderInfo.passenger.specialNeed.select' | aliasStatic }}
                             </a>
                             <div class="passenger-special-needs__list" ng-if="vm.specialNeedShowState[num]">
@@ -304,10 +304,10 @@
                             {{ vm.orderInfo.customer.phone }}
                           </p>
                         </td>
-                        <td ng-if="vm.orderInfo.customer.eMail">
+                        <td ng-if="vm.orderInfo.customer.email">
                           <p>
                             {{ 'web.orderInfo.customer.eMail' | aliasStatic}}
-                            {{ vm.orderInfo.customer.eMail }}
+                            {{ vm.orderInfo.customer.email }}
                           </p>
                         </td>
                       </tr>
@@ -401,9 +401,8 @@
       </div>
     </div>
 
-    <div
-        ng-if="(vm.orderInfo.price != vm.orderInfo.amountToPay || vm.orderInfo.currencyToPay != vm.orderInfo.currency) && vm.showPaymentFrame"
-        class="amountToPayWarning">
+    <div ng-if="(vm.orderInfo.price != vm.orderInfo.amountToPay || vm.orderInfo.currencyToPay != vm.orderInfo.currency) && vm.showPaymentFrame"
+         class="amountToPayWarning">
       <span ng-bind-html=" 'web.messages.amountToPayWarning' | aliasStatic "></span>
       <span ng-bind-html="{ value: vm.orderInfo.amountToPay, currency: vm.orderInfo.currencyToPay } | price"></span>
     </div>

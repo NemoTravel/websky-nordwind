@@ -123,7 +123,7 @@
 
         <wrap ng-if="!vm.ffpUser">
           <search-mono-brand-cartesian-variants
-                  ng-if="( 'search.useMonoBrandCartesian' | param )"
+                  ng-if=" ( 'search.searchVariantsMode' | param ) == 'PRICING_ROUTE_MONO_BRAND_CARTESIAN' "
                   result="vm.searchResult"
                   period="vm.searchResultPeriod"
                   loading="vm.loadingPeriodVariants"
@@ -132,7 +132,16 @@
                   resubmit="vm.searchSubmitHandler"
                   select="vm.monoBrandCartesianVariantSelectHandler">
           </search-mono-brand-cartesian-variants>
-          <wrap ng-if="!( 'search.useMonoBrandCartesian' | param )">
+          <search-pricing-route-and-mono-brand-variants
+                  ng-if=" ( 'search.searchVariantsMode' | param ) == 'PRICING_ROUTE_AND_MONO_BRAND' "
+                  result="vm.searchResult"
+                  period="vm.searchResultPeriod"
+                  params="vm.searchParams"
+                  limits="vm.bookingLimits"
+                  resubmit="vm.searchSubmitHandler"
+                  select="vm.pricingRouteAndMonoBrandVariantSelectHandler">
+          </search-pricing-route-and-mono-brand-variants>
+          <wrap ng-if=" ( 'search.searchVariantsMode' | param ) == 'PRICING_ROUTE_SIMPLE' ">
             <search-variants
                     ng-if="!vm.searchResult.fareGroups"
                     result="vm.searchResult"
