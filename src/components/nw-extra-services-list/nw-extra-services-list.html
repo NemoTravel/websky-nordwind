@@ -13,7 +13,7 @@
           'active': vm.es[esCode].active,
           'es-insurance': esCode === 'insurance',
           'es-aeroexpress': esCode === 'aeroexpress',
-          'extra-services__item--full-width': esCode === 'insurance' || esCode ==='aeroexpress'
+          'extra-services__item--full-width': esCode === 'insurance' || esCode ==='aeroexpress' || vm.isCommonService(esCode),
         }"
 		>
 			<div class="extra-services__item-image-wrp">
