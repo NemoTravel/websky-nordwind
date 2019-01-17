@@ -12,6 +12,45 @@
 	&--small
 		@extend %text--small
 
+.icon
+	&_meal
+		+icon($mealIcon, $width: 25px, $height: 25px)
+		background-image: $mealIcon !important
+
+	&_umbrella
+		+icon($insuranceIcon, $width: 25px, $height: 25px)
+		background-image: $insuranceIcon !important
+
+	&_aeroexpress
+		+icon($aeroexpressIcon, $width: 25px, $height: 25px)
+		background-image: $aeroexpressIcon !important
+
+	&_close
+		+icon($crossIcon, $width: 25px, $height: 25px)
+		display: inline-block
+		border-radius: 50%
+		background-color: #ffffff
+		cursor: pointer
+
+	&_plus
+		cursor: pointer
+		color: $brandRedColor
+		box-sizing: border-box
+		width: 25px
+		height: 25px
+		line-height: 25px
+		text-align: center
+		border: 1px solid
+		border-color: inherit
+		border-radius: 50%
+
+
+.icon-passenger
+	+icon($passengerIcon)
+	display: inline-block
+
+	&--active
+		background: $passengerActiveIcon center
 /* ==== END common ==== */
 
 /* ==== extra services popup width ==== */
@@ -43,6 +82,7 @@
 		background: $crossIcon no-repeat center
 		background-size: 80%
 		cursor: pointer
+
 
 /* ==== END extra services popup width ==== */
 
@@ -77,8 +117,48 @@
 
 	&__item--full-width
 		flex: 100%
+		order: 2
+		max-width: initial
+		border-radius: 5px
+		overflow: hidden
+		margin-top: 20px
+		flex-direction: row
 
 		.extra-services__item
+			&-image-wrp
+				width: 180px
+
+				&:before,
+				&:after
+					width: 200px
+					left: auto
+
+				&:before
+					right: 60px
+
+				&:after
+					right: 40px
+
+			&-service-name
+				margin-bottom: 5px
+				margin-top: 10px
+
+			&-descr
+				margin-bottom: 0
+				margin-right: 50px
+
+			&-descr-block
+				justify-content: space-between
+
+			&-button
+				width: 150px
+				align-self: center
+
+			&-descr-block
+				flex: 1
+				display: flex
+				flex-direction: row
+				padding: 5px
 
 			&-descr-wrp
 				flex: 60%
@@ -185,57 +265,15 @@
 		&:hover
 			@extend %btn--hover
 
-.nw-insurance
+.nw-insurance,
+.nw-meal,
+.nw-seat,
+.nw-aeroexpress
 	&.locked
 		opacity: .7
 
 		* > *
 			cursor: not-allowed
-
-.es-insurance,
-.es-aeroexpress
-	order: 2
-	max-width: initial
-	border-radius: 5px
-	overflow: hidden
-	margin-top: 20px
-	flex-direction: row
-
-	.extra-services__item-image-wrp
-		width: 180px
-
-	.extra-services__item-descr-block
-		flex: 1
-		display: flex
-		flex-direction: row
-		padding: 5px
-
-	.extra-services__item-image-wrp:before,
-	.extra-services__item-image-wrp:after
-		width: 200px
-
-	.extra-services__item-image-wrp:before
-		left: auto
-		right: 60px
-
-	.extra-services__item-image-wrp:after
-		left: auto
-		right: 40px
-
-	.extra-services__item-service-name
-		margin-bottom: 5px
-		margin-top: 10px
-
-	.extra-services__item-descr
-		margin-bottom: 0
-		margin-right: 50px
-
-	.extra-services__item-descr-block
-		justify-content: space-between
-
-	.extra-services__item-button
-		width: 150px
-		align-self: center
 
 .aeroexpress
 
@@ -432,8 +470,8 @@ order-prices[mode="pricesNotIssued"]
 		border-top-left-radius: 3px
 		border-bottom-left-radius: 3px
 
-		//i
-			display: none
+	//i
+          display: none
 
 	.name
 		margin-left: 40px
@@ -623,45 +661,6 @@ insurance-fares
 		&:hover
 			@extend %btn--hover
 
-.icon
-	&_meal
-		+icon($mealIcon, $width: 25px, $height: 25px)
-		background-image: $mealIcon !important
-
-	&_umbrella
-		+icon($insuranceIcon, $width: 25px, $height: 25px)
-		background-image: $insuranceIcon !important
-
-	&_aeroexpress
-		+icon($aeroexpressIcon, $width: 25px, $height: 25px)
-		background-image: $aeroexpressIcon !important
-
-	&_close
-		+icon($crossIcon, $width: 25px, $height: 25px)
-		display: inline-block
-		border-radius: 50%
-		background-color: #ffffff
-		cursor: pointer
-
-	&_plus
-		cursor: pointer
-		color: $brandRedColor
-		box-sizing: border-box
-		width: 25px
-		height: 25px
-		line-height: 25px
-		text-align: center
-		border: 1px solid
-		border-color: inherit
-		border-radius: 50%
-
-
-.icon-passenger
-	+icon($passengerIcon)
-	display: inline-block
-
-	&--active
-		background: $passengerActiveIcon center
 
 /* ==== redefine old styles ==== */
 
