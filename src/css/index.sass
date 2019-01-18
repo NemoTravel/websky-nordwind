@@ -32,6 +32,10 @@
 		background-color: #ffffff
 		cursor: pointer
 
+	&_luggage
+		+icon($baggageIcon, $width: 25px, $height: 25px)
+		background-image: $baggageIcon !important
+
 	&_plus
 		cursor: pointer
 		color: $brandRedColor
@@ -255,6 +259,10 @@
 
 		&--aeroexpress
 			background-image: $aeroexpressIcon
+
+		&--baggage,
+		&--specialLuggageA
+			background-image: $baggageIcon
 
 
 	&__item-button
