@@ -1,8 +1,10 @@
-<div class="item__i mobileHide">
-	<div class="top">
-		<div class="top__i">
-			<table>
-				<tbody>
+<div class="nw-aeroexpress" ng-class="{'locked': vm.locked}">
+
+	<div class="item__i mobileHide">
+		<div class="top">
+			<div class="top__i">
+				<table>
+					<tbody>
 					<tr>
 						<td>
 							<div class="text">
@@ -34,46 +36,46 @@
 							</div>
 						</td>
 					</tr>
-				</tbody>
-			</table>
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
 
-	<div
-		class="drop"
-		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
-	>
-		<div class="drop__i">
-			<div class="aeroexpress mobileHide">
-				<div class="aeroexpress__i">
-					<wrap
-						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-					>
-						<div class="passenger">
-							<div class="passenger__link__i">
-								<div class="passenger__link__i__name">
-									<i
-										class="icon icon-passenger aeroexpress__passenger-icon"
-										ng-class="{'icon-passenger--active': vm.isIssued(passenger)}"
-									></i>
-									<!-- /.icon icon_passenger -->
-									<strong>
-										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
+		<div
+			class="drop"
+			ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+		>
+			<div class="drop__i">
+				<div class="aeroexpress mobileHide">
+					<div class="aeroexpress__i">
+						<wrap
+							ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+						>
+							<div class="passenger">
+								<div class="passenger__link__i">
+									<div class="passenger__link__i__name">
+										<i
+											class="icon icon-passenger aeroexpress__passenger-icon"
+											ng-class="{'icon-passenger--active': vm.isIssued(passenger)}"
+										></i>
+										<!-- /.icon icon_passenger -->
+										<strong>
+											{{ passenger.lastName }} {{ passenger.firstName }}
+										</strong>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="passengersInfo">
-							<br />
-							<form
-								class="passengerForm__js"
-								name="vm.passengerDocForms[{{passengerNum}}]"
-								form-submit-error-highlight
-								novalidate
-							>
-								<table class="passengerInfo">
-									<tbody>
+							<div class="passengersInfo">
+								<br />
+								<form
+									class="passengerForm__js"
+									name="vm.passengerDocForms[{{passengerNum}}]"
+									form-submit-error-highlight
+									novalidate
+								>
+									<table class="passengerInfo">
+										<tbody>
 										<tr>
 											<td>
 												<div class="inp">
@@ -145,55 +147,55 @@
 											</td>
 											<td></td>
 										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
+										</tbody>
+									</table>
+								</form>
+							</div>
 
-						<aeroexpress-list
-							items="vm.optionsByPassengers[passengerNum]"
-							passenger="passenger"
-							free="vm.service.passengersFreeForAllDates[passengerNum]"
-							child="vm.service.passengersChild[passengerNum]"
-							locked="vm.locked"
-							touched="vm.submitTouchedByOrderPassengers[passengerNum]"
-							valid="vm.passengerDocForms[passengerNum].$valid"
-						>
-						</aeroexpress-list>
-					</wrap>
+							<aeroexpress-list
+								items="vm.optionsByPassengers[passengerNum]"
+								passenger="passenger"
+								free="vm.service.passengersFreeForAllDates[passengerNum]"
+								child="vm.service.passengersChild[passengerNum]"
+								locked="vm.locked"
+								touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+								valid="vm.passengerDocForms[passengerNum].$valid"
+							>
+							</aeroexpress-list>
+						</wrap>
 
-					<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
-						<div class="passenger">
-							<div class="passenger__link__i">
-								<div class="passenger__link__i__name">
-									<strong ng-if="passenger.lastName || passenger.firstName">
-										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
-									<strong ng-if="!passenger.lastName && !passenger.firstName">
-										{{ 'web.extraServices.aeroexpress.newPassenger' |
-										aliasStatic}}
-									</strong>
-									<a
-										href
-										ng-click="vm.removeExtraPassenger(passengerNum)"
-										class="remove-ae-passenger"
-									>
-										<i class="icon_close"></i>
-									</a>
+						<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
+							<div class="passenger">
+								<div class="passenger__link__i">
+									<div class="passenger__link__i__name">
+										<strong ng-if="passenger.lastName || passenger.firstName">
+											{{ passenger.lastName }} {{ passenger.firstName }}
+										</strong>
+										<strong ng-if="!passenger.lastName && !passenger.firstName">
+											{{ 'web.extraServices.aeroexpress.newPassenger' |
+											aliasStatic}}
+										</strong>
+										<a
+											href
+											ng-click="vm.removeExtraPassenger(passengerNum)"
+											class="remove-ae-passenger"
+										>
+											<i class="icon_close"></i>
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="passengersInfo">
-							<br />
-							<form
-								class="passengerForm__js"
-								name="vm.extraPassengerForms[{{passengerNum}}]"
-								form-submit-error-highlight
-								novalidate
-							>
-								<table class="passengerInfo">
-									<tbody>
+							<div class="passengersInfo">
+								<br />
+								<form
+									class="passengerForm__js"
+									name="vm.extraPassengerForms[{{passengerNum}}]"
+									form-submit-error-highlight
+									novalidate
+								>
+									<table class="passengerInfo">
+										<tbody>
 										<tr>
 											<td>
 												<div class="inp">
@@ -319,87 +321,87 @@
 											</td>
 											<td></td>
 										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
-
-						<aeroexpress-list
-							items="vm.optionsByExtraPassengers[passengerNum]"
-							passenger="passenger"
-							locked="vm.locked"
-							touched="vm.submitTouchedByExtraPassengers[passengerNum]"
-							free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
-							valid="vm.extraPassengerForms[passengerNum].$valid"
-						>
-						</aeroexpress-list>
-					</wrap>
-
-					<div class="aeroexpress__add-passenger">
-						<div
-							class="aeroexpress__add-passenger-head"
-							ng-click="vm.addExtraPassenger()"
-						>
-							<i class="aeroexpress__add-passenger-icon icon icon_plus"></i>
-							<!-- /.aeroexpress__add-passenger-icon -->
-
-							<div class="aeroexpress__add-passenger-text">
-								<h4 class="aeroexpress__add-passenger-title">
-									{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic
-									}}
-								</h4>
-								<!-- /.aeroexpress__add-passenger-title -->
-								<p class="aeroexpress__add-passenger-comment">
-									{{ 'web.extraServices.aeroexpress.addPassenger.commment' |
-									aliasStatic }}
-								</p>
-								<!-- /.aeroexpress__add-passenger-comment -->
+										</tbody>
+									</table>
+								</form>
 							</div>
-							<!-- /.aeroexpress__add-passenger-text -->
+
+							<aeroexpress-list
+								items="vm.optionsByExtraPassengers[passengerNum]"
+								passenger="passenger"
+								locked="vm.locked"
+								touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+								free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
+								valid="vm.extraPassengerForms[passengerNum].$valid"
+							>
+							</aeroexpress-list>
+						</wrap>
+
+						<div class="aeroexpress__add-passenger">
+							<div
+								class="aeroexpress__add-passenger-head"
+								ng-click="vm.addExtraPassenger()"
+							>
+								<i class="aeroexpress__add-passenger-icon icon icon_plus"></i>
+								<!-- /.aeroexpress__add-passenger-icon -->
+
+								<div class="aeroexpress__add-passenger-text">
+									<h4 class="aeroexpress__add-passenger-title">
+										{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic
+										}}
+									</h4>
+									<!-- /.aeroexpress__add-passenger-title -->
+									<p class="aeroexpress__add-passenger-comment">
+										{{ 'web.extraServices.aeroexpress.addPassenger.commment' |
+										aliasStatic }}
+									</p>
+									<!-- /.aeroexpress__add-passenger-comment -->
+								</div>
+								<!-- /.aeroexpress__add-passenger-text -->
+							</div>
+							<!-- /.aeroexpress__add-passenger-head -->
 						</div>
-						<!-- /.aeroexpress__add-passenger-head -->
+						<!-- /.aeroexpress__add-passneger -->
 					</div>
-					<!-- /.aeroexpress__add-passneger -->
 				</div>
 			</div>
 		</div>
-	</div>
-	<div
-		class="passengersTable__bottom-row"
-		ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
-	>
-		<div class="passengersTable__cancel">
-			<a
-				href
-				ng-click="vm.switchService()"
-				class="passengersTable__link passengersTable__link_cancel"
-			>
-				{{ 'web.extraServices.meal.cancel' | aliasStatic }}
-			</a>
-		</div>
+		<div
+			class="passengersTable__bottom-row"
+			ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
+		>
+			<div class="passengersTable__cancel">
+				<a
+					href
+					ng-click="vm.switchService()"
+					class="passengersTable__link passengersTable__link_cancel"
+				>
+					{{ 'web.extraServices.meal.cancel' | aliasStatic }}
+				</a>
+			</div>
 
-		<div class="passengersTable__totalPrice-wrp">
+			<div class="passengersTable__totalPrice-wrp">
 								<span class="passengersTable__totalPrice-descr-text">
 									{{ 'web.extraService.' + vm.service.code + '.totalPrice' |
 									aliasStatic}}
 								</span>
-			<span
-				class="passengersTable__totalPrice"
-				ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
-			>
+				<span
+					class="passengersTable__totalPrice"
+					ng-bind-html="{ value: vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code], currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
+				>
 								</span>
+			</div>
 		</div>
+
 	</div>
 
-</div>
-
-<div class="item__i mobileShow">
-	<div class="top">
-		<div class="top__i">
-			<a href>
-				<div class="row">
-					<table>
-						<tbody>
+	<div class="item__i mobileShow">
+		<div class="top">
+			<div class="top__i">
+				<a href>
+					<div class="row">
+						<table>
+							<tbody>
 							<tr>
 								<td><i class="icon_aeroexpress"></i></td>
 								<td>
@@ -415,82 +417,82 @@
 									</div>
 								</td>
 							</tr>
-						</tbody>
-					</table>
-				</div>
-			</a>
-			<div class="row">
-				<a href>
-					<div
-						ng-if="vm.service.active && vm.service.editablePrice"
-						class="price"
-					>
-						<div class="price__i">
-							<h3
-								ng-bind-html="{ value: vm.service.editablePrice.price,
-              currency: vm.service.editablePrice.currency } | price"
-							></h3>
-						</div>
-					</div>
-					<div ng-if="!vm.service.active" class="price">
-						<div class="price__i">
-							<p>{{ 'web.extraServices.minPrice' | aliasStatic }}</p>
-							<h3
-								ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
-							></h3>
-							<p>
-								{{ 'web.extraServices.aeroexpress.minPriceUnit' | aliasStatic }}
-							</p>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</a>
-				<a
-					href
-					ng-click="vm.switchService()"
-					ng-class="{ active: vm.service.active }"
-					class="btn showDrop_js"
-				>
+				<div class="row">
+					<a href>
+						<div
+							ng-if="vm.service.active && vm.service.editablePrice"
+							class="price"
+						>
+							<div class="price__i">
+								<h3
+									ng-bind-html="{ value: vm.service.editablePrice.price,
+              currency: vm.service.editablePrice.currency } | price"
+								></h3>
+							</div>
+						</div>
+						<div ng-if="!vm.service.active" class="price">
+							<div class="price__i">
+								<p>{{ 'web.extraServices.minPrice' | aliasStatic }}</p>
+								<h3
+									ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
+								></h3>
+								<p>
+									{{ 'web.extraServices.aeroexpress.minPriceUnit' | aliasStatic }}
+								</p>
+							</div>
+						</div>
+					</a>
+					<a
+						href
+						ng-click="vm.switchService()"
+						ng-class="{ active: vm.service.active }"
+						class="btn showDrop_js"
+					>
 					<span class="show">
 						{{ 'web.extraServices.aeroexpress.select' | aliasStatic }}
 					</span>
-					<span class="hide">
+						<span class="hide">
 						{{ 'web.extraServices.aeroexpress.deselect' | aliasStatic }}
 					</span>
-				</a>
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div
-		class="drop"
-		ng-class="{ active: vm.service.active, show_js: vm.service.active }"
-	>
-		<div class="drop__i">
-			<div class="aeroexpress">
-				<div class="aeroexpress__i">
-					<wrap
-						ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-					>
-						<div class="passenger">
-							<div class="passenger__link__i">
-								<div class="passenger__link__i__name">
-									<strong>
-										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
+		<div
+			class="drop"
+			ng-class="{ active: vm.service.active, show_js: vm.service.active }"
+		>
+			<div class="drop__i">
+				<div class="aeroexpress">
+					<div class="aeroexpress__i">
+						<wrap
+							ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+						>
+							<div class="passenger">
+								<div class="passenger__link__i">
+									<div class="passenger__link__i__name">
+										<strong>
+											{{ passenger.lastName }} {{ passenger.firstName }}
+										</strong>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="passengersInfo">
-							<br />
-							<form
-								class="passengerForm__js"
-								name="vm.passengerDocForms[{{passengerNum}}]"
-								form-submit-error-highlight
-								novalidate
-							>
-								<table class="passengerInfo">
-									<tbody>
+							<div class="passengersInfo">
+								<br />
+								<form
+									class="passengerForm__js"
+									name="vm.passengerDocForms[{{passengerNum}}]"
+									form-submit-error-highlight
+									novalidate
+								>
+									<table class="passengerInfo">
+										<tbody>
 										<tr>
 											<td>
 												<div class="inp">
@@ -549,55 +551,55 @@
 											</td>
 											<td></td>
 										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
+										</tbody>
+									</table>
+								</form>
+							</div>
 
-						<aeroexpress-list
-							items="vm.optionsByPassengers[passengerNum]"
-							passenger="passenger"
-							free="vm.service.passengersFreeForAllDates[passengerNum]"
-							child="vm.service.passengersChild[passengerNum]"
-							locked="vm.locked"
-							touched="vm.submitTouchedByOrderPassengers[passengerNum]"
-							valid="vm.passengerDocForms[passengerNum].$valid"
-						>
-						</aeroexpress-list>
-					</wrap>
+							<aeroexpress-list
+								items="vm.optionsByPassengers[passengerNum]"
+								passenger="passenger"
+								free="vm.service.passengersFreeForAllDates[passengerNum]"
+								child="vm.service.passengersChild[passengerNum]"
+								locked="vm.locked"
+								touched="vm.submitTouchedByOrderPassengers[passengerNum]"
+								valid="vm.passengerDocForms[passengerNum].$valid"
+							>
+							</aeroexpress-list>
+						</wrap>
 
-					<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
-						<div class="passenger">
-							<div class="passenger__link__i">
-								<div class="passenger__link__i__name">
-									<strong ng-if="passenger.lastName || passenger.firstName">
-										{{ passenger.lastName }} {{ passenger.firstName }}
-									</strong>
-									<strong ng-if="!passenger.lastName && !passenger.firstName">
-										{{ 'web.extraServices.aeroexpress.newPassenger' |
-										aliasStatic}}
-									</strong>
-									<a
-										href
-										ng-click="vm.removeExtraPassenger(passengerNum)"
-										class="remove-ae-passenger"
-									>
-										<i class="icon_remove"></i>
-									</a>
+						<wrap ng-repeat="(passengerNum, passenger) in vm.extraPassengers">
+							<div class="passenger">
+								<div class="passenger__link__i">
+									<div class="passenger__link__i__name">
+										<strong ng-if="passenger.lastName || passenger.firstName">
+											{{ passenger.lastName }} {{ passenger.firstName }}
+										</strong>
+										<strong ng-if="!passenger.lastName && !passenger.firstName">
+											{{ 'web.extraServices.aeroexpress.newPassenger' |
+											aliasStatic}}
+										</strong>
+										<a
+											href
+											ng-click="vm.removeExtraPassenger(passengerNum)"
+											class="remove-ae-passenger"
+										>
+											<i class="icon_remove"></i>
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="passengersInfo">
-							<br />
-							<form
-								class="passengerForm__js"
-								name="vm.extraPassengerForms[{{passengerNum}}]"
-								form-submit-error-highlight
-								novalidate
-							>
-								<table class="passengerInfo">
-									<tbody>
+							<div class="passengersInfo">
+								<br />
+								<form
+									class="passengerForm__js"
+									name="vm.extraPassengerForms[{{passengerNum}}]"
+									form-submit-error-highlight
+									novalidate
+								>
+									<table class="passengerInfo">
+										<tbody>
 										<tr>
 											<td>
 												<div class="inp">
@@ -723,29 +725,32 @@
 											</td>
 											<td></td>
 										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
+										</tbody>
+									</table>
+								</form>
+							</div>
 
-						<aeroexpress-list
-							items="vm.optionsByExtraPassengers[passengerNum]"
-							passenger="passenger"
-							locked="vm.locked"
-							touched="vm.submitTouchedByExtraPassengers[passengerNum]"
-							free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
-							valid="vm.extraPassengerForms[passengerNum].$valid"
-						>
-						</aeroexpress-list>
-					</wrap>
+							<aeroexpress-list
+								items="vm.optionsByExtraPassengers[passengerNum]"
+								passenger="passenger"
+								locked="vm.locked"
+								touched="vm.submitTouchedByExtraPassengers[passengerNum]"
+								free="vm.isExtraPassengerFreeForAllDates(passengerNum)"
+								valid="vm.extraPassengerForms[passengerNum].$valid"
+							>
+							</aeroexpress-list>
+						</wrap>
 
-					<a href ng-click="vm.addExtraPassenger()" class="link">
-						{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
-					</a>
+						<a href ng-click="vm.addExtraPassenger()" class="link">
+							{{ 'web.extraServices.aeroexpress.addPassenger' | aliasStatic }}
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<nw-popup-aeroexpress-schedule></nw-popup-aeroexpress-schedule>
+	<nw-popup-aeroexpress-schedule></nw-popup-aeroexpress-schedule>
+
+</div>
+<!-- /.nw-aeroexpress -->
