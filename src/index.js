@@ -9,6 +9,7 @@ require("./components/nw-seat/nw-seat");
 require("./components/nw-insurance/nw-insurance");
 require("./components/nw-aeroexpress/nw-aeroexpress");
 require("./components/nw-popup-aeroexpress-schedule/nwPopupAeroexpressSchedule");
+require("./components/nw-baggage/nw-baggage");
 require("./filters/toCity");
 
 // TODO: remove it!!
