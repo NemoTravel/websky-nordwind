@@ -1,5 +1,5 @@
 angular.module('wes').component('nwBaggage', {
-    templateUrl: 'components/es-baggage/nw-baggage.html',
+    templateUrl: 'components/nw-baggage/nw-baggage.html',
     controller: ['$element', '$scope', 'backend', 'utils', BaggageController],
     controllerAs: 'vm',
     bindings: {
