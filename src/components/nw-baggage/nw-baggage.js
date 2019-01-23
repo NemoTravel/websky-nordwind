@@ -31,8 +31,8 @@ function BaggageController($element, $scope, backend, utils) {
 
     vm.selectedRoutePartNum = 0;
     vm.selectedPassenger = 0;
-    console.log(JSON.stringify(vm.service, 2));
-    console.log(JSON.stringify(vm.commonLuggage, 2));
+    // console.log(JSON.stringify(vm.service, 2));
+    // console.log(JSON.stringify(vm.commonLuggage, 2));
 
     vm.optionsByRoutePartsAndPassengers = vm.service.routeParts.map(function (routePart) {
         return routePart.availableExtraServicesByPassengersAndSubgroups.map(function (subgroups) {
