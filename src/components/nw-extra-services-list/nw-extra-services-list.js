@@ -22,6 +22,7 @@ function extraServicesListController(utils, backend) {
 	const vm = this;
 	vm.isCommonService = utils.isCommonServiceCode;
 	vm.switchInsurance = switchInsurance;
+	vm.commonLuggage = false;
 
 	vm.orderInfo = backend.getOrderInfo();
 
@@ -29,6 +30,10 @@ function extraServicesListController(utils, backend) {
 	// в заказе только один пассажир, просто вызываем modifyExtraServices
 	const insuranceES = _.findWhere(vm.es, { code: "insurance" });
 	vm.isSingleItemInInsurance = insuranceES && insuranceES.items.length === 1;
+
+	// нужно собрать все типы доп. багажа чтобы передавать в компонент es-baggage вместе с es.baggage
+	vm.commonLuggage = _.filter(vm.es, es => es.code === 'specialLuggageA' | es.code === 'specialLuggageC');
+
 
 	function switchInsurance() {
 		if (!vm.locked) {

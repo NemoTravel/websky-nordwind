@@ -4,6 +4,7 @@ angular.module('wes').component('nwBaggage', {
     controllerAs: 'vm',
     bindings: {
         service: '=service',
+				commonLuggage: '=commonLuggage',
         locked: '=locked'
     }
 });
@@ -30,6 +31,8 @@ function BaggageController($element, $scope, backend, utils) {
 
     vm.selectedRoutePartNum = 0;
     vm.selectedPassenger = 0;
+    console.log(JSON.stringify(vm.service, 2));
+    console.log(JSON.stringify(vm.commonLuggage, 2));
 
     vm.optionsByRoutePartsAndPassengers = vm.service.routeParts.map(function (routePart) {
         return routePart.availableExtraServicesByPassengersAndSubgroups.map(function (subgroups) {
@@ -61,7 +64,7 @@ function BaggageController($element, $scope, backend, utils) {
             vm.service.active = !vm.service.active;
             if (!vm.service.active) {
                 backend.removeExtraService({
-                    code: 'baggage'
+                    code: vm.service.code
                 });
             }
         }
