@@ -32,46 +32,6 @@
 									</div>
 								</div>
 							</td>
-							<td>
-								<div
-									ng-if="vm.service.active && vm.service.editablePrice"
-									class="price"
-								>
-									<div class="price__i">
-										<h3
-											ng-bind-html="{ value: vm.service.editablePrice.price, currency: vm.service.editablePrice.currency } | price"
-										></h3>
-									</div>
-								</div>
-								<div ng-if="!vm.service.active" class="price">
-									<div class="price__i">
-										<p>{{ 'web.extraServices.minPrice' | aliasStatic}}</p>
-										<h3
-											ng-bind-html="{ value: vm.service.minPrice.price, currency: vm.service.minPrice.currency } | price"
-										></h3>
-										<p>
-											{{ 'web.extraServices.baggage.minPriceUnit' |
-											aliasStatic}}
-										</p>
-									</div>
-								</div>
-							</td>
-							<td>
-								<a
-									href
-									ng-click="vm.switchService()"
-									ng-if="!vm.checkServiceRemovalProhibited('baggage')"
-									ng-class="{ active: vm.service.active, control_disabled: vm.locked }"
-									class="btn showDrop_js "
-								>
-									<span class="show">
-										{{ 'web.extraServices.baggage.select' | aliasStatic}}
-									</span>
-									<span class="hide">
-										{{ 'web.extraServices.baggage.deselect' | aliasStatic}}
-									</span>
-								</a>
-							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -83,220 +43,321 @@
 			ng-class="{ active: vm.service.active, show_js: vm.service.active }"
 		>
 			<div class="drop__i">
-				<div class="selectBaggage mobileHide">
-					<div class="selectBaggage__i">
-						<table class="passengersTable">
-							<tbody>
-								<tr class="headRow">
-									<td class="firstCol"></td>
-									<td
-										ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
-									>
-										{{ passenger.lastName }} {{ passenger.firstName }}
-									</td>
-								</tr>
-								<tr
-									ng-repeat-start="(routePartNum, routePart) in vm.service.routeParts"
-									class="contentRow"
-								>
-									<td class="firstCol">
-										<div class="date">
-											{{ routePart.flightsInfo.date | formatDate: 'D MMMM, dd'}}
-										</div>
-										<div class="route">
-											<geo-marker
-												prefix="dep__point"
-												key="es-baggage"
-												city="routePart.flightsInfo.origincity"
-												cityname="routePart.flightsInfo.origincityName"
-												port="routePart.flightsInfo.originport"
-												portname="routePart.flightsInfo.originportName"
-											></geo-marker>
-											<div class="route__plane"><i class="icon_plane"></i></div>
-											<geo-marker
-												prefix="arr__point"
-												key="es-baggage"
-												city="routePart.flightsInfo.destinationcity"
-												cityname="routePart.flightsInfo.destinationcityName"
-												port="routePart.flightsInfo.destinationport"
-												portname="routePart.flightsInfo.destinationportName"
-											></geo-marker>
-										</div>
-									</td>
-									<td
-										ng-repeat="(passengerNum, availableExtraServicesBySubgroups) in routePart.availableExtraServicesByPassengersAndSubgroups"
-										ng-class="{ active: vm.selectedRoutePartNum == routePartNum && vm.selectedPassenger == passengerNum }"
-										ng-init="selectedPassengerRoutePartBaggage = vm.getSelectedPassengerRoutePartBaggage(passengerNum, routePartNum)"
-									>
-										<a
-											href
-											ng-click="vm.selectRoutePartPassenger(routePartNum, passengerNum)"
-											class="passengersTable__link"
-											ng-class="{ passengersTable__link_empty: !selectedPassengerRoutePartBaggage, passengersTable__link_select: (!selectedPassengerRoutePartBaggage && vm.selectedRoutePartNum == routePartNum && vm.selectedPassenger == passengerNum) }"
-										>
-											<wrap
-												ng-if="!selectedPassengerRoutePartBaggage && (vm.selectedRoutePartNum == routePartNum && vm.selectedPassenger == passengerNum)"
-											>
-												{{ 'web.extraServices.baggage.selectItem' |
-												aliasStatic}}
-											</wrap>
-											<wrap
-												ng-if="!selectedPassengerRoutePartBaggage && !(vm.selectedRoutePartNum == routePartNum && vm.selectedPassenger == passengerNum)"
-											>
-												{{ 'web.extraServices.baggage.noneSelected' |
-												aliasStatic}}
-											</wrap>
-											<wrap ng-if="selectedPassengerRoutePartBaggage">
-												{{ selectedPassengerRoutePartBaggage.count }} {{
-												'web.search.priceDetail.label.luggDescMsr.' |
-												aliasWithPrefix:'pc' }}
-												<span
-													ng-bind-html=" { value: selectedPassengerRoutePartBaggage.cost, currency: selectedPassengerRoutePartBaggage.currency } | price"
-												></span>
-											</wrap>
-										</a>
-										<a
-											ng-if="selectedPassengerRoutePartBaggage && !vm.checkServiceRemovalProhibited('baggage', passengerNum, routePart.mainFlightNum)"
-											href
-											ng-click="vm.removePassengerFlightBaggage(passengerNum, routePart.mainFlightNum)"
-											class="btn-remove"
-										>
-											<span class="infoBoxWrap">
-												<i class="icon_remove"></i>
-												<span class="infoBox">
-													<span class="infoBox__i">
-														{{
-														'web.extraServices.baggage.cancelByPassengerSegment'
-														| aliasStatic }}
-													</span>
-												</span>
-											</span>
-										</a>
-									</td>
-								</tr>
-
-								<tr ng-repeat-end class="contentServiceRow">
-									<td
-										ng-if="routePartNum == vm.selectedRoutePartNum"
-										class="firstCol"
-									></td>
-									<td
-										ng-if="routePartNum == vm.selectedRoutePartNum"
-										colspan="{{ vm.orderInfo.passengers.length }}"
-									>
-										<div class="baggage_container">
-											<table class="baggage_table baggage_table--free">
-												<tbody>
-													<tr
-														ng-repeat="freeBaggageItem in vm.service.routeParts[vm.selectedRoutePartNum].flightsInfo.freeBaggage"
-														ng-if="freeBaggageItem.passengerId == vm.orderInfo.passengers[vm.selectedPassenger].id"
-													>
-														<td>
-															<span
-																class="baggage_info baggage_info_caption free"
-															>
-																{{ 'web.extraServices.baggage.freeLugg' |
-																aliasStatic}} {{ freeBaggageItem.companyCode
-																}}-{{ freeBaggageItem.racenumber }}
-															</span>
-														</td>
-														<td>
-															<span class="baggage_info">
-																{{ freeBaggageItem.luggNorm }} {{
-																'web.search.priceDetail.label.luggDescMsr.' |
-																aliasWithPrefix:freeBaggageItem.luggNormMsr }}
-															</span>
-														</td>
-														<td>
-															<span class="baggage_info free">
-																{{ 'web.extraServices.baggage.freeLuggPrice' |
-																aliasStatic}}
-															</span>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-
-											<wrap
-												ng-repeat="(subgroupNum, subgroup) in vm.service.subgroups"
-											>
-												<wrap
-													ng-if="subgroup.type == 'COUNTABLE_MULTIPLE_SELECT'"
-												>
-													<table class="baggage_table">
-														<tr
-															ng-repeat="(itemNum, baggageItem) in vm.service.routeParts[vm.selectedRoutePartNum].availableExtraServicesByPassengersAndSubgroups[vm.selectedPassenger][subgroupNum]"
-															class="baggage-picker-cont"
-														>
-															<td>
-																<span class="baggage_info baggage_info_caption">
-																	{{ baggageItem.title }},
-																	<span
-																		ng-bind-html=" { value: baggageItem.price, currency: baggageItem.currency} | price"
-																	></span>
-																</span>
-															</td>
-															<td>
-																<service-picker
-																	count="baggageItem.alreadySelectedCount"
-																	limit="baggageItem.limit"
-																	locked="vm.locked"
-																	on-increase="vm.baggageCountChangeHandler(subgroupNum, baggageItem, +1, vm.selectedPassenger, vm.selectedRoutePartNum)"
-																	on-decrease="vm.baggageCountChangeHandler(subgroupNum, baggageItem, -1, vm.selectedPassenger, vm.selectedRoutePartNum)"
-																>
-																</service-picker>
-															</td>
-															<td>
-																<span
-																	class="baggage_info"
-																	ng-if="baggageItem.totalPrice"
-																	ng-bind-html="{ value: baggageItem.totalPrice, currency: baggageItem.currency} | price"
-																></span>
-															</td>
-														</tr>
-													</table>
-												</wrap>
-
-												<wrap
-													ng-if="subgroup.type == 'SELECT'"
-													ng-repeat="(subgroupNum, baggageSubgoupOptions) in vm.optionsByRoutePartsAndPassengers[vm.selectedRoutePartNum][vm.selectedPassenger]"
-												>
-													<ui-select
-														name="selectedBaggage"
-														ng-model="vm.selectedBaggageByRoutePartsAndPassengersView[vm.selectedRoutePartNum][vm.selectedPassenger][subgroupNum]"
-														ng-change="vm.changeBaggageBySelect(vm.selectedPassenger, vm.selectedRoutePartNum, subgroupNum);"
-														theme="selectize"
-														search-enabled="false"
-														ng-disabled="vm.locked"
-														required
-													>
-														<ui-select-match
-															placeholder="{{$select.selected.title || ( 'web.extraServices.baggage.noneSelected' | aliasStatic) }}"
-														>
-															{{$select.selected.title}}
-														</ui-select-match>
-														<ui-select-choices
-															repeat="baggageOption.index as baggageOption in baggageSubgoupOptions"
-														>
-															<div>{{ baggageOption.title }}</div>
-														</ui-select-choices>
-													</ui-select>
-												</wrap>
-											</wrap>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="passengersTable__cancel">
+				<div class="foodSelect">
+					<div class="foodSelect__i">
+						<div class="foodSelect__subheading">
+							<div class="foodSelect__es-name">
+								<p class="text">
+									{{ 'web.extraServices.baggage.subheadingEsDescr' | aliasStatic
+									}}
+								</p>
+								<!-- /.text -->
+							</div>
+							<!-- /.foodSelect__es-name -->
 							<a
+								ng-if="vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]"
 								href
 								ng-click="vm.switchService()"
-								ng-if="!vm.checkServiceRemovalProhibited('baggage')"
-								class="passengersTable__link passengersTable__link_cancel"
+								class="foodSelect__subheading-cancel"
 							>
-								{{ 'web.extraServices.baggage.cancel' | aliasStatic}}
+								{{ 'web.extraServices.meal.subheadingCancelES' | aliasStatic }}
+								<i class="icon icon_close"></i>
+								<!-- /.icon icon_close -->
 							</a>
+							<!-- /.foodSelect__subheading-cancel -->
+						</div>
+						<!-- /.foodSelect__subheading -->
+
+						<div class="foodSelect__routes">
+							<div
+								class="foodSelect__routes-list"
+								ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+							>
+								<div
+									class="foodSelect__routes-item"
+									ng-click="vm.selectFlightPassenger(flightNum, 0)"
+									ng-class="{'foodSelect__routes-item--active': flightNum == vm.selectedFlight}"
+								>
+									<geo-marker
+										prefix="arr__point"
+										key="es-meal"
+										city="flight.destinationcity"
+										cityname="flight.destinationcityName"
+										port="flight.destinationport"
+									></geo-marker>
+								</div>
+							</div>
+						</div>
+
+						<!-- routes -->
+						<div class="foodSelect__routes-info">
+							<div
+								class="passengersBlock_row-control-outer"
+								ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+							>
+								<div
+									class="passengersBlock_row-control-passengers"
+									ng-if="flightNum === vm.selectedFlight"
+								>
+									<i
+										class="passengersBlock_row-control-passengers-icon"
+										aria-hidden="true"
+									></i>
+
+									<div>
+										<span
+											class="passengersBlock_row-control-passengers-racenumber"
+										>
+											{{ flight.carrier }} - {{flight.racenumber}}
+										</span>
+									</div>
+
+									<geo-marker
+										prefix="dep__point"
+										key="es-meal"
+										city="flight.origincity"
+										cityname="flight.origincityName"
+										port="undefined"
+										portname="undefined"
+									></geo-marker>
+									<span class="foodSelect__airport-code">
+										{{ flight.origincity }}
+									</span>
+
+									<i
+										class="foodSelect__arrow-right icon icon--arrow-right"
+										aria-hidden="true"
+									></i>
+
+									<geo-marker
+										prefix="arr__point"
+										key="es-meal"
+										city="flight.destinationcity"
+										cityname="flight.destinationcityName"
+										port="undefined"
+										portname="undefined"
+									></geo-marker>
+									<span class="foodSelect__airport-code">
+										{{ flight.destinationcity }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="passengersBlock">
+							<div class="passengersBlock_row">
+								<div class="passengersBlock_row-control">
+									<div
+										class="passengersBlock_row-control-outer"
+										ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+									>
+										<div
+											class="passengersBlock_row-control-droporder"
+											ng-show="flightNum == vm.selectedFlight"
+										>
+											<div
+												class="passengersBlock_row-control-droporder-passenger"
+												ng-repeat="(passengerNum, passenger) in vm.orderInfo.passengers"
+												ng-if="vm.service.availableByPassengerSegments[passengerNum]"
+											>
+												<div
+													class="passengersBlock_row-control-droporder-passenger-outer"
+													ng-click="vm.selectFlightPassenger(flightNum, passengerNum)"
+													ng-class="{active: passengerNum == vm.selectedPassenger}"
+												>
+													<i
+														class="passengersBlock_row-control-droporder-passenger-icon"
+														aria-hidden="true"
+													></i>
+													<span
+														class="passengersBlock_row-control-droporder-passenger-name"
+														>{{ passenger.lastName }} {{ passenger.firstName
+														}}</span
+													>
+												</div>
+
+												<!-- passengersBlock_row-control-droporder-passenger-order -->
+
+												<div
+													ng-if="vm.orderInfo.groupedEditableExtraServices.baggage[passengerNum][flightNum]"
+													class="passengersBlock_row-control-droporder-passenger-order"
+													ng-repeat="(indexBaggageSelect, itemBaggageSelect) in vm.orderInfo.groupedEditableExtraServices.baggage[passengerNum][flightNum] track by $index"
+												>
+													<div
+														class="passengersBlock_row-control-droporder-passenger-order-outer"
+													>
+														<span>{{itemBaggageSelect.title}}</span>
+														<span
+															ng-bind-html="{ value: itemBaggageSelect.totalPrice, currency: itemBaggageSelect.currency } | price"
+														></span>
+														<i
+															class="passengersBlock_row-control-droporder-passenger-order-remove"
+															ng-click="vm.selectFlightPassenger(flightNum, passengerNum); vm.removePassengerFlightBaggage(passengerNum, flightNum)"
+															aria-hidden="true"
+														></i>
+													</div>
+												</div>
+												<!--special luggage issued services-->
+												<div
+													ng-if="vm.orderInfo.groupedEditableExtraServices.specialLuggageA[passengerNum][flightNum]"
+													class="passengersBlock_row-control-droporder-passenger-order"
+													ng-repeat="(indexSpecialLuggageASelect, itemSpecialLuggageASelect) in vm.orderInfo.groupedEditableExtraServices.specialLuggageA[passengerNum][flightNum] track by $index"
+												>
+													<div
+														class="passengersBlock_row-control-droporder-passenger-order-outer"
+													>
+														<span>{{itemSpecialLuggageASelect.title}}</span>
+														<span
+															ng-bind-html="{ value: itemSpecialLuggageASelect.totalPrice, currency: itemSpecialLuggageASelect.currency } | price"
+														></span>
+														<i
+															class="passengersBlock_row-control-droporder-passenger-order-remove"
+															ng-click="vm.removeServiceByFlightPassenger(flightNum, passengerNum); vm.removePassengerFlightMeal(passengerNum, flightNum)"
+															aria-hidden="true"
+														></i>
+													</div>
+												</div>
+
+												<!-- end passengersBlock_row-control-droporder-passenger-order -->
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="passengersBlock_row-menu">
+									<div class="list customScroll_height">
+										<div class="list__i isotopeGrid">
+											<div class="nw-baggage-service__wrp">
+												<p class="nw-baggage-service__header">
+													{{ 'web.extraServices.' + vm.service.code + '.header'
+													| aliasStatic }}
+												</p>
+												<!-- /.nw-baggage-service__header -->
+
+												<div
+													ng-repeat="(itemNum, baggageItem) in vm.commonLuggage.routeParts[vm.selectedRoutePartNum].availableExtraServicesByPassengersAndSubgroups[vm.selectedPassenger][0]"
+													class="nw-baggage-service"
+												>
+													<!-- /.customCheckbox nw-baggage-service__common -->
+													<div class="nw-baggage-service__body">
+														<div class="nw-baggage-service__es-title-block">
+															<wrap>
+																<div class="customCheckbox">
+																	<label
+																		for="checkbox-{{ itemNum }}"
+																		class="nw-baggage-service__header"
+																	>
+																		<input
+																			type="checkbox"
+																			id="checkbox-{{ itemNum }}"
+																			ng-checked="baggageItem.alreadySelectedCount"
+																			ng-click="vm.onCommonLuggageChange(baggageItem)"
+																		/><span></span>
+
+																		{{ 'web.extraServices.' +
+																		vm.commonLuggage.code + '.header' |
+																		aliasStatic }}
+																	</label>
+																	<!-- /.nw-baggage-service__header -->
+																</div>
+																<!-- /.customCheckbox -->
+															</wrap>
+														</div>
+														<!-- /.nw-baggage-service__es-title-block -->
+														<div
+															ng-if="baggageItem.alreadySelectedCount"
+															class="nw-baggage-service__price"
+															ng-bind-html="{ value: baggageItem.totalPrice, currency: baggageItem.currency} | price"
+														></div>
+														<div
+															ng-if="!baggageItem.alreadySelectedCount"
+															class="nw-baggage-service__price"
+															ng-bind-html="{ value: baggageItem.price, currency: baggageItem.currency} | price"
+														></div>
+														<!-- /.nw-baggage-service__price -->
+													</div>
+													<!-- /.nw-baggage-service__body -->
+												</div>
+												<!-- /.nw-baggage-service -->
+
+												<wrap
+													ng-repeat="(subgroupNum, subgroup) in vm.service.subgroups"
+												>
+													<wrap
+														ng-if="subgroup.type === 'COUNTABLE_MULTIPLE_SELECT'"
+													>
+														<div
+															ng-repeat="(itemNum, baggageItem) in vm.service.routeParts[vm.selectedRoutePartNum].availableExtraServicesByPassengersAndSubgroups[vm.selectedPassenger][subgroupNum]"
+															class="nw-baggage-service"
+														>
+															<div class="nw-baggage-service__body">
+																<div class="nw-baggage-service__es-title-block">
+																	<p class="nw-baggage-service__es-title">
+																		{{ baggageItem.title }}
+																	</p>
+																	<!-- /.nw-baggage-service__es-title -->
+																	<p class="nw-baggage-service__es-subtitle">
+																		{{ baggageItem.description | aliasStatic }}
+																	</p>
+																	<!-- /.nw-baggage-service__es-subtitle -->
+																</div>
+																<!-- /.nw-baggage-service__es-title-block -->
+																<div class="nw-baggage-service__picker">
+																	<service-picker
+																		count="baggageItem.alreadySelectedCount"
+																		limit="baggageItem.limit"
+																		locked="vm.locked"
+																		on-increase="vm.baggageCountChangeHandler(subgroupNum, baggageItem, +1, vm.selectedPassenger, vm.selectedRoutePartNum)"
+																		on-decrease="vm.baggageCountChangeHandler(subgroupNum, baggageItem, -1, vm.selectedPassenger, vm.selectedRoutePartNum)"
+																	>
+																	</service-picker>
+																</div>
+																<!-- /.nw-baggage-service__picker -->
+																<div
+																	ng-if="baggageItem.alreadySelectedCount"
+																	class="nw-baggage-service__price"
+																	ng-bind-html="{ value: baggageItem.totalPrice, currency: baggageItem.currency} | price"
+																></div>
+																<div
+																	ng-if="!baggageItem.alreadySelectedCount"
+																	class="nw-baggage-service__price"
+																	ng-bind-html="{ value: baggageItem.price, currency: baggageItem.currency} | price"
+																></div>
+																<!-- /.nw-baggage-service__price -->
+															</div>
+															<!-- /.nw-baggage-service__body -->
+														</div>
+														<!-- /.nw-baggage-service -->
+													</wrap>
+												</wrap>
+											</div>
+											<!-- /.nw-baggage__wrp -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="passengersTable__bottom-row" ng-if="vm.totalPrice">
+								<div class="passengersTable__cancel">
+									<a
+										href
+										ng-click="vm.switchService()"
+										class="passengersTable__link passengersTable__link_cancel"
+									>
+										{{ 'web.extraServices.meal.cancel' | aliasStatic }}
+									</a>
+								</div>
+
+								<div class="passengersTable__totalPrice-wrp">
+									<span class="passengersTable__totalPrice-descr-text">
+										{{ 'web.extraService.' + vm.service.code + '.totalPrice' |
+										aliasStatic}}
+									</span>
+									<span
+										class="passengersTable__totalPrice"
+										ng-bind-html="{ value: vm.totalPrice, currency: vm.service.selectedSeatsByPassengerSegments[passengerNum][flightNum].currency } | price"
+									>
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
