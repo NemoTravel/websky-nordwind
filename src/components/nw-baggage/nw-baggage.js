@@ -22,6 +22,14 @@ function BaggageController($element, $scope, backend, utils) {
 	vm.scrollToStart = scrollToStart;
 	vm.scrollToEnd = scrollToEnd;
 	vm.removePassengerFlightBaggage = removePassengerFlightBaggage;
+	vm.addServiceByFlightPassenger = addServiceByFlightPassenger;
+	vm.removeServiceByFlightPassenger = removeServiceByFlightPassenger;
+	vm.selectFlightPassenger = selectFlightPassenger;
+	vm.selectFirstAvailablePassengerFlight = selectFirstAvailablePassengerFlight;
+	vm.onCommonLuggageChange = onCommonLuggageChange;
+
+	vm.selectedFlight = 0;
+	vm.selectedPassenger = 0;
 
 	vm.checkServiceRemovalProhibited = backend.checkServiceRemovalProhibited;
 
@@ -30,6 +38,8 @@ function BaggageController($element, $scope, backend, utils) {
 
 	vm.selectedRoutePartNum = 0;
 	vm.selectedPassenger = 0;
+	console.log("nw-baggage.js vm.commonLuggage: ", vm.commonLuggage);
+	console.log("nw-baggage.js vm.service: ", vm.service);
 	// console.log(JSON.stringify(vm.service, 2));
 	// console.log(JSON.stringify(vm.commonLuggage, 2));
 
@@ -57,9 +67,26 @@ function BaggageController($element, $scope, backend, utils) {
 		);
 	});
 
+	$scope.$watch("vm.orderInfo.pricesEditable", () => {
+		const baggageTotalPrice = +vm.orderInfo.pricesEditable
+			.totalExtraServiceByGroup[vm.service.code]
+			? +vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]
+			: 0;
+
+		const specialLuggageATotalPrice = +vm.orderInfo.pricesEditable
+			.totalExtraServiceByGroup.specialLuggageA
+			? +vm.orderInfo.pricesEditable.totalExtraServiceByGroup.specialLuggageA
+			: 0;
+
+		vm.totalPrice = baggageTotalPrice + specialLuggageATotalPrice;
+	});
+
 	backend.addOrderInfoListener(
 		function(orderInfo) {
 			vm.orderInfo = orderInfo;
+			// vm.totalPrice =
+			// 	+vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code] +
+			// 	+vm.orderInfo.pricesEditable.totalExtraServiceByGroup.specialLuggageA;
 		},
 		false,
 		true
@@ -70,9 +97,14 @@ function BaggageController($element, $scope, backend, utils) {
 	function switchService() {
 		if (!vm.locked && !backend.checkServiceRemovalProhibited("baggage")) {
 			vm.service.active = !vm.service.active;
+			vm.selectFirstAvailablePassengerFlight();
+			vm.selectFlightPassenger(vm.orderInfo.plainFlights[0], 0);
 			if (!vm.service.active) {
 				backend.removeExtraService({
 					code: vm.service.code
+				});
+				backend.removeExtraService({
+					code: "specialLuggageA"
 				});
 			}
 		}
@@ -244,5 +276,102 @@ function BaggageController($element, $scope, backend, utils) {
 				segment_id: vm.orderInfo.plainFlights[flightNum].id
 			});
 		}
+	}
+
+	/*
+	 *
+	 * common service Special luggage code (from es-common.js)
+	 *
+	 */
+
+	function onCommonLuggageChange(baggageItem) {
+		if (baggageItem.alreadySelectedCount) {
+			removeServiceByFlightPassenger(vm.selectedFlight, vm.selectedPassenger);
+		} else {
+			addServiceByFlightPassenger(vm.selectedFlight, vm.selectedPassenger);
+		}
+	}
+
+	function addServiceByFlightPassenger(flightNum, passengerNum) {
+		var item = utils.getFirstNotEmptySubListItem(
+			vm.commonLuggage.itemsByPassengerSegments[passengerNum][flightNum]
+		);
+
+		if (
+			!vm.locked &&
+			!backend.checkServiceRemovalProhibited(
+				vm.commonLuggage.code,
+				passengerNum,
+				flightNum
+			)
+		) {
+			backend.modifyExtraService({
+				code: vm.commonLuggage.code,
+				passenger_id: vm.orderInfo.passengers[passengerNum].id,
+				segment_id: vm.orderInfo.plainFlights[flightNum].id,
+				subgroup: vm.commonLuggage.commonSubgroup,
+				rfisc: item.rfisc
+			});
+		}
+	}
+
+	function removeServiceByFlightPassenger(flightNum, passengerNum) {
+		var item = utils.getFirstNotEmptySubListItem(
+			vm.commonLuggage.itemsByPassengerSegments[passengerNum][flightNum]
+		);
+		if (
+			!vm.locked &&
+			!backend.checkServiceRemovalProhibited(
+				vm.commonLuggage.code,
+				passengerNum,
+				flightNum
+			)
+		) {
+			backend.removeExtraService({
+				code: vm.commonLuggage.code,
+				passenger_id: vm.orderInfo.passengers[passengerNum].id,
+				segment_id: vm.orderInfo.plainFlights[flightNum].id,
+				subgroup: vm.commonLuggage.commonSubgroup,
+				rfisc: item.rfisc
+			});
+		}
+	}
+
+	/*
+	 *
+	 * select first flight/passenger from nw-meal.js
+	 *
+	 */
+
+	function selectFlightPassenger(flightNum, passengerNum) {
+		vm.selectedFlight = flightNum;
+		vm.selectedPassenger = passengerNum;
+	}
+
+	function selectFirstAvailablePassengerFlight() {
+		vm.selectedFlight = getFirstAvailableFlightNum();
+		vm.selectedPassenger = getFirstAvailablePassengerNum(vm.selectedFlight);
+	}
+
+	function getFirstAvailableFlightNum() {
+		var i;
+		for (i = 0; i < vm.orderInfo.plainFlights.length; i++) {
+			if (vm.service.availableBySegments[i]) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	function getFirstAvailablePassengerNum(flightNum) {
+		var i;
+		if (vm.service.availableByPassengerSegments) {
+			for (i = 0; i < vm.orderInfo.passengers.length; i++) {
+				if (vm.service.availableByPassengerSegments[i][flightNum]) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 }
