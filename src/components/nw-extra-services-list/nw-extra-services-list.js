@@ -26,18 +26,26 @@ function extraServicesListController($scope, utils, backend) {
 	vm.commonLuggage = false;
 
 	vm.orderInfo = backend.getOrderInfo();
-	console.log('nw-extra-services-list vm: ', vm);
 
 	// не нужно показывать попап, по клику на страховку, если
 	// в заказе только один пассажир, просто вызываем modifyExtraServices
 	const insuranceES = _.findWhere(vm.es, { code: "insurance" });
 	vm.isSingleItemInInsurance = insuranceES && insuranceES.items.length === 1;
 
-	$scope.$watch('vm.es', function(){
+	$scope.$watch("vm.es", function() {
 		// нужно собрать все типы доп. багажа чтобы передавать в компонент es-baggage вместе с es.baggage
-		vm.commonLuggage = _.filter(vm.es, es => es.code === 'specialLuggageA' | es.code === 'specialLuggageC')[0];
+		vm.commonLuggage = _.filter(
+			vm.es,
+			es => (es.code === "specialLuggageA") | (es.code === "specialLuggageC")
+		)[0];
+		const baggage = _.filter(vm.es, es => es.code === "baggage")[0];
+		// Багажа нету, передаем туда specialLuggageA и specialLuggageC
+		if (!baggage && vm.es) {
+			vm.list.push("baggage");
+			vm.es["baggage"] = { ...vm.commonLuggage };
+			vm.es["baggage"].code = "baggage";
+		}
 	});
-
 
 	function switchInsurance() {
 		if (!vm.locked) {
