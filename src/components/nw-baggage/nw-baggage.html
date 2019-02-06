@@ -72,6 +72,7 @@
 							<div
 								class="foodSelect__routes-list"
 								ng-repeat="(flightNum, flight) in vm.orderInfo.plainFlights"
+								ng-click="vm.selectRoutePartByNum(flightNum)"
 							>
 								<div
 									class="foodSelect__routes-item"
@@ -330,7 +331,6 @@
 													</wrap>
 												</wrap>
 											</div>
-											<!-- /.nw-baggage__wrp -->
 										</div>
 									</div>
 								</div>
