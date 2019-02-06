@@ -27,6 +27,7 @@ function BaggageController($element, $scope, backend, utils) {
 	vm.selectFlightPassenger = selectFlightPassenger;
 	vm.selectFirstAvailablePassengerFlight = selectFirstAvailablePassengerFlight;
 	vm.onCommonLuggageChange = onCommonLuggageChange;
+	vm.selectRoutePartByNum = selectRoutePartByNum;
 
 	vm.selectedFlight = 0;
 	vm.selectedPassenger = 0;
@@ -40,8 +41,6 @@ function BaggageController($element, $scope, backend, utils) {
 	vm.selectedPassenger = 0;
 	console.log("nw-baggage.js vm.commonLuggage: ", vm.commonLuggage);
 	console.log("nw-baggage.js vm.service: ", vm.service);
-	// console.log(JSON.stringify(vm.service, 2));
-	// console.log(JSON.stringify(vm.commonLuggage, 2));
 
 	vm.optionsByRoutePartsAndPassengers = vm.service.routeParts.map(function(
 		routePart
@@ -68,6 +67,11 @@ function BaggageController($element, $scope, backend, utils) {
 	});
 
 	$scope.$watch("vm.orderInfo.pricesEditable", () => {
+		if (!vm.orderInfo.pricesEditable) {
+			vm.totalPrice = 0;
+			return;
+		}
+
 		const baggageTotalPrice = +vm.orderInfo.pricesEditable
 			.totalExtraServiceByGroup[vm.service.code]
 			? +vm.orderInfo.pricesEditable.totalExtraServiceByGroup[vm.service.code]
@@ -97,7 +101,6 @@ function BaggageController($element, $scope, backend, utils) {
 	function switchService() {
 		if (!vm.locked && !backend.checkServiceRemovalProhibited("baggage")) {
 			vm.service.active = !vm.service.active;
-			vm.selectFirstAvailablePassengerFlight();
 			vm.selectFlightPassenger(vm.orderInfo.plainFlights[0], 0);
 			if (!vm.service.active) {
 				backend.removeExtraService({
@@ -107,6 +110,7 @@ function BaggageController($element, $scope, backend, utils) {
 					code: "specialLuggageA"
 				});
 			}
+			vm.selectFirstAvailablePassengerFlight();
 		}
 	}
 
@@ -374,4 +378,9 @@ function BaggageController($element, $scope, backend, utils) {
 		}
 		return -1;
 	}
+
+	function selectRoutePartByNum(num){
+		vm.selectedRoutePartNum = num;
+	}
 }
+
