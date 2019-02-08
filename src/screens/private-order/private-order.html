@@ -1,28 +1,43 @@
-<app-loader ng-if="vm.loading || vm.searchLoading || vm.orderServicesLoading"></app-loader>
+<app-loader
+	ng-if="vm.loading ||
+	vm.searchLoading ||
+	vm.orderServicesLoading ||
+	 vm.modifyServicesLoading
+	 || vm.orderServicesLoading" ></app-loader>
+
 <app-header ng-if="!vm.loading"></app-header>
+<h1>{{ vm.loading || vm.searchLoading || vm.orderServicesLoading || vm.modifyServicesLoading || vm.orderServicesLoading }}</h1>
 
-<div  class="content">
+<private-order-state-updater ng-if="vm.orderInfo"></private-order-state-updater>
 
+<div class="content">
 	<div class="wrap wrap_pt32">
-
 		<order-with-es ng-if="vm.orderInfo" replace-with order-info="vm.orderInfo">
 			<!--nw-es-list -->
-			<nw-extra-services-list  ng-if="!vm.loading && vm.orderInfo" ng-if="vm.es" es="vm.es" list="vm.esList"
-															 locked="vm.modifyServicesLoading || vm.orderServicesLoading"></nw-extra-services-list>
+			<nw-extra-services-list
+				ng-if="!vm.loading && vm.orderInfo"
+				ng-if="vm.es"
+				es="vm.es"
+				list="vm.esList"
+				locked="vm.modifyServicesLoading || vm.orderServicesLoading"
+			></nw-extra-services-list>
 			<!--end nw-es-list -->
 
-			<div ng-if="vm.orderInfo.hasSelectedExtraServices && vm.priceVariant" class="payMethods">
+			<div
+				ng-if="vm.orderInfo.hasSelectedExtraServices && vm.priceVariant"
+				class="payMethods"
+			>
 				<div class="payMethods__i">
-
-
-					<wrap ng-show="!vm.isFreePricevariant">
+					<wrap ng-show="!vm.isFreePaymentVariants">
 						<h2 class="title">
 							{{ 'web.paymentTypeSelect.header' | aliasStatic}}
 						</h2>
-						<payment-type-select price-variant="vm.priceVariant"
-																 change-handler="vm.paymentFormChangeHandler"
-																 selected-payment-type="vm.selectedPaymentType"
-																 selected-payment-form="vm.selectedPaymentForm">
+						<payment-type-select
+							price-variant="vm.priceVariant"
+							change-handler="vm.paymentFormChangeHandler"
+							selected-payment-type="vm.selectedPaymentType"
+							selected-payment-form="vm.selectedPaymentForm"
+						>
 						</payment-type-select>
 					</wrap>
 
@@ -30,56 +45,72 @@
 						<div class="iconfirm__i">
 							<div class="customCheckbox">
 								<label>
-									<input type="checkbox" id="iconfirm" ng-model="vm.agree"/>
+									<input type="checkbox" id="iconfirm" ng-model="vm.agree" />
 									<span></span>
 								</label>
-								<div ng-if="!vm.agree && vm.submitButtonHover" class="errorMessage">
+								<div
+									ng-if="!vm.agree && vm.submitButtonHover"
+									class="errorMessage"
+								>
 									{{ 'web.addServices.agreeTooltip' | aliasStatic}}
 								</div>
 							</div>
 							<p>
 								<label for="iconfirm">
-									<wrap ng-bind-html=" 'web.addServices.agree' | aliasStatic"></wrap>
+									<wrap
+										ng-bind-html=" 'web.addServices.agree' | aliasStatic"
+									></wrap>
 								</label>
 							</p>
 						</div>
 					</div>
-
 				</div>
 			</div>
 
 			<div class="searchResultsControl">
 				<div class="searchResultsControl__i">
-
-					<a href ng-click="vm.openOrder(vm.pnrOrTicketNumber, vm.lastName)" class="btn btn_back">
+					<a
+						href
+						ng-click="vm.openOrder(vm.pnrOrTicketNumber, vm.lastName)"
+						class="btn btn_back"
+					>
 						{{ 'web.addServices.backToOrder' | aliasStatic}}
 					</a>
 
-					<a href ng-click="vm.clearSession()" ng-if=" !('site.bookingEnabled' | param) "
-						 class="btn btn-clear-session">
+					<a
+						href
+						ng-click="vm.clearSession()"
+						ng-if=" !('site.bookingEnabled' | param) "
+						class="btn btn-clear-session"
+					>
 						{{ 'web.buttons.clearSession' | aliasStatic}}
 					</a>
 
-					<a href ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading"
-						 ng-click="vm.submitPayment()"
-						 ng-class="{disabled: (!vm.agree || !vm.selectedPaymentForm ||
+					<a
+						href
+						ng-if="vm.orderInfo.hasSelectedExtraServices && !vm.confirmLoading"
+						ng-click="vm.submitPayment()"
+						ng-class="{disabled: (!vm.agree || !vm.selectedPaymentForm ||
                !vm.selectedPaymentType || vm.modifyServicesLoading || vm.orderServicesLoading)}"
-						 ng-mouseenter="vm.swithcSubmitButtonHoverState();"
-						 ng-mouseleave="vm.swithcSubmitButtonHoverState();"
-						 class="btn btn_next">
-							<span class="mobileHide">
-                                {{  vm.isFreePricevariant ? 'web.buttons.confirmAddServices' : 'web.buttons.gotoPayment' | aliasStatic}}
-                            </span>
+						ng-mouseenter="vm.swithcSubmitButtonHoverState();"
+						ng-mouseleave="vm.swithcSubmitButtonHoverState();"
+						class="btn btn_next"
+					>
+						<span class="mobileHide">
+							{{ vm.isFreePaymentVariants ? 'web.buttons.confirmAddServices' :
+							'web.buttons.gotoPayment' | aliasStatic}}
+						</span>
 						<span class="mobileShow">
-                                {{ 'web.buttons.next' | aliasStatic}}
-                            </span>
+							{{ 'web.buttons.next' | aliasStatic}}
+						</span>
 					</a>
-
 				</div>
 			</div>
 
-
-			<div ng-if="vm.showNeedSelectPaymentFormMesage" class="infoMessage infoMessage_error">
+			<div
+				ng-if="vm.showNeedSelectPaymentFormMesage"
+				class="infoMessage infoMessage_error"
+			>
 				<div class="infoMessage__i">
 					<p>
 						{{ 'web.messages.needSelectPaymentForm' | aliasStatic}}
@@ -97,8 +128,6 @@
 					</p>
 				</div>
 			</div>
-
-
 		</order-with-es>
 
 		<div class="process-answer process-answer--error" ng-if="vm.errorMessage">
@@ -106,5 +135,4 @@
 		</div>
 	</div>
 	<!-- /.wrap wrap_pt32 -->
-
 </div>

@@ -38,6 +38,10 @@ function extraServicesListController($scope, utils, backend) {
 			vm.es,
 			es => (es.code === "specialLuggageA") | (es.code === "specialLuggageC")
 		)[0];
+
+		// vm.commonLuggage.forEach(
+		// 	commonLuggageItem => removeCodeFromEsList(commonLuggageItem.code, vm.list),
+		// );
 		const baggage = _.filter(vm.es, es => es.code === "baggage")[0];
 		// Багажа нету, передаем туда specialLuggageA и specialLuggageC
 		if (!baggage && vm.es) {
@@ -78,5 +82,15 @@ function extraServicesListController($scope, utils, backend) {
 			params.productCode = item.productCode;
 		}
 		return params;
+	}
+
+	function removeCodeFromEsList(code, list) {
+		if (!(list && list.length)) {
+			return;
+		}
+		const index = list.indexOf(code);
+		if (index !== -1) {
+			list.splice(index, 1);
+		}
 	}
 }

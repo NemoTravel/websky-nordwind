@@ -535,11 +535,13 @@ order-prices[mode="pricesNotIssued"]
 			line-height: $defaultLineHegith
 
 .foodSelect,
-.seatSelect
+.seatSelect,
+.baggageSelect
 	padding: 0 10px 15px 20px
 
 	&__routes
 		display: flex
+		margin-bottom: 16px
 
 	&__routes-item
 		padding: 10px 30px
@@ -695,6 +697,26 @@ insurance-fares
 		&:hover
 			@extend %btn--hover
 
+.invoiceDrops
+	.title
+		border-radius: 5px
+	.circle
+		background: transparent
+
+		.icon_triangle
+			display: inline-block
+			width: 20px
+			height: 20px
+			background: $chevronIcon no-repeat center
+			background-size: contain
+			transform-origin: center
+			transform: translate(-50%, -50%) rotate(-90deg)
+
+	.item
+		&.active
+			.circle
+				i
+					transform: translate(-50%, -50%) rotate(0deg)
 
 /* ==== redefine old styles ==== */
 
@@ -871,5 +893,7 @@ insurance-fares
 	&__decline
 		position: relative
 
+.passengersBlock_row-control-outer
+	margin-bottom: 0
 
 /* ==== END redefine old styles ==== */

@@ -478,29 +478,29 @@
 
 				<div class="payMethods">
 					<div class="payMethods__i">
-						<wrap ng-show="!vm.isFreePricevariant">
+						<wrap ng-show="!vm.isFreePaymentVariants">
 							<h2 class="title">
 								{{ 'web.paymentTypeSelect.header' | aliasStatic}}
 							</h2>
-							<payment-type-select
-								ng-if="vm.priceVariant"
-								price-variant="vm.priceVariant"
-								change-handler="vm.paymentFormChangeHandler"
-								selected-payment-type="vm.selectedPaymentType"
-								selected-payment-form="vm.selectedPaymentForm"
-							>
-							</payment-type-select>
+              <payment-variant-select
+                ng-if="vm.paymentVariants"
+                variants="vm.paymentVariants"
+                change-handler="vm.paymentVariantChangeHandler"
+                selected="vm.selectedPaymentVariantIndex"
+                save-new-card="vm.saveNewCard">
+              </payment-variant-select>
 						</wrap>
 
 						<div class="iconfirm">
 							<div class="iconfirm__i">
 								<div class="customCheckbox">
-									<label
-										><input
-											type="checkbox"
-											id="iconfirm"
-											ng-model="vm.agree"/><span></span
-									></label>
+                  <label>
+                    <input type="checkbox" id="iconfirm" ng-model="vm.agree" />
+                    <span></span>
+                  </label>
+                  <div ng-if="!vm.agree && vm.submitButtonHover" class="errorMessage">
+                    {{ 'web.paymentTypeSelect.agreeTooltip' | aliasStatic}}
+                  </div>
 								</div>
 								<p>
 									<label for="iconfirm">
@@ -535,16 +535,14 @@
 						<a href="#{{$root.ROUTES.PASSENGERS}}" class="btn btn_back">
 							{{ 'web.buttons.back' | aliasStatic}}
 						</a>
-
-						<a
-							href
-							ng-if="!vm.doBookingAndRegisterOrderLoading"
-							ng-click="vm.submitPayment()"
-							ng-class="{ disabled: (!vm.agree || !vm.selectedPaymentForm || !vm.selectedPaymentType  || vm.modifyServicesLoading || vm.orderServicesLoading) }"
-							class="btn btn_next"
-						>
+            <a href ng-if="!vm.doBookingAndRegisterOrderLoading" ng-click="vm.submitPayment()"
+               ng-class="{ disabled: !vm.agree || !vm.paymentVariants[vm.selectedPaymentVariantIndex] ||
+               vm.modifyServicesLoading || vm.orderServicesLoading }"
+               ng-mouseenter="vm.swithcSubmitButtonHoverState();"
+               ng-mouseleave="vm.swithcSubmitButtonHoverState();"
+               class="btn btn_next">
 							<span class="mobileHide">
-								{{ vm.isFreePricevariant ? 'web.buttons.confirmRegisterOrder' :
+                {{  vm.isFreePaymentVariants ? 'web.buttons.confirmRegisterOrder' :
 								'web.buttons.gotoPayment' | aliasStatic}}
 							</span>
 							<span class="mobileShow">

@@ -11,6 +11,7 @@ require("./components/nw-aeroexpress/nw-aeroexpress");
 require("./components/nw-popup-aeroexpress-schedule/nwPopupAeroexpressSchedule");
 require("./components/nw-baggage/nw-baggage");
 require("./filters/toCity");
+require("./directives/privateOrder");
 
 // TODO: remove it!!
 angular.module("app").config([

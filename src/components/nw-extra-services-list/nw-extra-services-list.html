@@ -178,14 +178,14 @@
 				</wrap>
 			</nw-es-popup>
 			<nw-es-popup
-				ng-if="vm.isCommonService(esCode)"
+				ng-if="vm.isCommonService(esCode) && esCode !== 'specialLuggageA'"
 				es-code="esCode"
 				locked="vm.locked"
 				es="vm.es"
 			>
 				<wrap>
 					<es-common
-						ng-if="vm.isCommonService(esCode)"
+						ng-if="vm.isCommonService(esCode) && esCode !== 'specialLuggageA'"
 						service="vm.es[esCode]"
 						code="esCode"
 					></es-common>

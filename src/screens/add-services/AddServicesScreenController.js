@@ -33,9 +33,9 @@ angular.module('app').controller('AddServicesScreenController', ['$scope', '$rou
         backend.addUpdateOrderServicesListener(function (resp) {
             vm.orderInfo = resp[1];
             vm.priceVariant = resp[2];
-            vm.isFreePricevariant = utils.isFreePricevariant(resp[2]);
+            vm.isFreePaymentVariants = utils.isFreePaymentVariants(resp[2]);
 
-            if (vm.isFreePricevariant) {
+            if (vm.isFreePaymentVariants) {
                 vm.showNeedSelectPaymentFormMesage = false;
             }
 
