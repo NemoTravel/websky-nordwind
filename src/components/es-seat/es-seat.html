@@ -1,4 +1,6 @@
 <div class="item__i mobileHide">
+    <show-airplane-popup service="vm.service" show-warning-seat-popup="vm.showWarningSeatPopup">
+    </show-airplane-popup>
     <div class="top">
         <div class="top__i">
 
@@ -334,5 +336,9 @@
       available-passengers-count="vm.getAvailablePassengersCount(vm.service.availableByPassengerSegments)"
       subgroups="vm.service.subgroups">
   </popup-seat>
+
+  <popup-seat-warning service="vm.service"
+                      agree-with-airplane-change="vm.service.agreeWithAirplaneChange">
+  </popup-seat-warning>
 
 </div>
