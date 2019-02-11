@@ -1,0 +1,35 @@
+<div class="popup" id="popupSeatWarning" style="display: none;">
+  <div class="title">
+    <div class="title__i">
+      <p>
+        {{ 'web.seatWarning.header' | aliasStatic}}
+      </p>
+      <a href ng-click="vm.close()" class="closePopup closePopup_js"></a>
+    </div>
+  </div>
+
+  <div class="popup__i">
+    <div class="popup_remarkInfo">
+      <div class="popup_cont">
+        <div
+          class="seat-warning__content"
+          ng-bind-html="'web.seatWarning.content' | aliasStatic"
+        ></div>
+        <div class="seat-warning__buttons">
+          <button
+            class="seat-warning__btn seat-warning__btn_agree btn"
+            ng-click="vm.isUserAgree(true)"
+          >
+            {{ 'web.seatWarning.btn.agree' | aliasStatic }}
+          </button>
+          <button
+            class="seat-warning__btn seat-warning__btn_disagree btn"
+            ng-click="vm.isUserAgree(false)"
+          >
+            {{'web.seatWarning.btn.disagree' | aliasStatic }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
