@@ -1,6 +1,8 @@
 require('./screens/add-services/AddServicesScreenController');
 require('./screens/search-order/search-order');
 require('./directives/replaceWith');
+require('./directives/showAirplanePopupInfo');
+require('./components/popup-seat-warning/popup-seat-warning');
 
 angular.module('app').run(['$rootScope', 'redirect', 'backend', function ($rootScope, redirect, backend) {
     $rootScope.$on('$locationChangeStart', function (e) {
