@@ -112,8 +112,8 @@
                                 <div class="passengersBlock_row-control__comment" ng-bind-html=" 'web.extraServicesRules.seat' | aliasStatic "></div>
                             </div>
                             <div class="passengersBlock_row-menu passengersBlock_row-menu-seat">
-                                <div class="col">
-                                    <div class="info">
+                                <div class="col" >
+                                    <div class="info" ng-hide="vm.seatMapError">
                                         <div class="info__i">
                                             <p class="sun">
                                                 {{ vm.sunInfoByFlights[vm.selectedFlight] }}
