@@ -40,26 +40,6 @@
 					<!-- /.extra-services__item-service-name -->
 
 					<price es="vm.es[esCode]"></price>
-					<span
-						ng-if="
-              (!vm.es[esCode].active && vm.es[esCode].minPrice.price)
-              &&
-              !(esCode === 'insurance' || esCode === 'aeroexpress')
-            "
-						class="extra-services__item-min-price text text--highlight"
-					>
-						{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
-						vm.es[esCode].minPrice.price }} {{ vm.es[esCode].minPrice.currency
-						}}
-					</span>
-					<!-- /.extra-services__item-min-price text text--highlight -->
-
-					<!--service baggage active price active -->
-          <!--<span-->
-						<!--ng-if="vm.es[esCode] === 'baggage' && vm.es[esCode].active && vm.es[esCode]"-->
-						<!--class="extra-services__item-min-price text text&#45;&#45;highlight">-->
-					<!--</span>-->
-          <!-- /.extra-services__item-min-price text text--highlihgt -->
 
 					<p class="extra-services__item-desc">
 						{{ 'web.extraServices.' + esCode + '.desc' | aliasStatic }}
@@ -68,18 +48,6 @@
 				</div>
 				<!-- /.extra-services__item-descr-wrp -->
 
-				<span
-					ng-if="
-              vm.es[esCode].minPrice.price
-              &&
-              (esCode === 'insurance' || esCode === 'aeroexpress')
-            "
-					class="extra-services__item-min-price text text--highlight"
-				>
-					{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
-					vm.es[esCode].minPrice.price }} {{ vm.es[esCode].minPrice.currency }}
-				</span>
-				<!-- /.extra-services__item-min-price text text--highlight -->
 
 				<a
 					href
