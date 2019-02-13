@@ -40,7 +40,6 @@ function privateOrderStateUpdaterController($scope, backend, utils) {
 			function(resp) {
 				vm.orderInfo = resp[1];
 				vm.priceVariant = resp[2];
-				console.log(utils);
 				vm.isFreePaymentVariants = utils.isFreePaymentVariants(resp[2]);
 
 				if (vm.isFreePaymentVariants) {
