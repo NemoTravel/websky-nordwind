@@ -5,12 +5,13 @@ app.component("price", {
 	},
 	controller: "priceController",
 	controllerAs: "vm",
-	templateUrl: "components/price/price"
+	templateUrl: "components/price/price.html"
 });
 
 app.controller("priceController", ["$scope", priceController]);
 
 function priceController($scope) {
 	const vm = this;
-	console.log(vm, $scope);
+
+	console.log(vm.es);
 }

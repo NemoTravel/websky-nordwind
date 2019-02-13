@@ -1,1 +1,18 @@
-<span>price</span>
+<span class="extra-services__item-min-price text text--highlight">
+	<wrap ng-if="!vm.es.editablePrice">
+		<wrap ng-if="vm.es.code !== 'insurance'">
+			{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
+			vm.es.minPrice.price }} {{ vm.es.minPrice.currency }}
+		</wrap>
+		<wrap ng-if="vm.es.code === 'insurance'">
+			{{ 'web.extraServices.minPrice.from' | aliasStatic }} {{
+			vm.es.fullPrice.price }} {{ vm.es.fullPrice.currency }}
+		</wrap>
+	</wrap>
+	<wrap ng-if="vm.es.editablePrice">
+		<wrap>
+			{{ 'web.extraServices.selectedItemsPrice' | aliasStatic }} {{
+			vm.es.editablePrice.price }} {{ vm.es.editablePrice.currency }}
+		</wrap>
+	</wrap>
+</span>
