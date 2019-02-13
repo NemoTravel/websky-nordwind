@@ -39,6 +39,7 @@
 					</h3>
 					<!-- /.extra-services__item-service-name -->
 
+					<price es="vm.es[esCode]"></price>
 					<span
 						ng-if="
               (!vm.es[esCode].active && vm.es[esCode].minPrice.price)
@@ -52,6 +53,13 @@
 						}}
 					</span>
 					<!-- /.extra-services__item-min-price text text--highlight -->
+
+					<!--service baggage active price active -->
+          <!--<span-->
+						<!--ng-if="vm.es[esCode] === 'baggage' && vm.es[esCode].active && vm.es[esCode]"-->
+						<!--class="extra-services__item-min-price text text&#45;&#45;highlight">-->
+					<!--</span>-->
+          <!-- /.extra-services__item-min-price text text--highlihgt -->
 
 					<p class="extra-services__item-desc">
 						{{ 'web.extraServices.' + esCode + '.desc' | aliasStatic }}

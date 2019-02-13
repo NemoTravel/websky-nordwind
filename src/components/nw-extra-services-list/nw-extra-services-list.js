@@ -42,6 +42,7 @@ function extraServicesListController($scope, utils, backend) {
 		// vm.commonLuggage.forEach(
 		// 	commonLuggageItem => removeCodeFromEsList(commonLuggageItem.code, vm.list),
 		// );
+		removeCodeFromEsList(vm.commonLuggage.code, vm.list);
 		const baggage = _.filter(vm.es, es => es.code === "baggage")[0];
 		// Багажа нету, передаем туда specialLuggageA и specialLuggageC
 		if (!baggage && vm.es) {
