@@ -32,25 +32,54 @@ function extraServicesListController($scope, utils, backend) {
 	const insuranceES = _.findWhere(vm.es, { code: "insurance" });
 	vm.isSingleItemInInsurance = insuranceES && insuranceES.items.length === 1;
 
-	$scope.$watch("vm.es", function() {
-		// нужно собрать все типы доп. багажа чтобы передавать в компонент es-baggage вместе с es.baggage
+	// нужно собрать все типы доп. багажа чтобы передать в компонент es-baggage вместе с es['baggage']
+	$scope.$watch("vm.es", () => {
+		if (_.isEmpty(vm.es)) {
+			return;
+		}
+
 		vm.commonLuggage = _.filter(
 			vm.es,
 			es => (es.code === "specialLuggageA") | (es.code === "specialLuggageC")
-		)[0];
+		);
 
-		// vm.commonLuggage.forEach(
-		// 	commonLuggageItem => removeCodeFromEsList(commonLuggageItem.code, vm.list),
-		// );
-		removeCodeFromEsList(vm.commonLuggage.code, vm.list);
-		const baggage = _.filter(vm.es, es => es.code === "baggage")[0];
-		// Багажа нету, передаем туда specialLuggageA и specialLuggageC
-		if (!baggage && vm.es) {
-			vm.list.push("baggage");
+		vm.commonLuggage.forEach(es => removeCodeFromEsList(es.code, vm.list));
+
+		if (vm.commonLuggage.length === 1) {
+			vm.commonLuggage = vm.commonLuggage[0];
+		} else {
+			// TODO: Обрабатывать кейс когда больше одного багажа
+		}
+
+		if (_.contains(vm.list, "baggage")) {
+			vm.es["baggage"].commonLuggage = vm.commonLuggage;
+		} else {
 			vm.es["baggage"] = { ...vm.commonLuggage };
-			vm.es["baggage"].code = "baggage";
 		}
 	});
+
+	// $scope.$watch("vm.es", function() {
+	// 	if (_.isEmpty(vm.es)) {
+	// 		return;
+	// 	}
+	// 	// нужно собрать все типы доп. багажа чтобы передавать в компонент es-baggage вместе с es.baggage
+	// 	vm.commonLuggage = _.filter(
+	// 		vm.es,
+	// 		es => (es.code === "specialLuggageA") | (es.code === "specialLuggageC")
+	// 	)[0];
+	//
+	// 	// vm.commonLuggage.forEach(
+	// 	// 	commonLuggageItem => removeCodeFromEsList(commonLuggageItem.code, vm.list),
+	// 	// );
+	// 	removeCodeFromEsList(vm.commonLuggage.code, vm.list);
+	// 	const baggage = _.filter(vm.es, es => es.code === "baggage")[0];
+	// 	// Багажа нету, передаем туда specialLuggageA и specialLuggageC
+	// 	if (!baggage.length && vm.es) {
+	// 		vm.list.push("baggage");
+	// 		vm.es["baggage"] = { ...vm.commonLuggage };
+	// 		vm.es["baggage"].code = "baggage";
+	// 	}
+	// });
 
 	function switchInsurance() {
 		if (!vm.locked) {
