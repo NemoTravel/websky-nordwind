@@ -1,4 +1,8 @@
-<div class="popup" id="popupSeatWarning" style="display: none;">
+<div
+  class="popup popup-seat-warning"
+  id="popupSeatWarning"
+  style="display: none;"
+>
   <div class="title">
     <div class="title__i">
       <p>
@@ -12,9 +16,26 @@
     <div class="popup_remarkInfo">
       <div class="popup_cont">
         <div
-          class="seat-warning__content"
-          ng-bind-html="'web.seatWarning.content' | aliasStatic"
-        ></div>
+          class="dropdown"
+          ng-class="{'dropdown--isOpen': vm.isDropdownOpen}"
+        >
+          <div class="dropdown__title" ng-click="vm.switchDropdown()">
+            <i class="dropdown__icon icon_rightArr"></i>
+            <span class="link"
+              >{{ 'web.seatWarning.title' | aliasStatic }}
+            </span>
+            <!-- /.dropdown__icon -->
+          </div>
+          <!-- /.dropdown__title -->
+          <div
+            class="dropdown__content"
+            ng-if="vm.isDropdownOpen"
+            ng-bind-html="'web.seatWarning.content' | aliasStatic"
+          ></div>
+          <!-- /.dropdown__content -->
+        </div>
+        <!-- /.dropdown -->
+
         <div class="seat-warning__buttons">
           <button
             class="seat-warning__btn seat-warning__btn_agree btn"

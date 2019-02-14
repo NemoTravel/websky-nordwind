@@ -1,0 +1,21 @@
+<div
+  class="popup popup-extra-services-rules"
+  id="popupExtraServicesRules"
+  style="display: none;"
+>
+  <div class="title">
+    <div class="title__i">
+      <p>
+        {{ 'web.booking.extraServicesRulesPopup.header' | aliasStatic}}
+      </p>
+      <a href ng-click="vm.close()" class="closePopup closePopup_js"></a>
+    </div>
+  </div>
+
+  <div class="popup__i">
+    <div class="popup_extra-services-rules">
+      <div class="popup_cont" ng-bind-html="'web.booking.extraServicesRulesPopupContent' | aliasStatic">
+      </div>
+    </div>
+  </div>
+</div>

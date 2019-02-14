@@ -10,8 +10,10 @@ angular.module("app").component("popupSeatWarning", {
 
 function popupSeatWarningController() {
   var vm = this;
-  console.log("here");
+  vm.isDropdownOpen = false;
+
   vm.isUserAgree = isUserAgree;
+  vm.switchDropdown = switchDropdown;
 
   vm.close = jQuery.fancybox.close;
 
@@ -25,5 +27,9 @@ function popupSeatWarningController() {
       vm.service.active = false;
       vm.close();
     }
+  }
+
+  function switchDropdown() {
+    vm.isDropdownOpen = !vm.isDropdownOpen;
   }
 }
