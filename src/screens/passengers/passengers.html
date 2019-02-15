@@ -4,6 +4,12 @@
 
     <app-header></app-header>
 
+	<!--43366-->
+    <hide-countries-on-specific-route routes="vm.orderInfo.flights" countries="vm.countriesList"
+									  dont-fly-to-mexico="vm.dontFlyToMexico">
+	</hide-countries-on-specific-route>
+	<!--end 43366-->
+
     <div class="searchSteps">
         <div class="wrap">
             <div class="searchSteps__i">
@@ -55,6 +61,10 @@
                             <span ng-bind-html=" 'web.messages.passNamesLatin' | aliasStatic"></span>
                         </p>
 
+						<p ng-if="vm.dontFlyToMexico" class="intAttention">
+							{{ 'web.messages.dontFlyToMexico' | aliasStatic}}
+						</p>
+
 						<p class="login" ng-if="!vm.authoriseCustomer && !vm.accountExist">
 							{{ 'web.passengersInfo.loginInvitationMessage' | aliasStatic}}
 							<a href fancybox="popupLogin">
@@ -78,7 +88,7 @@
 										<div class="itemName__number">
                                            <span ng-show="vm.passengers.length > 1">{{ passengerNumber + 1 }}.</span> {{ 'web.passengerCategory.' | aliasWithPrefix:passenger.categoryCode }}
                                         </div>
-										<div class="selectWrap itemName__ui-select" ng-if="vm.authoriseCustomer && vm.privatePassengers.length">
+										<div class="selectWrap itemName__ui-select" ng-if="vm.authoriseCustomer && vm.privatePassengers.length && !vm.dontFlyToMexico">
 
                                             <ui-select name="privatePassenger"
                                                        search-enabled="false"
@@ -201,13 +211,19 @@
 															control="vm.passengerForms[passengerNumber].nationality"
 															touched="vm.submitTouched">
 														</error-message>
+														<error-message
+																control="vm.passengerCantFlyToMexico"
+																format-alias="web.dontFlyToMexico.input.error"
+																touched="vm.submitTouched">
+														</error-message>
                                                         <ui-select ng-model="passenger.nationality"
                                                                    theme="selectize"
                                                                    name="nationality"
                                                                    search-enabled="{{ !vm.isMobile }}"
+                                                                   check-can-fly-to-mexico
                                                                    skip-focusser="true"
                                                                    ng-change="vm.nationalityChangeHandler(passengerNumber)"
-                                                                   error-highlight="{{vm.submitTouched}}"
+                                                                   error-highlight="{{vm.submitTouched}} || {{ vm.passengerCantFlyToMexico }}"
 																   ui-select-custom
                                                                    class="ui-select-custom ui-select-passengers"
                                                                    required>

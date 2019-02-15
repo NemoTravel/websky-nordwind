@@ -2,6 +2,7 @@ require('./screens/add-services/AddServicesScreenController');
 require('./screens/search-order/search-order');
 require('./directives/replaceWith');
 require('./directives/showAirplanePopupInfo');
+require('./directives/hideCountriesOnSpecificRoute');
 require('./components/popup-seat-warning/popup-seat-warning');
 require('./components/popup-extra-services-rules/popup-extra-services-rules');
 
