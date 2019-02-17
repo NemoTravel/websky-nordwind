@@ -52,26 +52,4 @@ function hideCountriesOnSpecificRouteController($scope) {
       vm.dontFlyToMexico = false;
     }
   });
-
-
-  // $scope.$watch("vm.passengers", function() {
-  //   if (vm.dontFlyToMexico && !vm.passengersWasFiltered) {
-  //     console.log('here');
-  //     filterPassengers();
-  //   }
-  // });
-  //
-  // function filterPassengers() {
-  //   if (!vm.passengers || !vm.passengers.length) {
-  //     return;
-  //   }
-  //
-  //
-  //   vm.passengers = _.filter(vm.passengers, function(passenger){
-  //       return !_.contains(COUNTRY_CODES_FOR_REMOVE, passenger.nationality);
-  //   });
-  //   console.log(vm.passengers);
-  //
-  //   vm.passengersWasFiltered = true;
-  // }
 }
